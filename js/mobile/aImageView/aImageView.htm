@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="/wap/css/imageView.css">
+<div class="m-imageView">
+<div class="u-header"><a goback class="button button-clear icon ion-ios-arrow-back">返回</a><h1></h1><div class="button" ng-click="btn.complate()">编辑完成</div></div>
+<div class="g-content has-header has-footer">
+    <div class="imageView-container">
+        <div class="bd">
+            <div class="item" ng-repeat="item in items" data-background-image="{{item.filepath}}" my-repeat-finished></div>
+        </div>
+        <div class="hd"><span>{{swiper.activeIndex}}/{{swiper.length}}</span></div>
+    </div>
+</div>
+<div class="g-footer"><div class="imageView-btn"><a class="btn ion-navicon-round" ng-click="btn.menu()"></a></div></div></div>
+</div>

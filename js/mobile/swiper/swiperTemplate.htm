@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>模板选择</title>
+<link type="text/css" rel="stylesheet" href="/member/css/photo.css" />
+</head>
+<body>
+<div class="g-yskj">
+<div class="j-dialog f-oh">
+    <div class="f-m15">
+        <div class="m-photolist f-mt15">
+            <div class="photo-list template-list template-list-phone">
+                <ul class="f-cb" id="tpl"></ul>
+            </div>
+        </div>
+<!--
+        <div class="u-bottom">
+            <div class="pages">
+                <ul>
+                    <li class="active"><span>1</span></li>
+                    <li><a href="">2</a></li>
+                </ul>
+            </div>
+        </div>
+-->
+    </div>
+</div>
+</div>
+<script id="template" type="text/html">
+{{each list as value i}}
+<li>
+    <div class="pic" data-id="{{value.id}}" data-name="{{value.id}}"><a title="{{value.id}}"><img src="/js/mobile/swiper/images/{{value.id}}.jpg" /></a><div class="onRight"></div></div>
+    <div class="tt f-cb">
+    <h2>{{value.id}}</h2>
+    </div>
+</li>
+{{/each}}
+</script>
+</body>
+</html>
+<script type="text/javascript" src="/js/sea.js"></script>
+<script type="text/javascript">
+seajs.use(['jquery','fnDialog','template'],function($,dialog,template){
+    $(function(){
+        dialog.editor({
+            width:'1200',
+            callback:function(){
+                var $on=$('.photo-list .on');
+                var id=$on.attr('data-id');
+                var name=$on.attr('data-name');
+                topDialog.close({id:id,name:name}).remove();
+            }
+        });
+        var data={list:[{id:'swiper01'},{id:'swiper02'},{id:'swiper03'}]};
+        var html = template('template', data);
+        $('#tpl').html(html);
+        dialog.reset();
+        var topDialog=dialog.dialog;
+        var list=$('.photo-list');
+        list.delegate('li .pic','click',function(){
+            var _this=$(this);
+            if(_this.is('.on')){
+                _this.removeClass('on');    
+            }else{
+                _this.addClass('on').closest('li').siblings('li').find('.pic').removeClass('on');
+            }
+        });
+    })
+});
+</script>

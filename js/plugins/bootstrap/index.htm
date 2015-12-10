@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="components/bootstrap2/css/bootstrap.css">
+    <link rel="stylesheet" href="/js/plugins/bootstrap/calendar/css/calendar.css">
+    <link rel="stylesheet" href="/member/css/calendar.css" />
+</head>
+<body>
+<div class="g-yskj">
+    <div class=" f-m15">
+        <div class="m-calendar-title f-mb10"><span class="f-fr"><span class="btn-group"><span class="btn" data-calendar-nav="prev"><</span><span class="btn" data-calendar-nav="next">></span></span><span class="u-btn f-mlr5" data-calendar-nav="today">今日</span><span class="btn-group"><span class="btn" data-calendar-view="day">日</span><span class="btn" data-calendar-view="week">周</span><span class="btn" data-calendar-view="month">月</span></span></span><h2></h2></div>
+        <div id="calendar"></div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="components/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="components/underscore/underscore-min.js"></script>
+<script type="text/javascript" src="components/bootstrap3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="calendar/js/language/zh-CN.js"></script>
+<script type="text/javascript" src="calendar/js/calendar.js"></script>
+<!--<script type="text/javascript" src="calendar/js/app.js"></script>-->
+<script type="text/javascript">
+var _$=$;
+</script>
+<script type="text/javascript" src="/js/sea.js"></script>
+<script type="text/javascript">
+seajs.use(['jquery','tools'],function($,tools){
+//    var theWeek=time.getWeek();
+//    var theWeekDates=time.getWeekDates();
+//    console.log(theWeek);
+//    console.log(theWeekDates);
+    var calendar=_$('#calendar').calendar({
+        tmpl_path:'/js/plugins/bootstrap/calendar/tmpls/',//模板目录
+        view:'month',
+        events_source: 'events.json.php',//事件
+        language :'zh-CN',//中文
+        tmpl_cache: false,//缓存
+        day: '2013-03-12',//当前时期
+        first_day:'1',//从周一开始
+        model:'#1',
+        onAfterEventsLoad :function(events){
+        },
+        onAfterViewLoad :function(view){
+            console.log(calendar);
+            //初始化标题，在线状态
+            $('.m-calendar-title h2').text(this.getTitle());
+            $('[data-calendar-view]').removeClass('active');
+            $('[data-calendar-view="' + view + '"]').addClass('active');
+            //添加点击事件
+        }
+    });
+    //添加视图，右击事件
+    tools.contextMenu({
+        target:'.cal-cell,.cal-day-hour,.cal-week-box',
+        addMenu:['添加事件'],
+        itemClick:function(index,obj,event){
+            var view=calendar.options.view;
+            var _this=$(obj);
+            var DATA={};
+            switch (view){
+                case 'day':{
+                    var start=new Date(calendar.options.position.start);
+                    var end=new Date(calendar.options.position.start);
+                    var startHours=_this.find('.col-xs-1').eq(0).text();
+                    start.setHours(parseInt(startHours.slice(0,2)));
+                    end.setHours(parseInt(startHours.slice(0,2)));
+                    end.setMinutes('30');
+                    DATA.start=start;
+                    DATA.end=end;
+                    break;
+                }
+                case 'month':{
+                    var day=_this.find('[data-cal-date]').attr('data-cal-date').split('-');
+                    var start=new Date(day[0]+'/'+day[1]+'/'+day[2]);
+                    var end=new Date(day[0]+'/'+day[1]+'/'+day[2]);
+                    end.setHours(23);
+                    end.setMinutes(59);
+                    end.setSeconds(59);
+                    DATA.start=start;
+                    DATA.end=end;
+                    break;
+                }
+                case 'week':{
+                    var $cell=_this.find('.cal-row-head .cal-cell1');
+                    var arr=[];
+                    var clientX=event.clientX;
+                    $.each($cell,function(){
+                        var $this=$(this);
+                        var offset=$this.offset();
+                        if((offset.left+$this.width())>=clientX){
+                            var day=$this.find('[data-cal-date]').attr('data-cal-date').split('-');
+                            var start=new Date(day[0]+'/'+day[1]+'/'+day[2]);
+                            var end=new Date(day[0]+'/'+day[1]+'/'+day[2]);
+                            end.setHours(23);
+                            end.setMinutes(59);
+                            end.setSeconds(59);
+                            DATA.start=start;
+                            DATA.end=end;
+                            return false;
+                        }
+                    });
+                }
+            }
+            console.log(DATA);
+        }
+    });
+//    $(document).bind('contextmenu',function(event){
+//        var clientX=event.clientX;
+//        var clientY=event.clientY;
+//        var $tpl=$('<div class="u-contextmenu"><ul><li>添加事件</li></ul></div>');
+//        $tpl.css({'top':clientY+'px','left':clientX+'px'});
+//        $tpl.appendTo($('body'));
+//        $tpl.click(function(){
+//            $tpl.remove();
+//        });
+//        return false;
+//    });
+    //上一月下一月切换
+    $('[data-calendar-nav]').each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.navigate($this.data('calendar-nav'));
+        });
+    });
+    //视图却换
+    $('[data-calendar-view]').each(function() {
+        var $this = $(this);
+        $this.click(function() {
+            calendar.view($this.data('calendar-view'));
+        });
+    });  
+})    
+</script>

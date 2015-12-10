@@ -1,0 +1,14 @@
+/* CSS Document */
+
+#uploader .progress { border: 1px solid #1483d8; width: 100%; background: #fff; height: 18px; position: relative; display: inline-block; text-align: center; line-height: 20px; color: #6dbfff; position: relative; margin: 0 10px 0 0; }
+#uploader .progress .progress-bar { width: 0; height: 100%; left: 0; top: 0; background: #1483d8; position: absolute; }
+
+#uploader  #thelist .item{ background:#f7f7f7; padding:10px; margin-bottom:10px; border:1px solid #e8e8e8; position:relative;}
+#uploader  #thelist .item .del{ display:block; position:absolute; right:10px; top:5px; width:16px; height:16px; overflow:hidden; cursor:pointer; background:url(../images/cross.png) 0 4px no-repeat;}
+#uploader  #thelist .item .del:hover{ background-position:0 bottom;}
+
+.m-queueList table{ width:100%; *width:auto; table-layout:fixed; border-collapse:collapse; color:#444; font-weight:normal;}
+.m-queueList table tbody td{ padding:5px 5px 5px 10px; border-bottom:1px solid #eee;}
+.m-queueList table tbody td a{padding-right:70px; display:inline-block; vertical-align:middle;}
+.m-queueList table tbody td a:hover{ color:#444;}
+.m-queueList table tbody tr.on td a{background:url(../images/msg_bg.png) right -249px no-repeat;}

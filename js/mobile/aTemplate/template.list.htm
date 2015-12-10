@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="wap/css/photo.css">
+<div class="u-header">
+    <a class="button button-clear icon ion-ios-arrow-back" ng-click="back()">返回</a>
+    <h1 class="title">{{title}}</h1>
+</div>
+<div class="g-content has-header" scroll-page data-curpage="0" data-marginbottom="10" data-url="scrollPageUrl" callback="getItems(items)"></div>
+<script type="text/ng-template" id="scrollPageHtml">
+    <div class="m-template-list f-cb f-mt10">
+        <div class="item-list" ng-repeat="item in items" ng-click="parent('goView({{$index}})')">
+            <div class="pic"><img ng-src="{{item.thumb}}"></div>
+            <div class="title"><h2 class="f-toe">{{item.name}}</h2></div>
+        </div>
+    </div>
+</script>

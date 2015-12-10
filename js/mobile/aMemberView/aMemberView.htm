@@ -1,0 +1,134 @@
+<div class="u-header">
+    <a goback class="button button-clear icon ion-ios-arrow-back">返回</a>
+    <h1 class="title">详细资料</h1>
+</div>
+<div class="g-content has-header s-bgf5" ng-if="item.type!=1">
+    <div class="u-list-container f-m15">
+        <div class="item-pic">
+            <div class="pic"><img ng-src="{{item.avatar}}" /></div>
+            <div class="info">
+                <div class="title f-oh"><div class="f-fr" style="margin-top:3px;" ng-class="{'u-icon-male':item.sex=='男','u-icon-women':item.sex=='女'}"></div><div class="f-oh"><h2>{{item.realname}}({{item.nickname}})</h2></div></div>
+                <p>{{item.signature}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="u-list-box f-mb15">
+        <div class="u-simtable view">
+            <div class="str">
+                <div class="sth">能力圈</div>
+                <div class="std">{{item.business}}</div>
+            </div>
+            <div class="str">
+                <div class="sth">邮箱</div>
+                <div class="std">{{item.email}}</div>
+            </div>
+            <div class="str">
+                <div class="sth">所在地</div>
+                <div class="std">{{item.province}} {{item.city}} {{item.county}}</div>
+            </div>
+            <div class="str">
+                <div class="sth">详细地址</div>
+                <div class="std">{{item.address}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="f-mb15" ng-if="item.sites" ng-cloak>
+        <div class="u-list-box">
+            <a class="item-txt-line layout-right" ng-repeat="site in item.sites" ng-bind="site.name" ng-href="{{site.url}}"></a>
+        </div>
+    </div>
+    <div class="f-mb15" ng-cloak>
+        <div class="u-list-box f-cb">
+            <div class="panel-list" ng-if="item.yellow_pages">
+                <a ng-href="{{item.yellow_pages.url}}">
+                    <div class="pic"><img ng-src="/member/images/panel/wzsz.png" /></div>
+                    <h2 ng-bind="item.yellow_pages.name"></h2>
+                </a>
+            </div>
+            <div class="panel-list" ng-if="item.store_pages">
+                <a ng-href="{{item.store_pages.url}}">
+                    <div class="pic"><img ng-src="/member/images/panel/wdwd.png" /></div>
+                    <h2 ng-bind="item.store_pages.name"></h2>
+                </a>
+            </div>
+            <div class="panel-list">
+                <a ng-href="{{item.yellow_pages.url}}/?m=photo&a=category&mid={{item.id}}}">
+                    <div class="pic"><img ng-src="/member/images/panel/tpxc.png" /></div>
+                    <h2>微秀</h2>
+                </a>
+            </div>
+            <div class="panel-list">
+                <a ng-href="?m=site&a=tpl&name=member_card&account={{item.account}}">
+                    <div class="pic"><img ng-src="/member/images/panel/rzsf.png" /></div>
+                    <h2>微名片</h2>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="f-mb15 f-mlr15"><a class="u-btn-blue u-btn-big u-btn-full" href="?m=message&c=index&a=add&mid={{item.id}}">发消息</a></div>
+    <div class="f-mb15 f-mlr15" ng-if="item.mobile"><a class="u-btn-gray1 u-btn-big u-btn-full" href="tel:{{item.mobile}}">打电话</a></div>
+    <div class="f-mb15 f-mlr15" ng-if="item.qq"><a class="u-btn-gray1 u-btn-big u-btn-full" href="http://wpa.qq.com/msgrd?v=3&uin={{item.qq}}&site=qq&menu=yes">聊QQ</a></div>
+</div>
+<div class="g-content has-header s-bgf5" ng-if="item.type==1">
+    <div class="u-list-container f-m15">
+        <div class="item-pic">
+            <div class="pic"><img ng-src="{{item.logo}}" /></div>
+            <div class="info">
+                <div class="title f-oh"><div class="f-oh"><h2>{{item.name}}</h2></div></div>
+                <p>{{item.signature}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="u-list-box f-mb15">
+        <div class="u-simtable view">
+            <div class="str">
+                <div class="sth">经营范围</div>
+                <div class="std">{{item.scope}}</div>
+            </div>
+            <div class="str">
+                <div class="sth">所在地</div>
+                <div class="std">{{item.province}} {{item.city}} {{item.county}}</div>
+            </div>
+            <div class="str">
+                <div class="sth">详细地址</div>
+                <div class="std">{{item.address}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="f-mb15" ng-if="item.sites" ng-cloak>
+        <div class="u-list-box">
+            <a class="item-txt-line layout-right" ng-repeat="site in item.sites" ng-bind="site.name" ng-href="{{site.url}}"></a>
+        </div>
+    </div>
+    <div class="f-mb15" ng-cloak>
+        <div class="u-list-box f-cb">
+            <div class="panel-list" ng-if="item.yellow_pages">
+                <a ng-href="{{item.yellow_pages.url}}">
+                    <div class="pic"><img ng-src="/member/images/panel/wzsz.png" /></div>
+                    <h2 ng-bind="item.yellow_pages.name"></h2>
+                </a>
+            </div>
+            <div class="panel-list" ng-if="item.store_pages">
+                <a ng-href="{{item.store_pages.url}}">
+                    <div class="pic"><img ng-src="/member/images/panel/wdwd.png" /></div>
+                    <h2 ng-bind="item.store_pages.name"></h2>
+                </a>
+            </div>
+            <div class="panel-list">
+                <a ng-href="{{item.yellow_pages.url}}/?m=photo&a=category&mid={{item.id}}}">
+                    <div class="pic"><img ng-src="/member/images/panel/tpxc.png" /></div>
+                    <h2>微秀</h2>
+                </a>
+            </div>
+            <div class="panel-list">
+                <a ng-href="?m=site&a=tpl&name=member_card&account={{item.account}}">
+                    <div class="pic"><img ng-src="/member/images/panel/rzsf.png" /></div>
+                    <h2>微名片</h2>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="f-mb15 f-mlr15"><a class="u-btn-blue u-btn-big u-btn-full" href="?m=message&c=index&a=add&mid={{item.id}}">发消息</a></div>
+    <div class="f-mb15 f-mlr15" ng-if="item.mobile"><a class="u-btn-gray1 u-btn-big u-btn-full" href="tel:{{item.mobile}}">打电话</a></div>
+    <div class="f-mb15 f-mlr15" ng-if="item.qq"><a class="u-btn-gray1 u-btn-big u-btn-full" href="http://wpa.qq.com/msgrd?v=3&uin={{item.qq}}&site=qq&menu=yes">聊QQ</a></div>
+</div>

@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="wap/css/photo.css">
+<div class="u-header">
+    <a class="button button-clear icon ion-ios-arrow-back" ng-click="back()">返回</a>
+    <h1 class="title">{{view.name}}</h1>
+    <div class="button"><a class="btn" ng-click="complete()">应用此模板</a></div>
+</div>
+<div class="g-content has-header">
+    <div class="g-content-max">
+        <div class="m-template-view">
+            <div class="pic"><img ng-src="{{view.thumb}}"></div>
+            <div class="title"><h2>{{view.name}}</h2></div>
+            <div class="desc">{{view.description}}</div>
+        </div>
+    </div>
+</div>

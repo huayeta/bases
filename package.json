@@ -1,0 +1,56 @@
+{
+  "name": "yst",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@server1.53835.net:yst.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer-loader": "^3.1.0",
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-transform-runtime": "^6.3.13",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "babel-preset-stage-2": "^6.1.18",
+    "babel-runtime": "^6.3.13",
+    "css-loader": "^0.23.0",
+    "del": "^2.0.2",
+    "file-loader": "^0.8.5",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.3.0",
+    "gulp-changed": "^1.3.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.1",
+    "html-loader": "^0.3.0",
+    "jshint": "^2.8.0",
+    "jsx-loader": "^0.13.2",
+    "redux-devtools": "^2.1.5",
+    "stream-combiner2": "^1.1.1",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.8",
+    "webpack-stream": "^2.1.1"
+  },
+  "dependencies": {
+    "babel-preset-stage-2": "^6.3.13",
+    "core-js": "^1.2.6",
+    "history": "^1.13.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.0",
+    "react-router": "^1.0.0",
+    "redux": "^3.0.4"
+  }
+}

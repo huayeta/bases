@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<link rel="stylesheet" type="text/css" href="/public/default/style/css/common.css">
+<link rel="stylesheet" type="text/css" href="/public/default/style/js/plugins/webuploader/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/public/default/style/js/plugins/webuploader/css/webuploader-file.css">
+</head>
+
+<body>
+<div class="g-yskj">
+<div class="j-dialog f-oh">
+<div class="m-tabs f-m15">
+<div class="tabs">
+<div class="tabs-hd"><ul class="opt"><li class="select">附件上传</li><li>网络地址</li><li>在线网盘</li></ul></div>
+<div class="tabs-bd">
+<div>
+<div id="uploader" class="f-pd20">
+<div class="f-mb10">
+<a href="javascript:void(0);" id="picker" class="u-btn pie f-mr10">选择附件</a>
+<a href="javascript:void(0);" id="ctlBtn" class="u-btn-red pie f-mr10">开始上传</a>
+</div>
+<div id="thelist"></div>
+</div>
+<!--uploader end-->
+<fieldset class="u-fieldset f-mt15 f-dn" id="uploader-img-list">
+<legend>附件列表</legend>
+<div class="m-queueList">
+<table>
+<tbody>
+</tbody>
+</table>
+</div>
+</fieldset>
+<!--m-queueList end-->
+</div>
+<!--div end-->
+<div class="f-dn">
+<p class="f-mtb10 f-fs14 s-gray">请输入网络地址：</p>
+<p class="f-mb10"><input type="text" class="u-txt callback" size="80" /></p>
+</div>
+<!--div end-->
+<div class="f-dn">
+<iframe src="" id="attachment" frameborder="0" scrolling="no" style="overflow-x:hidden; border:none;" width="100%;" height="400" allowtransparency="true"></iframe>
+</div>
+<!--div end-->
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="/public/default/style/js/plugins/jquery/jquery.js"></script>
+<script type="text/javascript" src="/public/default/style/js/plugins/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="/public/default/style/js/plugins/webuploader/js/webuploader-file.js"></script>
+<script type="text/javascript" src="/public/default/style/js/sea.js"></script>
+<script type="text/javascript">
+seajs.use(['jquery','commonTools','fnDialog'],function($,tools,dialog){
+    $(function(){
+        var MAXSIZE=dialog.dialog.data.size;
+        $('#attachment').attr('src','?m=attachment&c=attachment&a=document&size='+MAXSIZE);
+        dialog.editor({
+            title:'文件上传',
+            width:'780',
+            height:'480',
+            callback:function(obj){
+                obj.close(callbackVal()).remove();
+            }
+        });
+        function callbackVal(){
+            var obj=$('.tabs-bd>div:visible');
+            var index=obj.index();
+            switch (index){
+                case 0:{
+                    var tr=obj.find('#uploader-img-list tr.on');
+                    var val='';
+                    var size=tr.size();
+                    if(size>0){
+                        if(size==1){
+                            val=uploaderVal[tr.index()]    
+                        }else{
+                            var arr=[];
+                            tr.each(function(){
+                                arr.push(uploaderVal[$(this).index()]);
+                            });    
+                            val=arr;
+                        }
+                    }
+                    return val;
+                    break;
+                }
+                case 1:{
+                    var val=obj.find('.callback').val();
+                    return {'filepath':val,'status':'1'};
+                    break;    
+                }
+                case 2:{
+                    var iframe=obj.find('iframe');
+                    var tr=iframe.contents().find('#uploader-img-list tr.on');
+                    var val='';
+                    var size=tr.size();
+                    var VAL=eval(iframe[0].contentWindow.jsonContent());
+                    if(size>0){
+                        if(size==1){
+                            val=VAL[tr.index()]    
+                        }else{
+                            var arr=[];
+                            tr.each(function(){
+                                arr.push(VAL[$(this).index()]);
+                            });    
+                            val=arr;
+                        }
+                    }
+                    return val;
+                    break;    
+                }
+            }
+        }
+    });
+});
+</script>

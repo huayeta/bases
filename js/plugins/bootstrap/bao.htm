@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="/member/css/calendar.css" />
+</head>
+
+<body>
+    <div class="g-yskj">
+        <div class=" f-m15">
+            <div class="m-daily f-fl">
+                <div class="title">
+                    <select class="u-slt j-year"></select>
+                    <select class="u-slt f-ml10 j-quarter">
+                        <option value="1">第一季度</option>
+                        <option value="2">第二季度</option>
+                        <option value="3">第三季度</option>
+                        <option value="4">第四季度</option>
+                    </select>
+                </div>
+                <div class="con j-timetree">
+                    
+                </div>
+            </div>
+            <script type="text/html" id="timetree">
+               {{each list as value index}}
+                <div class="timetree-month">
+                    <div class="timetree-head">
+                        <div class="time-txt j-daily" data-month="{{value.month}}"><em>{{value.month}}</em>月</div>
+                        <em class="time-circle"></em>
+                    </div>
+                    <div class="timetree-weeklist f-dn">
+                        <ul>
+                           {{each value.weeks as v}}
+                            <li><a class="week j-daily" data-week="{{v.week}}">第 {{v.week}} 周</a><em class="time-circle"></em></li></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+                {{/each}}
+                <div class="timetree-month">
+                    <div class="timetree-head endyear" data-quarter="{{quarter}}">
+                        <div class="time-txt j-daily" data-quarter="{{quarter}}">{{quarter}}</div>
+                        <em class="time-circle"></em>
+                    </div>
+                </div>
+            </script>
+            <div style=" margin-left:240px;" class="j-dailycon">
+                
+            </div>
+            <script type="text/html" id="dailycon">
+               <form id="j-form">
+                <div class="f-mb10">1、{{title}}</div>
+                <div class="f-mb10">
+                    <textarea class="u-txtarea" name="arg[personal]" style=" width:75%; height:150px;" placeholder="此处填写工作报告" datatype="*"></textarea>
+                </div>
+                <input type="submit" class="u-btn-gray u-btn-big pie" value="提&nbsp;&nbsp;交">
+                </form>
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="/js/sea.js"></script>
+<script type="text/javascript" src="/js/plugins/bootstrap/daily.js"></script>

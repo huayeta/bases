@@ -1,0 +1,36 @@
+/* CSS Document */
+
+.m-comment{}
+.m-comment .u-com-reply{ padding-top:20px;}
+.m-comment .u-com-reply h2{ font-family:Microsoft YaHei,Heiti SC; font-size:20px; font-weight:100; margin-bottom:15px; height:25px; line-height:25px;}
+.m-comment .u-com-reply h2 strong{ float:left; font-weight:normal;}
+.m-comment .u-com-reply h2 a{ float:right; font-size:13px; color:#1A649D;}
+.m-comment .u-com-reply .com_area .com_area_box{ height: 60px; padding: 10px; border: 1px solid #ddd;}
+.m-comment .u-com-reply .com_area .com_area_box .txtarea1{ border:0 none; width: 100%; height: 100%; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); outline:none; resize:none;}
+.m-comment .u-com-reply .com_area .com_ft{*zoom:1; overflow: hidden;}
+.m-comment .u-com-reply .com_area .com_ft .com_ft_btn{ float:right; margin:8px 10px 8px 0;}
+.m-comment .u-com-reply .com_area .com_ft .com_ft_btn .com-btn{ background:#379BE9; color:#fff; border:0 none; border-radius:2px; display:inline-block; padding:0 10px; line-height:28px; height:28px; text-align:center; cursor:pointer;}
+.m-comment .u-com-reply .com_area .com_ft .com_ft_btn .com-btn:hover{ background:#328BD2;}
+
+.m-comment .u-com-list-tt{ font-family:Microsoft YaHei,Heiti SC; font-size:15px; padding:5px 0; color:#FF2968; font-weight:400; border-bottom:1px solid #e8e8e8;}
+
+.m-comment .u-com-list{ position:relative; padding-left:40px; vertical-align:top; border-bottom:1px solid #ddd; zoom:1;}
+.m-comment .u-com-list .pic{ position:absolute; top:20px; left:0;}
+.m-comment .u-com-list .pic img{ border-radius:20px; width:40px; height:40px; cursor:pointer; display:block;}
+.m-comment .u-com-list .pic img:hover{ opacity:0.9;}
+.m-comment .u-com-list .bd{ padding-left:10px; zoom:1;}
+.m-comment .u-com-list .bd .tt{ color:#999; padding-top:18px; line-height:20px; height: auto; border: 0;}
+.m-comment .u-com-list .bd .tt .list-user{ color:#379BE9; text-decoration:none;}
+.m-comment .u-com-list .bd .tt .list-time,.m-comment .u-com-list .list .bd .tt .list-hf{ margin-left:7px; margin-right:3px; color:#999;}
+.m-comment .u-com-list .bd .tt .list-hf{ color:#555;}
+.m-comment .u-com-list .bd .list-c{ margin-top:6px; font-size:14px; line-height:24px; word-break:break-all; color:#2A2A2A;}
+.m-comment .u-com-list .bd .ft{ margin-top:3px; padding-bottom:15px; color:#999;}
+.m-comment .u-com-list .bd .ft .ft-btn{ color:#999; padding-left:15px; margin-right:6px; background:url(../images/m-comment.gif) no-repeat; line-height:14px;}
+.m-comment .u-com-list .bd .ft .ft-btn:hover{ text-decoration:none;color:#555;}
+.m-comment .u-com-list .bd .ft .ft-btn em{ font-style:normal;}
+.m-comment .u-com-list .bd .ft .vote{ background-position:-448px -84px;}
+.m-comment .u-com-list .bd .ft .vote:hover{ background-position:-448px -104px;}
+.m-comment .u-com-list .bd .ft .reply{ background-position:-443px -124px; padding-left:19px;}
+.m-comment .u-com-list .bd .ft .reply:hover{ background-position:-443px -144px;}
+.m-comment .u-com-list .children .u-com-list{ border-bottom:0 none; border-top:1px dotted #ddd;}
+.m-comment .btn-more{ height: 30px; line-height: 30px; text-align: center; border: 1px solid #ddd; font-size: 14px; clear: both; margin: 15px 0; background: #ccc; color: #333; cursor: pointer;}

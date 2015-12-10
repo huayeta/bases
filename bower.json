@@ -1,0 +1,26 @@
+{
+  "name": "yst",
+  "version": "0.0.0",
+  "authors": [
+    "zh <zh@yingshangkeji.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "microevents": "*",
+    "requirejs": "~2.1.20",
+    "blueimp-file-upload": "~9.11.2",
+    "jquery": "~2.1.4",
+    "angular": "~1.4.7",
+    "angular-ui-router": "~0.2.15",
+    "history.js": "history#~1.8.0",
+    "angular-contenteditable": "~0.3.8"
+  }
+}

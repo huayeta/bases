@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>地区选择</title>
+<link type="text/css" rel="stylesheet" href="/member/css/common.css" />
+<style type="text/css">
+    .m-items ul{ position: relative; padding-bottom: 10px;}
+    .m-items ul li{ float: left; width: 20%; padding: 10px 0; font-size: 12px; border-bottom: 1px dotted #eee;}
+    .m-items ul li label{ display: block;}
+    .list{ border-bottom: 1px solid #eee; }
+    .list .hd{ width: 120px; padding: 10px; color: #0077cc;}
+</style>
+</head>
+<body>
+<div class="g-yskj">
+<div class="j-dialog f-oh">
+    <div class="f-m15 j-box"></div>
+</div>
+</div>
+<script id="template" type="text/html">
+{{each data[1] as value i}}
+<div class="list f-cb">
+    <div class="f-fl hd"><label><input type="checkbox" class="u-checkbox f-mr5" data-area-btn="{{i}}" {{if value.isChecked}}checked{{/if}}>{{value.name}}</label></div>
+    <div class="f-oh">
+        <div class="m-items">
+            <ul class="f-cb {{if !value.isExist}}f-dn{{/if}}">
+                {{each data[value.id] as item index}}
+                <li><label><input type="checkbox" class="u-checkbox f-mr5" data-area-val="{{index}}" data-area-pid="{{item.pid}}" {{if item.isChecked}}checked{{/if}}>{{item.name}}</label></li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>
+{{/each}}
+</script>
+</body>
+</html>
+<script type="text/javascript" src="/js/sea.js"></script>
+<script type="text/javascript">
+seajs.use(['jquery','fnDialog','template','wbmc','tools'],function($,dialog,template,wbmc,tools){
+    $(function(){
+        var topDialog=dialog.dialog;
+        var DATA;//总数据
+        var $box=$('.j-box');
+        dialog.editor({
+            width:'800',
+            callback:function(){
+                var result={};
+                result.id=[];
+                result.name=[];
+                for(var i=0,n=DATA.data[1].length;i<n;i++){
+                    if(DATA.data[1][i].isChecked){
+                        result.id.push(DATA.data[1][i].id);
+                        result.name.push(DATA.data[1][i].name);
+                    }else if(DATA.data[1][i].isExist){
+                        for(var j=0;j<DATA.data[DATA.data[1][i].id].length;j++){
+                            var tmp=DATA.data[DATA.data[1][i].id][j];
+                            if(tmp.isChecked){
+                                result.id.push(tmp.id);
+                                result.name.push(tmp.name);
+                            }
+                        }
+                    }
+                }
+//                console.log(result);
+                topDialog.close(result).remove();
+            }
+        });
+        wbmc({name:'area',init:function(val){
+            DATA=val;
+//            console.log(DATA);
+            var arr=topDialog.data;
+            //初始化DATA的默认选中城市
+            for(var i=0;i<arr.length;i++){
+                //如果直接是省份id的时候
+                if(DATA.findIdObj[arr[i]]==1){
+                    
+                    for(var j=0;j<DATA.data[1].length;j++){
+                        if(DATA.data[1][j].id==arr[i]){
+                            DATA.data[1][j].isChecked=true;//省份被选中
+                            DATA.data[1][j].isExist=true;//省份下存在有城市被选中
+                            //省份下的城市被选中
+                            for(var n=0;n<DATA.data[DATA.data[1][j].id].length;n++){
+                                DATA.data[DATA.data[1][j].id][n].isChecked=true;
+                            }
+                            break;
+                        }
+                    }
+                }else{
+                    //如果不是省份id就先让省份id存在有城市选中，再让下面城市选中id
+                   for(var j=0;j<DATA.data[1].length;j++){
+                        if(DATA.data[1][j].id==DATA.findIdObj[arr[i]]){
+                            DATA.data[1][j].isExist=true;//省份下存在有城市被选中
+                            break;
+                        }
+                    }
+                    for(var j=0;j<DATA.data[DATA.findIdObj[arr[i]]].length;j++){
+                        var tmp=DATA.data[DATA.findIdObj[arr[i]]][j];
+                        if(tmp.id==arr[i]){
+                            DATA.data[DATA.findIdObj[arr[i]]][j].isChecked=true;
+                            break;
+                        }
+                    }
+                }
+            }
+//            console.log(DATA);
+            //插入初始化的城市
+            $box.html(template('template',DATA));
+            //初始化多选
+            tools.checkSel({btn:'[data-area-btn]',val:'[data-area-val]',contain:'.list',change:function(obj,box,btn){
+                var _this=$(obj);
+                if(_this.attr('data-area-btn')){
+                    //切换ul是否显示
+                    var $ul=_this.closest('.list').find('.m-items ul');
+                    if(_this.is(':checked')){
+                        $ul.show();
+                    }else{
+                        $ul.hide();
+                    }
+                    //更新城市的选中
+                    var index=_this.attr('data-area-btn');
+                    var isChecked=_this.is(':checked');
+                    for(var j=0;j<DATA.data[DATA.data[1][index].id].length;j++){
+                        var tmp=DATA.data[DATA.data[1][index].id][j];
+                        tmp.isChecked=isChecked;
+                    }
+                    //更新省份的选中
+                    DATA.data[1][_this.attr('data-area-btn')].isChecked=isChecked;
+                    DATA.data[1][_this.attr('data-area-btn')].isExist=isChecked;
+                }else{
+                    var $filter=box.filter(':checked');
+                    if($filter.size()==0){
+                        _this.closest('.list').find('.m-items ul').hide();
+                    }
+                    //更新城市的选中
+                    DATA.data[_this.attr('data-area-pid')][_this.attr('data-area-val')].isChecked=_this.is(':checked');
+                    //更新省份的选中
+                    DATA.data[1][btn.attr('data-area-btn')].isChecked=btn.is(':checked');
+                    DATA.data[1][btn.attr('data-area-btn')].isExist=($filter.size()>0?true:false);
+                }
+            }});
+            //重置弹窗的高度
+            dialog.reset();
+        }});
+    })
+});
+</script>

@@ -1,0 +1,10 @@
+<div class="u-header">
+        <a class="button button-clear icon icon ion-ios-arrow-back" ng-click="gotoBack()">返回</a>
+        <h1 class="title">{{title}}</h1>
+    </div>
+    <div class="g-content has-header s-bgf5">
+        <div class="f-mb10"></div>
+        <div class="u-list-box f-mb10">
+            <div class="item-txt-line layout-checkmark" ng-repeat="item in items" ng-click="change(item.val)" ng-class="{sel:item.val==def}">{{item.name}}</div>
+        </div>
+    </div>
