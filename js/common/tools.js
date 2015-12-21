@@ -4,12 +4,11 @@ define('tools', function(require, exports, module) {
     require('jquery');
     //选项卡
     (function(a) {
-        a.fn.tabs = function() {
+        a.fn.tabs = function(cb) {
             this.each(function() {
-                if (a(this).children().size() > 2) {
-                    alert("选项卡子元素超过两个");
-                    return
-                }
+                var $this=a(this);
+                var tx=$this.data('autoinit');
+                if(tx===false)return true;
                 a(this).children(":eq(1)").children().hide().eq(0).show();
                 if (a(this).find(".opt").size() == 1) {
                     var b = a(this).find(".opt").children()
@@ -27,7 +26,9 @@ define('tools', function(require, exports, module) {
                     a(this).click(function() {
                         a(this).parent().children().removeClass("select");
                         a(this).addClass("select");
-                        a(this).parents(".tabs:first").children(":eq(1)").children().hide().eq(c).show()
+                        var $con=a(this).parents(".tabs:first").children(":eq(1)").children().hide().eq(c);
+                        $con.show()
+                        if(a.isFunction(cb))cb(this,$con[0]);
                     })
                 });
                 if (a(this).attr("scroll") != "undefined") {}
@@ -994,10 +995,12 @@ define('tools', function(require, exports, module) {
                                 var val = $('[data-upload-val]', parent);
                                 $.each(val, function(i, n) {
                                     var _this = $(n);
+                                    var attr=_this.attr('data-upload-val');
+                                    if(!attr)attr='filepath';
                                     var tag = n.nodeName.toLowerCase();
-                                    if (tag == 'a') _this.attr('href', ret[0].filepath);
-                                    if (tag == 'input') _this.val(ret[0].filepath);
-                                    if (tag == 'img') _this.attr('src', ret[0].filepath);
+                                    if (tag == 'a') _this.attr('href', ret[0][attr]);
+                                    if (tag == 'input') _this.val(ret[0][attr]);
+                                    if (tag == 'img') _this.attr('src', ret[0][attr]);
                                 });
                                 if ($.isFunction(opts.callback)) {
                                     opts.callback(ret, _this);
@@ -1654,89 +1657,73 @@ define('tools', function(require, exports, module) {
                                         url: '?m=member&c=index&a=getinfo&expand=true',
                                         success: function(ret) {
                                             var info = ret.info;
-                                            if (member.isname == '1' || member.isphone == '1' || member.isarea == '1') {
-                                                //判断是否完善了信息
-                                                if (info.type == '0' && (!info.mobile || !info.realname || !info.county)) {
+                                            var str='';
+                                            if(member.isname=='1'){
+                                                if(info.type=='0' && !info.realname){
                                                     //个人
-                                                    dialog.alert({
-                                                        icon: false,
-                                                        title: '完善信息',
-                                                        content: '<div class="m-tabform" style="width:500px;"><form action=""><table><tbody><tr><th width="80">姓名：</th><td><input type="text" class="u-txt" name="par[realname]" datatype="*" value="' + (info.realname ? info.realname : '') + '"/></td></tr><tr><th>手机：</th><td><input type="text" class="u-txt" name="par[mobile]" datatype="*" value="' + (info.mobile ? info.mobile : '') + '"/></td></tr><tr><th>所在地：</th><td><select class="u-slt f-mr10" id="LP" name="par[province]"></select><select class="u-slt f-mr10" id="LC" name="par[city]"></select><select class="u-slt slt2" id="LA" name="par[county]"></select></td></tr></tbody></table></form></div>',
-                                                        onshow: function(content, dia) {
-                                                            wbmc({
-                                                                name: 'area',
-                                                                root: 1,
-                                                                val: 'name',
-                                                                oid: ['#LP', '#LC', '#LA'],
-                                                                def: [info.province, info.city, info.county]
-                                                            });
-                                                            validForm.form({
-                                                                target: $(content).find('form')[0],
-                                                                url: '?m=member&c=account',
-                                                                success: function(ree) {
-                                                                    if (ree.status) {
-                                                                        dialog.tips({
-                                                                            content: ree.info,
-                                                                            callback: function() {
-                                                                                dia.close().remove();
-                                                                                _this.certification(member, info);
-                                                                            }
-                                                                        });
-                                                                    } else {
-                                                                        dialog.tips({
-                                                                            content: ree.info
-                                                                        });
-                                                                    }
-                                                                }
-                                                            });
-                                                        },
-                                                        callback: function(content, dia) {
-                                                            $(content).find('form').submit();
-                                                        }
-                                                    });
-                                                } else if (info.type == '1' && (!info.name || !info.phone || !info.county)) {
+                                                    str+='<tr><th width="80">姓名：</th><td><input type="text" class="u-txt" name="par[realname]" datatype="*" /></td></tr>';
+                                                }else if(info.type=='1' && !info.name){
                                                     //企业
-                                                    dialog.alert({
-                                                        icon: false,
-                                                        title: '完善信息',
-                                                        content: '<div class="m-tabform" style="width:500px;"><form action=""><table><tbody><tr><th width="80">企业全称：</th><td><input type="text" class="u-txt" name="arg[name]" datatype="*" value="' + (info.name ? info.name : '') + '"/></td></tr><tr><th>企业电话：</th><td><input type="text" class="u-txt" name="arg[phone]" datatype="*" value="' + (info.phone ? info.phone : '') + '"/></td></tr><tr><th>所在城市：</th><td><select class="u-slt f-mr10" id="province" name="arg[province]"></select><select class="u-slt f-mr10" id="city" name="arg[city]"></select><select class="u-slt slt2" id="county" name="arg[county]"></select></td></tr></tbody></table></form></div>',
-                                                        onshow: function(content, dia) {
-                                                            wbmc({
-                                                                name: 'area',
-                                                                root: 1,
-                                                                val: 'name',
-                                                                oid: ['#province', '#city', '#county'],
-                                                                def: [info.province, info.city, info.county]
-                                                            });
-                                                            validForm.form({
-                                                                target: $(content).find('form')[0],
-                                                                url: '?m=member&c=account',
-                                                                success: function(ree) {
-                                                                    if (ree.status) {
-                                                                        dialog.tips({
-                                                                            content: ree.info,
-                                                                            callback: function() {
-                                                                                dia.close().remove();
-                                                                                _this.certification(member, info);
-                                                                            }
-                                                                        });
-                                                                    } else {
-                                                                        dialog.tips({
-                                                                            content: ree.info
-                                                                        });
-                                                                    }
-                                                                }
-                                                            });
-                                                        },
-                                                        callback: function(content, dia) {
-                                                            $(content).find('form').submit();
-                                                        }
-                                                    });
-                                                } else {
-                                                    _this.certification(member, info);
+                                                    str+='<tr><th width="80">企业全称：</th><td><input type="text" class="u-txt" name="arg[name]" datatype="*" /></td></tr>';
                                                 }
-                                            } else {
-                                                _this.certification(member, info)
+                                            }
+                                            if(member.isphone=='1'){
+                                                if(info.type=='0' && !info.mobile){
+                                                    //个人
+                                                    str+='<tr><th>手机：</th><td><input type="text" class="u-txt" name="par[mobile]" datatype="m"/>';
+                                                }else if(info.type=='1' && !info.phone){
+                                                    //企业
+                                                    str+='<tr><th>企业手机：</th><td><input type="text" class="u-txt" name="arg[phone]" datatype="m" /></td></tr>'
+                                                }
+                                            }
+                                            if(member.isarea=='1'){
+                                                if(info.type=='0' && !info.county){
+                                                    //个人
+                                                    str+='<tr><th>所在地：</th><td><select class="u-slt f-mr10" id="LP" name="par[province]"></select><select class="u-slt f-mr10" id="LC" name="par[city]"></select><select class="u-slt slt2" id="LA" name="par[county]" datatype="*"></select></td></tr>';
+                                                }else if(info.type=='1' && !info.county){
+                                                    //企业
+                                                    str+='<tr><th>所在城市：</th><td><select class="u-slt f-mr10" id="LP" name="arg[province]"></select><select class="u-slt f-mr10" id="LC" name="arg[city]"></select><select class="u-slt slt2" id="LA" name="arg[county]" datatype="*"></select></td></tr>'
+                                                }
+                                            }
+                                            if(str){
+                                                dialog.alert({
+                                                    icon: false,
+                                                    title: '完善信息',
+                                                    cancel:false,
+                                                    content: '<div class="m-tabform" style="width:500px;"><form action=""><table><thead><tr><th width="80"></th><th></th></tr></thead><tbody>'+str+'</tbody></table></form></div>',
+                                                    onshow: function(content, dia) {
+                                                        wbmc({
+                                                            name: 'area',
+                                                            root: 1,
+                                                            val: 'name',
+                                                            oid: ['#LP', '#LC', '#LA']
+                                                        });
+                                                        validForm.form({
+                                                            target: $(content).find('form')[0],
+                                                            url: '?m=member&c=account',
+                                                            success: function(ree) {
+                                                                if (ree.status) {
+                                                                    dialog.tips({
+                                                                        content: ree.info,
+                                                                        callback: function() {
+                                                                            dia.close().remove();
+                                                                            _this.certification(member, info);
+                                                                        }
+                                                                    });
+                                                                } else {
+                                                                    dialog.tips({
+                                                                        content: ree.info
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+                                                    },
+                                                    callback: function(content, dia) {
+                                                        $(content).find('form').submit();
+                                                    }
+                                                });
+                                            }else{
+                                                _this.certification(member, info);
                                             }
                                         }
                                     });
@@ -2231,15 +2218,22 @@ define('tools', function(require, exports, module) {
         var defaults = {
             target: '',
             ele: 'body',
+            autoLoad:true,
             callback: function() {}
         };
         var opts = $.extend(defaults, a);
         if (!opts.target) return;
-        getJquery(opts.target).on('load', function() {
-            var _this = $(this);
-            var height = _this.contents().find(opts.ele)[0].scrollHeight;
-            opts.callback(height, _this[0]);
-            return;
+        var $target=getJquery(opts.target);
+        $target.each(function(){
+            var $this=$(this);
+            $this.on('load', function() {
+                var _this = $(this);
+                var $ele=_this.contents().find(opts.ele);
+                if($ele.size()==0)$ele=_this.contents().find('body');
+                var height = $ele[0].scrollHeight;
+                opts.callback(height, _this[0]);
+            });
+            if(opts.autoLoad)$this.attr('src',$this.data('src'));
         });
     }
 

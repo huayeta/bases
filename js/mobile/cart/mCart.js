@@ -117,7 +117,7 @@ define('mCart',function(require, exports, module){
         };
         var opts=$.extend(defaults,a);
 		//如果无需发货
-		if(opts.nodelivery)return;
+		if(opts.nodelivery=='1')return;
         if(!opts.freight)return;//防没有运费模板的时候返回
         var $box=$('.j-freightBox');
         if($box.size()==0)return;
@@ -201,16 +201,7 @@ define('mCart',function(require, exports, module){
         var $spicBox=$('.j-spicBox');
         var $orderForm=$spicBox.find('form');
         var $orderSales=$spicBox.find('.j-sales');//
-        var $point=$('.j-point');//需要多少积分的jquery对象
         var $givepoint=$('.j-givepoint');//赠送的积分的jquery对象
-        //如果point存在就直接显示出来
-        if(opts.purchase=='3' && opts.point){
-            $point.show().find('b').text(opts.point);
-        }
-        //如果赠送的积分存在就直接显示出来
-        if(opts.givepoint){
-            $givepoint.show().find('b').text(opts.givepoint);
-        }
         if(opts.spic)$isSpic.show();
         $price.data('defaultValue',$price.html());
         $stock.data('defaultValue',$stock.html());
@@ -254,7 +245,21 @@ define('mCart',function(require, exports, module){
         //设置规格
         // console.log(opts.sales_attributes);
         // console.log(opts.sales_attribute);
-        if(!$.isEmptyObject(opts.sales_attribute)){
+		function getGivepoint(result){
+			if(opts.give_point_json && !$.isEmptyObject(opts.give_point_json)){
+				if(!result)return $givepoint.find('b').text('0');
+				var diff=parseFloat(result.price)-parseFloat(result.cost);
+				// console.log(opts.give_point_json);
+				// console.log(diff);
+				var givepoint=opts.give_point_json[diff]?opts.give_point_json[diff]:0;
+				return $givepoint.show().find('b').text(givepoint);
+			}else{
+				return $givepoint.show().find('b').text(opts.give_point);
+			}
+		}
+        if($.isEmptyObject(opts.sales_attribute)){
+			getGivepoint();
+		}else{
             var sales={};
             sales.sales_attribute_str=mTools.serialize(opts.sales_attribute);
             sales.attribute=[];//页面应该显示的规格
@@ -309,32 +314,15 @@ define('mCart',function(require, exports, module){
                         else{$price.html($price.data('defaultValue'))}
                         $stock.html('库存'+result.stock+'件');
                         $orderSales.val(sales.sels.join(','));
-                        //需要购买积分
-                        if(opts.purchase=='3'){
-                            var point=result.point;
-                            if(!point)point=opts.point;
-                            if(point!=0)$point.show().find('b').text(point);
-                        }
-                        //赠送的积分
-                        var givepoint;
-                        if(result.givepoint){
-                            givepoint=parseInt(result.givepoint);
-                            if(opts.scale){givepoint=(givepoint*parseFloat(opts.scale)).toFixed(2)}
-                        }else{
-                            givepoint=opts.givepoint;
-                        }
-                        $givepoint.show().find('b').text(givepoint);
+						//赠送的积分
+                        getGivepoint(result);
                     }else{
                         //出现没匹配到的问题
                        $price.html($price.data('defaultValue'));
                         $stock.html('库存0件');
                         $orderSales.val('');
-                        //需要购买的积分
-                        if(opts.purchase=='3'){
-                            $point.hide();
-                        }
-                        //赠送的积分
-                        if(!opts.givepoint)$givepoint.hide();
+						//赠送的积分
+                        getGivepoint();
                     }
                 }
             }

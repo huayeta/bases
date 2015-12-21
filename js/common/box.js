@@ -250,7 +250,7 @@ define('box',function(require, exports, module){
 							if(info.email)name=info.email;
 							if(info.realname || info.name)name=info.realname?info.realname:info.name;
 							if(info.nickname || info.abbreviation)name=info.nickname?info.nickname:info.abbreviation;
-							_this.html('欢迎您，<a href="/?m=member" class="name f-mr10" target="_blank">'+name+'</a><a href="/?m=member&a=logout&redirectURL='+encodeURIComponent(window.location.href)+'" class="f-mr10">退出</a>'+user);
+							_this.html('<a href="/?m=member&c=index&a=left&menu=1" class="name f-mr10" target="_blank">'+name+'</a><a href="/?m=member&a=logout&redirectURL='+encodeURIComponent(window.location.href)+'" class="f-mr10">退出</a>'+user);
 						}else{
 							if(!opts.html)opts.html='<a href="?m=member&c=index&a=login&redirectURL='+encodeURIComponent(window.location.href)+'" class="btn1">登录</a> <a href="?m=member&a=register'+PID+'" class="btn2" target="_blank">注册</a>'
 							_this.html(opts.html);
@@ -499,7 +499,24 @@ define('box',function(require, exports, module){
             }
         })
     }
-
+	//绑定往会员中心跳转
+	var bindGoMember=function(){
+		var a=a||{};
+		var defaults={
+			target:'.j-bindGoMember'
+		};
+		var opts=$.extend(defaults,a);
+		var $target=$(opts.target);
+		$target.each(function(){
+			var $this=$(this);
+			var url=$this.data('url');
+			var title=$this.data('title');
+			if(url){
+				$this.attr('href','?m=site&a=tpl&name=target_url&title='+encodeURIComponent(title)+'&url='+encodeURIComponent(url));
+				$this.attr('target','_blank');
+			}
+		});
+	}
     //往会员中心跳转
     var gotoMember=function(a){
         var a=a||{};
@@ -1262,6 +1279,7 @@ define('box',function(require, exports, module){
 		changeQuantity:changeQuantity,//改变数量
         addOrder:addOrder,//直接购买
         addCart:addCart,//添加购物车
+		bindGoMember:bindGoMember,//绑定会员中心跳转
         gotoMember:gotoMember,//往会员中心跳转
         goMember:goMember,//点击往会员中心跳转
         countdown:countdown,//团购时间

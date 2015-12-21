@@ -6,7 +6,6 @@ seajs.use(['angular','aForm','aTools','simpop'],function(angular,aForm,aTools,si
             $scope.total.num=0;//总购物数量
             $scope.total.price=0;//总购物金额
             $scope.total.isSel=false;//储存购物车商品是否全选
-			$scope.total.point=0;//储存购买商品总共需要多少积分
 			$scope.total.givepoint=0;//储存购买商品总共赠送多少积分
             $scope.isItems=true;//默认有数据
             aForm.request({url:'?m=product&c=cart&a=index',isJson:true})
@@ -72,10 +71,8 @@ seajs.use(['angular','aForm','aTools','simpop'],function(angular,aForm,aTools,si
                 }else{
                     $scope.isItems=true;
                 }
-                console.log($scope.isItems);
                 var price=0;
                 var num=0;
-				var point=0;
 				var givepoint=0;
                 var sel=true;
                 angular.forEach($scope.items,function(n,i){
@@ -106,8 +103,7 @@ seajs.use(['angular','aForm','aTools','simpop'],function(angular,aForm,aTools,si
                         if(m.isSel){
                             price+=parseInt(m.quantity)*parseFloat(m.price);
                             num+=parseInt(m.quantity);
-                            if(m.purchase==3)point+=parseFloat(m.point?m.point:0)*parseFloat(m.quantity);
-                            givepoint+=parseFloat(m.givepoint?m.givepoint:0)*parseFloat(m.quantity);
+                            givepoint+=parseFloat(m.give_point?m.give_point:0)*parseFloat(m.quantity);
                         }
                         if(m.quantity>m.stock){$scope.items[i].products[j].status=0;}
                         else{$scope.items[i].products[j].status=1;}
@@ -125,7 +121,6 @@ seajs.use(['angular','aForm','aTools','simpop'],function(angular,aForm,aTools,si
                 $scope.total.isSel=sel;
 				$scope.total.price=price.toFixed(2);
                 $scope.total.num=num;
-                $scope.total.point=point.toFixed(2);
                 $scope.total.givepoint=givepoint.toFixed(2);
             };
             //提交函数
@@ -135,24 +130,12 @@ seajs.use(['angular','aForm','aTools','simpop'],function(angular,aForm,aTools,si
                     e.preventDefault();
                     return false;
                 }
-				if($scope.total.mepoint<$scope.total.point){
-					simpop.tips({content:'您的总'+$scope.total.pointA+'不足'});
-                    e.preventDefault();
-                    return false;
-				}
                 var tx=true;
                 var purchase;
                 angular.forEach($scope.items,function(n,i){
                     angular.forEach(n.products,function(m,j){
                         if(m.isSel){
-                            if(!purchase){purchase=m.purchase;}
-                            else{
-                                if(m.purchase!=purchase){
-                                    tx=false;
-                                    simpop.tips({content:'请选择相同的付款方式商品再重新结算！!'});
-                                }
-                            }
-                            if(m.status==0 && tx){
+                            if(m.status==0){
                                 tx=false;
                                 simpop.tips({content:'您选择的商品有缺货商品!'});
                             }

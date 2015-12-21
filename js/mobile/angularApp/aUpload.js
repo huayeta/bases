@@ -13,7 +13,7 @@ define('aUpload',function(require, exports, module){
 		.state('uploadImage',{
 			url:'/upload/image?id&size&isProduct&url&isadmin',
 			templateUrl:'?m=attachment&c=images&a=dialog',
-			controller:function($scope,$stateParams,$window,aForm,result){
+			controller:function($scope,$stateParams,$window,aForm,result,editorFactory){
                 $scope.size=$stateParams.size?$stateParams.size:1;//是否可以多选
                 $scope.items=[];
                 var serverUrl='?m=attachment&c=images&a=upload';
@@ -173,6 +173,7 @@ define('aUpload',function(require, exports, module){
                             });
 						})
 					}
+                    if($stateParams.id=='editorImage')editorFactory.setResult($stateParams.id,returnData)
                     result.setResult($stateParams.id,returnData);
                     $window.history.go(-1);
 				};

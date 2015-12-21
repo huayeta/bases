@@ -18,3 +18,9 @@ npm-debug.log
 /node_modules
 /js/components/
 /js/maps/
+/js/activity/
+/js/cart/
+/js/comment/
+/js/dict/
+/js/label/
+/js/react/

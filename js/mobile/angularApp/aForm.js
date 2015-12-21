@@ -96,8 +96,8 @@ define('aForm',function(require, exports, module){
 			link:function(scope,ele,attrs){
 				var state=attrs.mySref;
 				var storeArr=[];
-				if(attrs.store)storeArr=attrs.store.split(',');
 				ele.bind('click',function(event){
+					if(attrs.store)storeArr=attrs.store.split(',');
 					if(state){
 						var obj={};
 						for(var i=0,n=storeArr.length;i<n;i++){
@@ -367,15 +367,33 @@ define('aForm',function(require, exports, module){
             }
         }
     })
-
+	form.factory('editorFactory',function(){
+		var obj={};
+		obj.range='';
+		obj.resultData;//返回的数据
+		obj.removeResult=function(){
+			obj.resultData=undefined;
+			obj.isResult=false;
+		}
+		obj.setResult=function(id,result){
+			obj.resultData={id:id,result:result};
+		}
+		obj.getResult=function(){
+			var result=obj.resultData;;
+			obj.resultData=undefined;
+			return result;
+		}
+		return obj;
+	})
 	//https://github.com/akatov/angular-contenteditable
-	form.directive('editor', ['$timeout', function($timeout) {
+	form.directive('editor', ['$timeout','$parse','editorFactory', function($timeout,$parse,editorFactory) {
 	    return {
 	        restrict: 'AE',
 	        require: '?ngModel',
 			transclude: true,
 			replace: true,
-            template: '<div class="j-ueditor ueditor"><div class="tools"><a class="del f-fr f-mr10" ng-click="clear();">清空</a><a class="uploadimage icon">上传图片</a></div><div class="u-txtarea j-editor" contenteditable="true" style="width:100%;" ng-style="style" ng-transclude="true"></div></div>',
+			scope:true,
+            template: '<div class="j-ueditor ueditor"><div class="tools"><a class="del f-fr f-mr10" ng-click="clear();">清空</a><a class="uploadimage icon" my-sref="upload/image?id=editorImage&size=2" store="{{store}}">上传图片</a></div><div class="u-txtarea j-editor" contenteditable="true" style="width:100%;overflow-y:scroll;min-height:150px;" ng-style="style" ng-transclude="true"></div><div class="j-ueditor ueditor"><div class="tools f-mt10"><a class="delf-mr10" ng-click="br();">插入新一行</a></div></div>',
 	        link: function(scope, element, attrs, ngModel) {
 				var editor=element.find('.j-editor');
 	            // don't do anything unless this is actually bound to a model
@@ -395,70 +413,22 @@ define('aForm',function(require, exports, module){
 	                opts[opt] = o && o !== 'false'
 	            })
 				scope.style={};
+				scope.store=attrs.store;
 
 				//默认值
-				ngModel.$setViewValue(editor.html());
+				if(!$parse(attrs.ngModel)(scope))ngModel.$setViewValue(editor.html());
 
 				//清空函数
 				scope.clear=function(){
 					editor.html('');
 					ngModel.$setViewValue('');
 				}
-				//重置高度
-				function resetHeight() {
-					var height=editor[0].scrollHeight;
-					if(height>200){
-						scope.style.height=height+'px';
-					}else {
-						scope.style.height='200px';
-					}
+				//换行函数
+				scope.br=function(){
+					var html=editor.html();
+					editor.html(html+'<div><br/></div>')
 				}
-				// function getCursortPosition (ctrl) {
-				//     var CaretPos = 0;   // IE Support
-				//     if (document.selection) {
-				//     ctrl.focus ();
-				//         var Sel = document.selection.createRange ();
-				//         Sel.moveStart ('character', -ctrl.value.length);
-				//         CaretPos = Sel.text.length;
-				//     }
-				//     // Firefox support
-				//     else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-				//         CaretPos = ctrl.selectionStart;
-				//     return (CaretPos);
-				// }
-				// function setCaretPosition(ctrl, pos){
-				//     if(ctrl.setSelectionRange)
-				//     {
-				//         ctrl.focus();
-				//         ctrl.setSelectionRange(pos,pos);
-				//     }
-				//     else if (ctrl.createTextRange) {
-				//         var range = ctrl.createTextRange();
-				//         range.collapse(true);
-				//         range.moveEnd('character', pos);
-				//         range.moveStart('character', pos);
-				//         range.select();
-				//     }
-				// }
 
-				editor.bind('click',function(){
-					// var range=document.createRange();
-					// range.selectNode(editor[0]);
-					// console.log(range);
-					// window.getSelection().addRange(range);
-					var sel=window.getSelection();
-					if(sel.getRangeAt && sel.rangeCount){
-						var range=sel.getRangeAt(0);
-						range.deleteContents();
-						var el=document.createElement('div');
-						el.innerHTML='11111';
-						range.insertNode(el);
-						range = range.cloneRange();
-						range.collapse(true);
-						sel.removeAllRanges();
-						sel.addRange(range);
-					}
-				})
 	            // view -> model
 	            editor.bind('input', function(e) {
 	                scope.$apply(function() {
@@ -491,7 +461,6 @@ define('aForm',function(require, exports, module){
 	                            editor[0].focus()
 	                        })
 	                    }
-						resetHeight();
 	                })
 	            })
 
@@ -527,7 +496,6 @@ define('aForm',function(require, exports, module){
 	                    sel.removeAllRanges()
 	                    sel.addRange(range)
 	                }
-					resetHeight();
 	            }
 	            if (opts.selectNonEditable) {
 	                editor.bind('click', function(e) {
@@ -543,6 +511,24 @@ define('aForm',function(require, exports, module){
 	                    }
 	                })
 	            }
+
+				scope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams){
+					if(fromParams && fromParams.id=='editorImage'){
+						var returnData=editorFactory.getResult();
+						if(returnData){
+							$timeout(function(){
+								var oldHtml=editor.html();
+								var str='';
+								returnData.result.forEach(function(item){
+									str+='<img src="'+item.filepath+'" style="max-width:100%;" />'
+								});
+								editor.html(oldHtml+str);
+								ngModel.$setViewValue(oldHtml+str);
+							},0)
+						}
+					}
+				})
+
 	        }
 	    }
 	}]);
@@ -788,8 +774,8 @@ define('aForm',function(require, exports, module){
                         for(var i in ret){
                             $parse(model[i]).assign(scope.$parent,ret[i][attrs.val]);
                         }
-                        scope.$parent.$apply();
                         if(attrs.callback)scope.$eval(attrs.callback);
+						scope.$parent.$apply();
                     }});
                 });
             }

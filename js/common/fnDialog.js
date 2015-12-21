@@ -6,7 +6,7 @@ define('fnDialog',function(require, exports, module){
 		require('dialogPlus');
 		top.dialog=dialog;
 	}
-	
+
     require('jquery');
     //url框架弹窗
 	function getDialog(a){
@@ -24,22 +24,22 @@ define('fnDialog',function(require, exports, module){
 				url:opts.url,
 				data: opts.data,
 				onclose:function(){
-					opts.onclose(); 
+					opts.onclose();
 					if(this.returnValue && typeof opts.callback == 'function'){
-						opts.callback(this.returnValue);		
+						opts.callback(this.returnValue);
 					}
 				}
-			});	
+			});
 		d.showModal();
-		return;	
+		return;
 	}
     //有内容html弹窗
-	
+
 	//dialog提示消息
 	function tipsDialog(a){
 		var defaults={
-			title:'提示消息',
-			content:'',	
+			// title:'提示消息',
+			content:'',
 			callback:'',
 			time:''
 		}
@@ -54,12 +54,12 @@ define('fnDialog',function(require, exports, module){
 		if(opts.time!='')time=opts.time;
 		setTimeout(function () {
 			if(typeof opts.callback == 'function'){
-				opts.callback();	
+				opts.callback();
 			}
 			d.close(true).remove();
 		}, time);
 	}
-	
+
 	//dialog弹窗
 	function alertDialog(a){
 		var defaults={
@@ -133,30 +133,30 @@ define('fnDialog',function(require, exports, module){
 				}
 			]);
 		}
-		eval(opts.showModal)?d.showModal():d.show();	
+		eval(opts.showModal)?d.showModal():d.show();
 	}
-	
+
 	//计算dialog的最大高度
 	function maxhDialog(h){
 		$('.g-yskj').height('auto');
 		var maxH=$(window.parent.window).height()*0.75;
 		var height;
 		if(h){
-			height=(parseFloat(h)>maxH)?maxH:parseFloat(h);	
+			height=(parseFloat(h)>maxH)?maxH:parseFloat(h);
 		}else{
-			var H=$('.j-dialog').outerHeight()+1;	
+			var H=$('.j-dialog').outerHeight()+1;
 			height=(H>maxH?maxH:H);
 		}
 		$('.g-yskj').height(height);
-		return height;	
+		return height;
 	}
-	
+
 	//重新等位dialog的高度
 	function resetDialog(){
 		var dialog = top.dialog.get(window);
-		dialog.height(maxhDialog());	
+		dialog.height(maxhDialog());
 	}
-	
+
 	//弹窗的内部js
 	function editorDialog(a){
 		var a=a||{};
@@ -179,15 +179,15 @@ define('fnDialog',function(require, exports, module){
                 value:'确定',
                 callback:function(){
                     if(typeof opts.callback == 'function'){
-                        opts.callback(dialog);	
+                        opts.callback(dialog);
                     }
                     return false;
                 },
                 autofocus: true
-            }]);	
+            }]);
         }
 	}
-	
+
 	module.exports={
 		dialogObj:top.dialog,
 		dialog:top.dialog.get(window),
