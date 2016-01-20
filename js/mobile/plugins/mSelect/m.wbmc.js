@@ -107,7 +107,7 @@ define('mWbmc',function(require, exports, module){
                 var $target = $(obj);
                 ARR=[];
                 TTT=true;
-                
+
                 var _this = this;
 
                 _this.renderHTML();
@@ -143,8 +143,8 @@ define('mWbmc',function(require, exports, module){
                             if(TTT){return;}
                             ARR[i].selectScroll=this;
                             _this.updateSelected(i);
-                        });  
-                    })(i);    
+                        });
+                    })(i);
                 }
 
                 //初始化点击事件
@@ -173,7 +173,7 @@ define('mWbmc',function(require, exports, module){
             renderHTML : function(){
                 var stime = opts.timeStart + ':00';
                 var etime = opts.timeStart + opts.timeNum + ':00';
-                var html = '<div class="mt_mask"></div><div id="mSelect" class="mt_poppanel"><div class="mt_panel"><h3 class="mt_title">请选择选项</h3><div class="mt_body"><div class="box"></div><div class="mt_indicate"></div></div><div class="mt_confirm"><a href="javascript:void(0);" class="mt_ok">确定</a> <a href="javascript:void(0);" class="mt_cancel">取消</a></div></div></div>';
+                var html = '<div class="mt_mask"></div><div id="mSelect" class="mt_poppanel"><div class="mt_panel"><h3 class="mt_title">请选择选项</h3><div class="mt_body"><div class="box"></div><div class="mt_indicate"></div></div><div class="mt_confirm"><a href="javascript:void(0);" class="mt_ok u-btn-blue u-btn-biger">确定</a> <a href="javascript:void(0);" class="mt_cancel u-btn-gray u-btn-biger">取消</a></div></div></div>';
                 $(document.body).append(html);
             },
             updateSelected : function(index){
@@ -209,7 +209,7 @@ define('mWbmc',function(require, exports, module){
                             // console.log(i);
                             ARR[i].selectScroll=this;
                             _this.updateSelected(i);
-                        }); 
+                        });
                     })(i);
                 }
 //                console.log(22);

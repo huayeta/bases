@@ -28,18 +28,10 @@ define('aBox',function(require, exports, module){
         	var a=a||{};
             var defaults={};
             var opts=$.extend(defaults,a);
-            if(opts.type==1){
-                //企业用户
-                if(tx=true)return opts.name;
-                if(opts.abbreviation)return opts.abbreviation;//昵称
-                if(opts.name)return opts.name;//全称
-            }
-            if(opts.type==0){
-                //个人用户
-                if(tx=true)return opts.realname;
-                if(opts.nickname)return opts.nickname;//昵称
-                if(opts.realname)return opts.realname;//真实姓名
-            }
+			//个人用户
+			if(tx=true)return opts.realname;
+			if(opts.nickname)return opts.nickname;//昵称
+			if(opts.realname)return opts.realname;//真实姓名
             return '';
         }
         var getMobile=function(a){
@@ -237,7 +229,13 @@ define('aBox',function(require, exports, module){
                         if(attrs.store){
                         	var objArr=attrs.store.split(',');
                         	for(var i in objArr){
-                        		scope[objArr[i]]=ret.info[objArr[i]];
+								if(scope[objArr[i]]){
+									if(angular.isObject(scope[objArr[i]])){
+										angular.extend(scope[objArr[i]],ret.info[objArr[i]]);
+									}
+								}else{
+									scope[objArr[i]]=ret.info[objArr[i]];
+								}
                         	}
                         }
 //						判断下第一屏是否加载完
@@ -421,6 +419,18 @@ define('aBox',function(require, exports, module){
 					scope.callback({url:tpl});
 				})
 				if(url.params['order'] && url.params['order'].search(type)!=-1 && url.params['order'].search('DESC')!=-1)ele.addClass('my-searchOrder');
+			}
+		}
+	})
+
+	//返回顶部
+	aBox.directive('backTop',function(){
+		return {
+			restrict:'A',
+			link:function(scope,ele,attrs){
+				require.async(['mBox'],function(mBox){
+					mBox.backTop({target:ele[0]});
+				});
 			}
 		}
 	})

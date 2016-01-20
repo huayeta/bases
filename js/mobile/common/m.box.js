@@ -4,6 +4,7 @@ define('mBox',function(require, exports, module){
 
 	//分析url地址
 	var parseUrl=function(url) {
+        if(!url)url=window.location.href;
 		var a =  document.createElement('a');
 		a.href = url;
 		return {
@@ -35,17 +36,18 @@ define('mBox',function(require, exports, module){
 	var getCurUrl=function(a){
 		var a=a||{};
 		var defaults={
-			isRemove:[]
+			remove:[]
 		};
 		var opts=$.extend(defaults,a);
+        if(opts.isRemove)opts.remove=opts.isRemove;//兼容老的一些用法
 		var url=parseUrl(window.location.href);
 		var tpl='/?';
 		for(var i in url.params){
 			if(!opts.isPage && i=='page')continue;
-			if(opts.isRemove.length>0){
+			if(opts.remove.length>0){
 				var isContinue=false;
-				for(var j=0;j<opts.isRemove.length;j++){
-					if(opts.isRemove[j]==i)isContinue=true;
+				for(var j=0;j<opts.remove.length;j++){
+					if(opts.remove[j]==i)isContinue=true;
 				}
 				if(isContinue)continue;
 			}
@@ -91,14 +93,16 @@ define('mBox',function(require, exports, module){
         return data;
     }
     //获取登陆窗口
-    var getLogin=function(pid){
+    var getLogin=function(pid,other){
         if(!pid)pid=getCurParams('pid');
-        if(!pid){
-            pid='';
-        }else{
-            pid='&pid='+pid;
+        var str='';
+        if(pid)str+='&pid='+pid;
+        if(other){
+            for(var i in other){
+                str=str+'&'+i+'='+other[i];
+            }
         }
-        window.location.href="?m=member&c=index&a=login"+pid+"&redirectURL="+encodeURIComponent(window.location.href);
+        window.location.href="?m=member&c=index&a=login"+str+"&redirectURL="+encodeURIComponent(window.location.href);
     }
     //获取注册窗口
     var getRegister=function(pid){
@@ -625,23 +629,254 @@ define('mBox',function(require, exports, module){
             return false;
         }
     }
-    //微信分享定制
-	var wxShare=function(a){
-		var a=a||{};
-		var defaults={
+    // 分享
+    var share=function(a){
+        var a=a||{};
+        var defaults={
+            target:'.j-share',
+            url:''
+        };
+        var opts=$.extend(defaults,a);
+        if(opts.target){
+            $(opts.target).click(shareFn);
+        }else{
+            shareFn();
+        }
+        function shareFn(){
+            if(!isWeixin()){
+                require.async('mTools', function(mTools) {
+                    mTools.showBtn({
+                        target:false,
+                        buttons:[
+                            {
+                                text:'<img src="index.php?m=common&c=tool&a=qrcode&url=http://'+parseUrl().host+'/'+opts.url+'" style="width:100%;" /><p>快快将二维码分享给小伙伴吧~~</p>',
+                                isRemove:false
+                            }
+                        ]
+                    });
+                })
+            }else{
+                var style='';
+                style+='.iswx-share{position: absolute; left: 0;bottom:0; width: 100%; height: 100%; background:rgba(0,0,0,.6) url(/wap/images/common/wx-share.png) center top no-repeat; background-size: 70% auto; z-index:9999;text-align: center;}';
+                var $box=$('<div><style>'+style+'</style><div class="iswx-share"></div></div>');
+                $box.click(function(){
+                    $box.remove();
+                });
+                $('body').append($box);
+            }
 
-		};
-		var opts=$.extend(defaults,a);
-		require.async(['wx'],function(wx){
-			//注入权限验证配置
-			wx.config({
-				debug:true
-			});
-		});
-	}
+
+        }
+    }
+
+    //认证手机和填写真实姓名
+    var verifyMobile=function(a){
+        var a=a||{};
+        var defaults={
+            verify_realname:false,
+            verify_mobile:false,
+            callback:''
+        }
+        var opts=$.extend(defaults,a);
+        var loginInfo=getLoginInfo({expand:true});
+        if(!loginInfo.status)return getLogin();
+        var verify_realname=opts.verify_realname;//是否存在要填写姓名 暂时关闭真实姓名的填写
+        if(loginInfo.info.realname)verify_realname=true;//如果存在了就不需要填写姓名
+        var verify_mobile=opts.verify_mobile;//是否认证了手机
+        if(loginInfo.info.ismobile=='1')verify_mobile=true;//如果存在就不需要认证手机
+        if(verify_mobile && verify_realname)return;
+        require.async(['simpop'],function(simpop){
+            var style='';
+            style+='.m-tabform .tab-tr{ margin: 0 10px; line-height: 42px; border-bottom: 1px solid #f5f5f5; font-size: 16px; overflow: hidden;}';
+            style+='.m-tabform .tab-tr .tab-th{ width: 80px; float: left; color: #808080;}';
+            style+='.m-tabform .tab-tr .tab-td{ overflow: hidden; color: #333; min-height: 42px;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt{display: inline-block; width: 100%; box-sizing: border-box; height: 100%; line-height: normal; border: 0 none; box-shadow: none; color: #333; padding: 0;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt::-webkit-input-placeholder{ color: #bbb;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt:disabled{ opacity: .8; background:none;}';
+            style='<style>'+style+'</style>';
+            simpop.alert({
+                title:'验证手机',
+                okVal:'保存',
+                autoClose:false,
+                style:'padding:5px;',
+                content:function(){
+                    var tpl='<div class="m-tabform">'+style+(verify_realname?'':'<div class="tab-tr"><div class="tab-th">姓名：</div><div class="tab-td"><input type="text" class="u-txt j-realname" /></div></div>')+(verify_mobile?'':'<div class="tab-tr"><div class="tab-th">手机号：</div><div class="tab-td"><input type="text" class="u-txt j-mobile" /></div></div><div class="tab-tr"><div class="tab-th">验证码：</div><div class="tab-td"><a class="u-lineBtn f-fr f-ml5 f-mt5 j-send">免费发送验证码</a><div class="f-oh"><input type="text" class="u-txt j-vcode" /></div></div>')+'</div>';
+                    return tpl;
+                },
+                onShow:function(obj){
+                    var $content=$(obj.pop);
+                    $(obj.pop).find('.j-send').click(function(){
+                        var mobile=$content.find('.j-mobile').val();
+                        if(!mobile)return simpop.tips({content:'手机号码不能为空'});
+                        var regM=/^13[0-9]{9}$|14[0-9]{9}|15[0-9]{9}$|18[0-9]{9}$/;
+                        if(!regM.test(mobile))return simpop.tips({content:'请填写正确的手机号!'});
+                        aForm.promise({
+                            url:'?m=member&c=index&a=verify&t=verify_mobile&no='+mobile,
+                            isJson:true
+                        }).then(function(ret){
+                            if(!ret.status){
+                                simpop.tips({content:'该手机已经被注册!'});
+                            }else{
+                                simpop.alert({
+                                    title:'填写图形安全验证码，获取短信',
+                                    okVal:'发送',
+                                    autoClose:false,
+                                    style:'padding:5px;',
+                                    content:function(){
+                                        var tpl='<div class="m-tabform">'+style+'<div class="tab-tr"><div class="tab-th">图码：</div><div class="tab-td"><img src="api.php?n=vcode&width=130&height=40" class="f-fr j-switch-vcode" align="absbottom" style="width:130px; height:40px;" /><div class="f-oh"><input type="text" class="u-txt" name="vcode" /></div></div></div></div>';
+                                        return tpl;
+                                    },
+                                    onShow:function(obj){
+                                        var $content=$(obj.pop);
+                                        $content.find('.j-switch-vcode').click(function(){
+                                            $(this).attr('src','api.php?n=vcode&width=130&height=40');
+                                        });
+                                    },
+                                    callback:function(obj){
+                                        var $content=$(obj.pop);
+                                        var $ipt=$content.find('input');
+                                        var vcode=$ipt.val();
+                                        if(!vcode)return simpop.tips({content:'请先填写验证码'});
+                                        request({
+                                            url:'?m=member&c=account&a=verify_mobile&mobile='+mobile+'&vcode='+vcode+'&verify=1',
+                                            success:function(ret){
+                                                if(!ret.status){
+                                                    if(ret.info.indexOf('一个手机')!=-1){
+                                                        return simpop.alert({
+                        											content:ret.info,
+                        											okVal:'去登录',
+                        											callback:function(){
+                        												request({
+                        													url:'?m=member&c=account&a=unbundling_wechat',
+                                                                            success:function(ret){
+                            													request({
+                            														url:'?m=member&a=logout',
+                            														isJson:true,
+                                                                                    success:function(ret){
+                                														if(ret.status){
+                                															getLogin();
+                                														}
+                                													}
+                            													})
+                            												}
+                        												})
+                        											}
+                        										});
+                                                    }
+                                                    return simpop.tips({content:ret.info});
+                                                }
+                                                simpop.tips({content:ret.info});
+                                                obj.close();
+                                            }
+                                        })
+                                    }
+                                });
+                            }
+                        });
+                    })
+                },
+                callback:function(obj){
+                    var $content=$(obj.pop);
+                    if(!verify_realname){
+                        var realname=$content.find('.j-realname').val();
+                        if(!realname)return simpop.tips({content:'请填写姓名'});
+                        request({
+                            type:'post',
+                            url:'?m=member&c=account',
+                            data:{'par[realname]':realname},
+                            success:function(ret){
+                                if(!ret.status)return simpop.tips({content:ret.info});
+                                verify_realname=true;
+                                if(verify_mobile && verify_realname){
+                                    simpop.tips({content:'保存成功',callback:function(){
+                                        if(opts.callback && $.isFunction(opts.callback)){
+                                            opts.callback();
+                                        }
+                                    }});
+                                    obj.close();
+                                }
+                            }
+                        });
+                    }
+                    if(!verify_mobile){
+                        var mobile=$content.find('.j-mobile').val();
+                        if(!mobile)return simpop.tips({content:'请填写手机号'});
+                        var vcode=$content.find('.j-vcode').val();
+                        if(!vcode)return simpop.tips({content:'请填写验证码'});
+                        request({
+                            type:'POST',
+                            url:'?m=member&c=account&a=verify_mobile',
+                            data:{mobile:mobile,code:vcode},
+                            success:function(ret){
+                                if(!ret.status){
+                                    return simpop.tips({content:ret.info});
+                                }
+                                verify_mobile=true;
+                                if(verify_mobile && verify_realname){
+                                    simpop.tips({content:'保存成功',callback:function(){
+                                        if(opts.callback && $.isFunction(opts.callback)){
+                                            opts.callback();
+                                        }
+                                    }});
+                                    obj.close();
+                                }
+                            }
+                        })
+                    }
+                }
+            });
+        })
+    }
+    //完善手机和姓名
+    var fillMobile=function(a){
+        var loginInfo=getLoginInfo({expand:true});
+        if(!loginInfo.status)return getLogin();
+        var is_realname=false;
+        if(loginInfo.info.realname)is_realname=true;
+        var is_mobile=false;
+        if(loginInfo.info.mobile)is_mobile=true;
+        if(is_realname && is_mobile)return;
+        require.async(['simpop'],function(simpop){
+            var style='';
+            style+='.m-tabform .tab-tr{ margin: 0 10px; line-height: 42px; border-bottom: 1px solid #f5f5f5; font-size: 16px; overflow: hidden;}';
+            style+='.m-tabform .tab-tr .tab-th{ width: 80px; float: left; color: #808080;}';
+            style+='.m-tabform .tab-tr .tab-td{ overflow: hidden; color: #333; min-height: 42px;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt{display: inline-block; width: 100%; box-sizing: border-box; height: 100%; line-height: normal; border: 0 none; box-shadow: none; color: #333; padding: 0;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt::-webkit-input-placeholder{ color: #bbb;}';
+            style+='.m-tabform .tab-tr .tab-td .u-txt:disabled{ opacity: .8; background:none;}';
+            style='<style>'+style+'</style>';
+            simpop.alert({
+                title:'完善信息',
+                okVal:'保存',
+                autoClose:false,
+                style:'padding:5px;',
+                content:function(){
+                    var tpl='<div class="m-tabform">'+style+(is_realname?'':'<div class="tab-tr"><div class="tab-th">姓名：</div><div class="tab-td"><input type="text" class="u-txt j-realname" /></div></div>')+(is_mobile?'':'<div class="tab-tr"><div class="tab-th">手机号：</div><div class="tab-td"><input type="text" class="u-txt j-mobile" /></div></div>')+'</div>';
+                    return tpl;
+                },
+                callback:function(obj){
+                    var $content=$(obj.pop);
+                    var realname=$content.find('.j-realname').val();
+                    if(!realname)return simpop.tips({content:'请填写姓名'});
+                    var mobile=$content.find('.j-mobile').val();
+                    if(!mobile)return simpop.tips({content:'请填写手机号'});
+                    request({
+                        type:'post',
+                        url:'?m=member&c=account',
+                        data:{'par[realname]':realname,'par[mobile]':mobile},
+                        success:function(ret){
+                            if(!ret.status)return simpop.tips({content:ret.info});
+                            simpop.tips({content:ret.info});
+                            obj.close();
+                        }
+                    });
+                }
+            });
+        })
+    }
+
     return {
         isWeixin:isWeixin,//判断是否是微信浏览器
-		wxShare:wxShare,//分享接口
 		parseUrl:parseUrl,//解析url
 		getCurUrl:getCurUrl,//获取当前网址
 		getCurParams:getCurParams,//获取当前页面某个参数
@@ -663,6 +898,9 @@ define('mBox',function(require, exports, module){
 		isLoadImg:isLoadImg,//判断图片加载完后调用回调函数
 		request:request,//请求数据
         backTop:backTop,//返回顶部
-        goBack:goBack
+        goBack:goBack,//后退按钮
+        share:share,//分享按钮
+        verifyMobile:verifyMobile,//验证手机和填写真实姓名
+        fillMobile:fillMobile//完善手机和真实姓名
     }
 });

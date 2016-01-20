@@ -34,6 +34,7 @@ define(function(require,exports,module){
 		}
 		var	valid=_this.Validform({
 			btnSubmit:opts.btnSubmit,
+			beforeCheck:opts.beforeCheck,
 			tiptype:function(msg,o,cssctl){
 				if(!o.obj.is("form")){
                     var parent=o.obj.parent();
@@ -57,7 +58,7 @@ define(function(require,exports,module){
 				"z2-4" :/^[\u4E00-\u9FA5\uf900-\ufa2d]{2,4}$/,
 				"domain":/^(?!http:\/\/)?(?!www\.)?.*$/,//域名正则匹配
 				"domains":/^(?!http:\/\/|www)+.*$/,//域名正则匹配
-				"f2-4":/^\d*(\.\d{2,4})?$/,//浮点价格
+				"f2-4":/^\d+(\.\d{2,4})?$/,//浮点价格
 				"urls":/^(\w+:\/\/)\w+(\.\w+)+.*$/,//http域名正则
                 "validAccount":function(gets,obj,curform,datatype){
                     var _this=$(obj);

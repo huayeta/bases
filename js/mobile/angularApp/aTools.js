@@ -655,42 +655,45 @@ define('aTools',function(require, exports, module){
                             var str='';
                             var arr=[];
                             _this.isStatus=true;
-                            if(member.isemail && member.isemail=='1' && ret.info.isemail=='0'){
+                            if(member.isemail && member.isemail=='1' && !isTrue(ret.info.isemail)){
                                 arr.push({
                                     verify:'email',
                                     callback:verify_email,
                                     txt:'邮箱',
                                     url:'?m=member&c=account&a=verify_email'
                                 });
+								$window.location.href='?m=member&c=account&a=verify_email';
                                 _this.isStatus=false;
                             }
-                            if(member.ismobile && member.ismobile=='1' && ret.info.ismobile=='0'){
+                            if(member.ismobile && member.ismobile=='1' && !isTrue(ret.info.ismobile)){
                                 arr.push({
                                     verify:'mobile',
                                     callback:verify_mobile,
                                     txt:'手机',
                                     url:'?m=member&c=account&a=verify_mobile'
                                 });
+								$window.location.href='?m=member&c=account&a=verify_mobile';
                                 _this.isStatus=false;
                             }
-                            if(member.isauth && member.isauth=='1' && ((ret.info.type=='0' && !isTrue(ret.info.isidcard)) || (ret.info.type=='1' && !isTrue(ret.info.status)))){
+                            if(member.isauth && member.isauth=='1' && !isTrue(ret.info.isidcard)){
                                 arr.push({
                                     verify:'auth',
                                     callback:verify_auth,
                                     txt:'身份',
                                     url:'?m=member&c=account&a=verify_card'
                                 });
+								$window.location.href='?m=member&c=account&a=verify_card';
                                 _this.isStatus=false;
                             }
-                            if(member.isgroupid && member.isgroupid=='1' && ret.info.groupid=='0'){
-                                arr.push({
-                                    verify:'isgroupid',
-                                    callback:verify_isgroupid,
-                                    txt:'认证vip会员',
-                                    url:opts.is_yst=='1'?'?m=service&c=vip&a=buy':'?m=algorithm&c=index&a=index'
-                                });
-                                _this.isStatus=false;
-                            }
+                            // if(member.isgroupid && member.isgroupid=='1' && !isTrue(ret.info.groupid)){
+                            //     arr.push({
+                            //         verify:'isgroupid',
+                            //         callback:verify_isgroupid,
+                            //         txt:'认证vip会员',
+                            //         url:opts.is_yst=='1'?'?m=service&c=vip&a=buy':'?m=algorithm&c=index&a=index'
+                            //     });
+                            //     _this.isStatus=false;
+                            // }
                             //判断是否为真
                             function isTrue(a){
                                 if(!a)return false;
@@ -733,6 +736,9 @@ define('aTools',function(require, exports, module){
                                 }
                                 str='请认证（'+tmp.join('/')+'），拥有密码信、登陆特权！';
                                 simpop.alert({
+									close:false,
+									maskclose:false,
+									cancelVal:false,
                                     content:str,
                                     callback:function(content,dia){
                                         $window.location.href=arr[0].url;

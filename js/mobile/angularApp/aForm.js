@@ -96,6 +96,7 @@ define('aForm',function(require, exports, module){
 			link:function(scope,ele,attrs){
 				var state=attrs.mySref;
 				var storeArr=[];
+				if(scope.STORE)storeArr=scope.STORE.split(',');
 				ele.bind('click',function(event){
 					if(attrs.store)storeArr=attrs.store.split(',');
 					if(state){
@@ -176,11 +177,18 @@ define('aForm',function(require, exports, module){
 				id:''
 			};
 			var opts=angular.extend(defaults,a);
-			if(!opts.id)return;
-			var $tmp=$(MSG[opts.id]);
-			delete MSG[opts.id];
-			$tmp.remove();
-			return opts.id;
+			if(opts.id){
+				var $tmp=$(MSG[opts.id]);
+				delete MSG[opts.id];
+				$tmp.remove();
+				return opts.id;
+			}else{
+				for(var i in MSG){
+					var $tmp=$(MSG[i]);
+					delete MSG[i];
+					$tmp.remove();
+				}
+			}
 		}
 		return obj;
 	})
@@ -393,7 +401,7 @@ define('aForm',function(require, exports, module){
 			transclude: true,
 			replace: true,
 			scope:true,
-            template: '<div class="j-ueditor ueditor"><div class="tools"><a class="del f-fr f-mr10" ng-click="clear();">清空</a><a class="uploadimage icon" my-sref="upload/image?id=editorImage&size=2" store="{{store}}">上传图片</a></div><div class="u-txtarea j-editor" contenteditable="true" style="width:100%;overflow-y:scroll;min-height:150px;" ng-style="style" ng-transclude="true"></div><div class="j-ueditor ueditor"><div class="tools f-mt10"><a class="delf-mr10" ng-click="br();">插入新一行</a></div></div>',
+            template: '<div class="j-ueditor m-editor"><div class="tools"><a class="btn f-fr f-mr10" ng-click="clear();">清空</a><a class="btn" my-sref="upload/image?id=editorImage&size=2" store="{{store}}"><i class="uploadimage"></i>上传图片</a></div><div class="editor-txtarea j-editor" contenteditable="true" style="width:100%;min-height:150px;" ng-style="style" ng-transclude="true"></div><div class="tools f-mt10"><a class="btn f-mr10" ng-click="br();">插入新一行</a></div></div>',
 	        link: function(scope, element, attrs, ngModel) {
 				var editor=element.find('.j-editor');
 	            // don't do anything unless this is actually bound to a model
@@ -537,7 +545,7 @@ define('aForm',function(require, exports, module){
             restrict: 'AE',
             transclude: true,
             replace: true,
-            template: '<div class="j-ueditor ueditor"><div class="tools"><a class="del f-fr f-mr10">清空</a><a class="bold icon">加粗</a><a class="italic icon">斜体</a><a class="underline icon">下划线</a><a class="fontsize icon">字体大小</a></div><script type="text/plain" style="height:200px;width:100%;" ng-transclude id="myEditor1"></script></div>',
+            template: '<div class="j-ueditor ueditor"><div class="tools"><a class="del f-fr f-mr10">清空</a><a class="bold tools-icon">加粗</a><a class="italic tools-icon">斜体</a><a class="underline tools-icon">下划线</a><a class="fontsize tools-icon">字体大小</a></div><script type="text/plain" style="height:200px;width:100%;" ng-transclude id="myEditor1"></script></div>',
             require: '?ngModel',
             scope: {
                 config: '='
@@ -632,22 +640,23 @@ define('aForm',function(require, exports, module){
             link:function(scope,ele,attrs,ngModel){
                 scope.select={};
                 var value=form.strToJson(attrs.mselect);
+				if(!value)value={};
                 //设置默认值
-                var VAL='';
-                if(ngModel)VAL=$parse(attrs.ngModel)(scope.$parent);
-                if(!VAL){
-                	if(attrs.def==''){
-	                    for(var i in value){
-	                        scope.select={name:value[i],value:i};
-	                       break;
-	                    }
-	                }else{
-	                    scope.select={name:value[attrs.def],value:attrs.def};
-	                }
-	                if(ngModel)$parse(attrs.ngModel).assign(scope.$parent,scope.select.value);
-                }else{
-                	scope.select={name:value[VAL],value:VAL};
-                }
+				var VAL='';
+				if(ngModel)VAL=$parse(attrs.ngModel)(scope.$parent);
+				if(!VAL){
+					if(attrs.def==''){
+						for(var i in value){
+							scope.select={name:value[i],value:i};
+						   break;
+						}
+					}else{
+						scope.select={name:value[attrs.def],value:attrs.def};
+					}
+					if(ngModel)$parse(attrs.ngModel).assign(scope.$parent,scope.select.value);
+				}else{
+					scope.select={name:value[VAL],value:VAL};
+				}
 				if(ngModel){
 					ngModel.$render=function(){
 						try{
@@ -655,12 +664,18 @@ define('aForm',function(require, exports, module){
 						}catch(e){}
 					}
 				}
+				// console.log(value);
                 require.async(['mSelect'],function(mSelect){
                 	mSelect.mSelect({
                 		target:ele[0],
                         value:value,
                         def:scope.select.value,
-                        click:function(opts){opts.def=scope.select.value;},
+                        click:function(opts){
+							opts.def=scope.select.value;
+							if(attrs.value && $parse(attrs.value)(scope.$parent)){
+								value=opts.value=$parse(attrs.value)(scope.$parent);
+							}
+						},
                         callback:function(val){
                             if(ngModel){
                             	$parse(attrs.ngModel).assign(scope.$parent,val.value);
@@ -670,6 +685,7 @@ define('aForm',function(require, exports, module){
                                 scope.$apply();
                             }
                             if(attrs.callback)scope.$eval(attrs.callback);
+							scope.$parent.$apply();
                         }
                     });
                 });
@@ -682,11 +698,16 @@ define('aForm',function(require, exports, module){
             scope:true,
             require:'?ngModel',
             link:function(scope,ele,attrs,ngModel){
+				var ishours=attrs.ishours=='false'?false:true;
             	//设置默认值
                 var VAL=$parse(attrs.ngModel)(scope.$parent);
                 if(!VAL){
 	                if(attrs.def){
-	                    $parse(attrs.ngModel).assign(scope.$parent,form.toDate(attrs.def,'yyyy-MM-dd hh:mm:ss'));
+						if(ishours){
+		                    $parse(attrs.ngModel).assign(scope.$parent,form.toDate(attrs.def,'yyyy-MM-dd hh:mm:ss'));
+						}else{
+							$parse(attrs.ngModel).assign(scope.$parent,form.toDate(attrs.def,'yyyy-MM-dd'));
+						}
 	                }else{
 	                    $parse(attrs.ngModel).assign(scope.$parent,'');
 	                }
@@ -694,11 +715,16 @@ define('aForm',function(require, exports, module){
                 require.async(['mTime'],function(mTime){
             		mTime.mTime({
             			target:ele[0],
+						ishours:ishours,
                         click:function(opts){
                         	opts.def=$parse(attrs.ngModel)(scope.$parent);
                         },
                         callback:function(val){
-                            $parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date+' '+val.hours+':'+val.minutes+':00');
+							if(ishours){
+	                            $parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date+' '+val.hours+':'+val.minutes+':00');
+							}else{
+								$parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date);
+							}
                             scope.$parent.$apply();
                         }
                     });
@@ -715,6 +741,8 @@ define('aForm',function(require, exports, module){
                 var setVal;//设置scope函数
                 var timer=[];//定时器
                 var model=attrs.model.split(',');
+				var selectNum=3;
+				if(model.length)selectNum=model.length;
                 var defArr=(attrs.def?attrs.def.split(','):[]);
                 for(var i in model){
                     (function(i){
@@ -753,7 +781,7 @@ define('aForm',function(require, exports, module){
                 		nameArray=scope.$eval(attrs.namearray);
                 	}
                 	if(!nameArray)return;
-                    mWbmc.wbmc({target:ele[0],name:nameArray,pid:attrs.pid,select:attrs.select?attrs.select:'3',root:attrs.root?attrs.root:0,val:attrs.val,defId:attrs.defid,def:attrs.def?attrs.def.split(','):'',init:function(obj){
+                    mWbmc.wbmc({target:ele[0],name:nameArray,pid:attrs.pid,select:attrs.select?attrs.select:selectNum,root:attrs.root?attrs.root:0,val:attrs.val,defId:attrs.defid,def:attrs.def?attrs.def.split(','):'',init:function(obj){
                     	if(attrs.defid){
                     		for(var i in obj.opts.def){
                     			if(obj.opts.def[i])$parse(model[i]).assign(scope.$parent,obj.opts.def[i]);
@@ -770,7 +798,7 @@ define('aForm',function(require, exports, module){
                             obj.opts.def.push($parse(model[i])(scope.$parent));
                        }
                     },callback:function(ret){
-                    	// console.log(ret);
+                    	scope.select=ret;
                         for(var i in ret){
                             $parse(model[i]).assign(scope.$parent,ret[i][attrs.val]);
                         }
@@ -1016,9 +1044,15 @@ define('aForm',function(require, exports, module){
 	})
 	form.factory('removeHtml',function(){
 		return function(str){
+			if(!str)return '';
 			str=str.replace(/<[^>].*?>/g,"");
 			str=str.replace(/(&#60;)(?!&#62;).*?(&#62;)/g,"");
 			return str;
+		}
+	});
+	form.filter('removeHtml',function(removeHtml){
+		return function(str){
+			return removeHtml(str);
 		}
 	});
     form.filter('toTrust',function($sce){

@@ -108,7 +108,7 @@ seajs.config({
 		jqueryFileUpload:'js/mobile/plugins/jqueryFileUpload/jquery.fileupload.js'
 	},
 	map: [
-		[ /^(.*\/.*\.(?:css|js))(?:.*)$/i, '$1?t=20151002' ]
+		[ /^(.*\/.*\.(?:css|js))(?:.*)$/i, '$1?t=20151231' ]
 	]
 });
 

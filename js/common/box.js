@@ -160,18 +160,9 @@ define('box',function(require, exports, module){
     	}
     	var getName=function(tx){
     		if(!infos)return '';
-            if(infos.type==1){
-                //企业用户
-                if(tx=true)return infos.name;
-                if(infos.abbreviation)return infos.abbreviation;//昵称
-                if(infos.name)return infos.name;//全称
-            }
-            if(infos.type==0){
-                //个人用户
-                if(tx=true)return infos.realname;
-                if(infos.nickname)return infos.nickname;//昵称
-                if(infos.realname)return infos.realname;//真实姓名
-            }
+			if(tx=true)return infos.realname;
+			if(infos.nickname)return infos.nickname;//昵称
+			if(infos.realname)return infos.realname;//真实姓名
             return '';
         }
         var getMobile=function(a){
@@ -250,7 +241,7 @@ define('box',function(require, exports, module){
 							if(info.email)name=info.email;
 							if(info.realname || info.name)name=info.realname?info.realname:info.name;
 							if(info.nickname || info.abbreviation)name=info.nickname?info.nickname:info.abbreviation;
-							_this.html('<a href="/?m=member&c=index&a=left&menu=1" class="name f-mr10" target="_blank">'+name+'</a><a href="/?m=member&a=logout&redirectURL='+encodeURIComponent(window.location.href)+'" class="f-mr10">退出</a>'+user);
+							_this.html('<a href="/?m=member" class="name f-mr10" target="_blank">'+name+'</a><a href="/?m=member&a=logout&redirectURL='+encodeURIComponent(window.location.href)+'" class="f-mr10">退出</a>'+user);
 						}else{
 							if(!opts.html)opts.html='<a href="?m=member&c=index&a=login&redirectURL='+encodeURIComponent(window.location.href)+'" class="btn1">登录</a> <a href="?m=member&a=register'+PID+'" class="btn2" target="_blank">注册</a>'
 							_this.html(opts.html);
@@ -529,9 +520,9 @@ define('box',function(require, exports, module){
         require.async('cookie',function(cookie){
             $.cookie('gotomember',serialize({"title":opts.title,"url":opts.url}));
 			if(opts._blank){
-				_blank('/?m=member');
+				_blank('/?m=member&a=senior');
 			}else{
-				window.location.href='?m=member';
+				window.location.href='/?m=member&a=senior';
 			}
         });
     }
@@ -541,11 +532,13 @@ define('box',function(require, exports, module){
         var defaults={
             target:'[data-goMember]',
             title:'跳转链接',
+			before:'',
 			_blank:false,
             url:''
         };
         var opts=$.extend(defaults,a);
         $(document).on('click',opts.target,function(event){
+			if(opts.before && $.isFunction(opts.before) && opts.before(this)===false)return false;
             var _this=$(this);
             if(opts.target.charAt(0)=='['){
 	            var sx=opts.target.substring(1,opts.target.length-1);
@@ -1237,22 +1230,40 @@ define('box',function(require, exports, module){
 		});
 	};
 
+	//手机终端的信息
+	var browser=function(){
+		var u = navigator.userAgent, app = navigator.appVersion;
+		return {//移动终端浏览器版本信息
+			 trident: u.indexOf('Trident') > -1, //IE内核
+			 presto: u.indexOf('Presto') > -1, //opera内核
+			 webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+			 gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+			 mobile: !!u.match(/AppleWebKit.*Mobile.*/)||!!u.match(/AppleWebKit/), //是否为移动终端
+			 ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+			 android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+			 iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQHD浏览器
+			 iPad: u.indexOf('iPad') > -1, //是否iPad
+			 webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+		 }
+	}
+
     /*
     * 常用功能函数
     */
-    window.yst={};
-    //会员中心跳转
-    window.yst.algorithm=function(){
-    	gotoMember({title:'机制商品',url:'?m=algorithm&c=index&a=index'});
-    }
-    //在线充值
-    window.yst.recharge=function(){
-    	gotoMember({title:'我的资产',url:'?m=financial&c=recharge'});
-    }
-    //卡包
-    window.yst.cardBinding=function(){
-    	gotoMember({title:'我的资产',url:'?m=financial&c=card&a=index'});
-    }
+    window.yst={
+		algorithm:function(){
+			//会员中心跳转
+	    	gotoMember({title:'机制商品',url:'?m=algorithm&c=index&a=index'});
+	    },
+		recharge:function(){
+			//在线充值
+	    	gotoMember({title:'我的资产',url:'?m=financial&c=recharge'});
+	    },
+		cardBinding:function(){
+			//卡包
+	    	gotoMember({title:'我的资产',url:'?m=financial&c=card&a=index'});
+	    }
+	};
 
 	module.exports={
 		_blank:_blank,//先窗口打开
@@ -1284,6 +1295,7 @@ define('box',function(require, exports, module){
         goMember:goMember,//点击往会员中心跳转
         countdown:countdown,//团购时间
         loadCss:loadCss,//判断css是否加载了，然后加载
-		scrollMenu:scrollMenu//滚动菜单
+		scrollMenu:scrollMenu,//滚动菜单
+		browser:browser//终端的信息
 	}
 })

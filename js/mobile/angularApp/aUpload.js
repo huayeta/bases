@@ -332,7 +332,7 @@ define('aUpload',function(require, exports, module){
                     var progress = parseInt(data._progress.loaded / data._progress.total * 100, 10);
                     $.each($scope.items,function(pIndex,item){
                         if(item.createtime==data.timeId){
-                            $scope.items[i].css={'width':0.1*progress+'%'};
+                            $scope.items[pIndex].css={'width':0.1*progress+'%'};
                             $scope.$apply();
                             return;
                         }
@@ -344,8 +344,8 @@ define('aUpload',function(require, exports, module){
                             if(ret.status){
                                 var obj=ret.info;
                                 obj.isProgress=false;
-                                $scope.items.splice(i,1,obj);
-                                $scope.changeClass(i);
+                                $scope.items.splice(pIndex,1,obj);
+                                $scope.changeClass(pIndex);
                             }else{
                                 simpop.alert({content:ret.info});
                             }

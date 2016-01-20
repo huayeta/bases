@@ -304,7 +304,7 @@ define('mTools',function(require, exports, module){
                     var index=$(this).data('index');
                     var callback=opts.buttons[index].callback;
                     if($.isFunction(callback))callback(_this[0]);
-                    $msg.remove();
+                    if(opts.buttons[index].isRemove!==false)$msg.remove();
                 });
                 $con.prepend(tpl);
             }

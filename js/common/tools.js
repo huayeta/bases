@@ -301,6 +301,30 @@ define('tools', function(require, exports, module) {
             if (url.params[a]) return url.params[a];
             return undefined;
         }
+    //获得当前页面的url
+	var getCurUrl=function(a){
+		var a=a||{};
+		var defaults={
+			remove:[]
+		};
+		var opts=$.extend(defaults,a);
+        if(opts.isRemove)opts.remove=opts.isRemove;//兼容老的一些用法
+		var url=parseUrl(window.location.href);
+		var tpl='/?';
+		for(var i in url.params){
+			if(!opts.isPage && i=='page')continue;
+			if(opts.remove.length>0){
+				var isContinue=false;
+				for(var j=0;j<opts.remove.length;j++){
+					if(opts.remove[j]==i)isContinue=true;
+				}
+				if(isContinue)continue;
+			}
+			tpl=tpl+i+'='+url.params[i]+'&';
+		}
+		if(tpl.charAt(tpl.length-1)=='&')tpl=tpl.substr(0,tpl.length-1);
+		return tpl;
+	}
         //中文下的逗号转换成英文下的逗号
     var convertComma = function(a) {
             var a = a || {};
@@ -1476,11 +1500,11 @@ define('tools', function(require, exports, module) {
                 var key = _this.data('changeform');
                 obj[key] = _this.val();
             });
-            console.log(obj);
+            // console.log(obj);
         }
         this.get = function() {
-            var tx = false;
-            var tmp = false;
+            var tx = false;//当data-changeform=true的dom没变动返回true
+            var tmp = false;//当data-changeform!=true的dom变动的时候返回true
             $.each($target, function() {
                 var _this = $(this);
                 var key = _this.data('changeform');
@@ -1557,7 +1581,7 @@ define('tools', function(require, exports, module) {
                     }
                     //默认值
                     var defaultSel=$target.data('defaultsel');
-                    if(defaultSel)defaultSel=defaultSel.split(',');
+                    if(defaultSel)defaultSel=(defaultSel+'').split(',');
                     parames.data.defaultSel=defaultSel;
                     return true;
                 },
@@ -1588,34 +1612,34 @@ define('tools', function(require, exports, module) {
                     var tmp = '';
                     var url = '';
                     _this.isStatus = true;
-                    if (member.isemail && member.isemail == '1' && info.isemail == '0') {
+                    if (member.isemail && member.isemail == '1' && !isTrue(info.isemail)) {
                         tmp += '认证邮箱、';
                         url = '?m=member&c=account&a=verify_email';
                         _this.isStatus = false;
                     }
-                    if (member.ismobile && member.ismobile == '1' && info.ismobile == '0') {
+                    if (member.ismobile && member.ismobile == '1' && !isTrue(info.ismobile)) {
                         tmp += '认证手机、';
                         if (!url) url = '?m=member&c=account&a=verify_mobile';
                         _this.isStatus = false;
                     }
-                    if (member.isauth && member.isauth == '1' && ((info.type == '0' && !isTrue(info.isidcard)) || (info.type == '1' && !isTrue(info.status)))) {
+                    if (member.isauth && member.isauth == '1' && !isTrue(info.isidcard)) {
                         tmp += '认证身份、';
                         if (!url) url = '?m=member&c=account&a=verify_card';
                         _this.isStatus = false;
                     }
-                    if (member.isgroupid && member.isgroupid == '1' && info.groupid == '0') {
-                        tmp += '认证vip会员、';
-                        var topBody=$(window.top.document).find('.j-member-body');
-                        var is_yst=topBody.attr('is_yst');
-                        if (!url){
-                            if(is_yst=='1'){
-                                url = '?m=service&c=vip&a=buy';
-                            }else{
-                                url = '?m=algorithm&c=index&a=index';
-                            }
-                        }
-                        _this.isStatus = false;
-                    }
+                    // if (member.isgroupid && member.isgroupid == '1' && !isTrue(info.groupid)) {
+                    //     tmp += '认证vip会员、';
+                    //     var topBody=$(window.top.document).find('.j-member-body');
+                    //     var is_yst=topBody.attr('is_yst');
+                    //     if (!url){
+                    //         if(is_yst=='1'){
+                    //             url = '?m=service&c=vip&a=buy';
+                    //         }else{
+                    //             url = '?m=algorithm&c=index&a=index';
+                    //         }
+                    //     }
+                    //     _this.isStatus = false;
+                    // }
                     //判断是否为真
                     function isTrue(a) {
                         if (!a) return false;
@@ -1627,6 +1651,7 @@ define('tools', function(require, exports, module) {
                         tmp = tmp.substring(0, tmp.length - 1);
                         str = '您还没有完善信息（' + tmp + '），建议先去完善信息';
                         dialog.alert({
+                            cancel:false,
                             content: str,
                             callback: function(content, dia) {
                                 newtabs.newtabs('账户管理', url);
@@ -1659,30 +1684,21 @@ define('tools', function(require, exports, module) {
                                             var info = ret.info;
                                             var str='';
                                             if(member.isname=='1'){
-                                                if(info.type=='0' && !info.realname){
+                                                if(!info.realname){
                                                     //个人
                                                     str+='<tr><th width="80">姓名：</th><td><input type="text" class="u-txt" name="par[realname]" datatype="*" /></td></tr>';
-                                                }else if(info.type=='1' && !info.name){
-                                                    //企业
-                                                    str+='<tr><th width="80">企业全称：</th><td><input type="text" class="u-txt" name="arg[name]" datatype="*" /></td></tr>';
                                                 }
                                             }
                                             if(member.isphone=='1'){
-                                                if(info.type=='0' && !info.mobile){
+                                                if(!info.mobile){
                                                     //个人
                                                     str+='<tr><th>手机：</th><td><input type="text" class="u-txt" name="par[mobile]" datatype="m"/>';
-                                                }else if(info.type=='1' && !info.phone){
-                                                    //企业
-                                                    str+='<tr><th>企业手机：</th><td><input type="text" class="u-txt" name="arg[phone]" datatype="m" /></td></tr>'
                                                 }
                                             }
                                             if(member.isarea=='1'){
-                                                if(info.type=='0' && !info.county){
+                                                if(!info.county){
                                                     //个人
-                                                    str+='<tr><th>所在地：</th><td><select class="u-slt f-mr10" id="LP" name="par[province]"></select><select class="u-slt f-mr10" id="LC" name="par[city]"></select><select class="u-slt slt2" id="LA" name="par[county]" datatype="*"></select></td></tr>';
-                                                }else if(info.type=='1' && !info.county){
-                                                    //企业
-                                                    str+='<tr><th>所在城市：</th><td><select class="u-slt f-mr10" id="LP" name="arg[province]"></select><select class="u-slt f-mr10" id="LC" name="arg[city]"></select><select class="u-slt slt2" id="LA" name="arg[county]" datatype="*"></select></td></tr>'
+                                                    str+='<tr><th>所在地：</th><td><input type="hidden" name="par[area]" class="j-area"><select class="u-slt f-mr10" id="LP" name="par[province]"></select><select class="u-slt f-mr10" id="LC" name="par[city]"></select><select class="u-slt slt2" id="LA" name="par[county]" datatype="*"></select></td></tr>';
                                                 }
                                             }
                                             if(str){
@@ -1692,11 +1708,20 @@ define('tools', function(require, exports, module) {
                                                     cancel:false,
                                                     content: '<div class="m-tabform" style="width:500px;"><form action=""><table><thead><tr><th width="80"></th><th></th></tr></thead><tbody>'+str+'</tbody></table></form></div>',
                                                     onshow: function(content, dia) {
+                                                        var $content=$(content);
+                                                        var $area=$content.find('.j-area');
                                                         wbmc({
                                                             name: 'area',
                                                             root: 1,
                                                             val: 'name',
-                                                            oid: ['#LP', '#LC', '#LA']
+                                                            oid: ['#LP', '#LC', '#LA'],
+                                                            change:function(obj,area){
+                                                                var $obj=$(obj);
+                                                                if($obj.attr('id')=='LA'){
+                                                                    var id=$obj.find('option:selected').attr('id');
+                                                                    $area.val(id);
+                                                                }
+                                                            }
                                                         });
                                                         validForm.form({
                                                             target: $(content).find('form')[0],
@@ -2608,8 +2633,35 @@ define('tools', function(require, exports, module) {
         $blank.trigger('submit');
     }
 
+    var limitWord=function (a) {
+        var a=a||{};
+        var defaults={
+            target:'.j-limitWord',
+            wordText:'.j-limitWordText'
+        };
+        var opts=$.extend(defaults,a);
+        var $target=$(opts.target);
+        $.each($target,function(){
+            var $this=$(this);
+            var $text=$this.find(opts.wordText);
+            var num=parseInt($text.text());
+            var $ipt=$this.find('input');
+            if($ipt.size()==0)$ipt=$this.find('textarea');
+            $ipt.keyup(function(){
+                var size=$ipt.val().length;
+                if(size<=num){
+                    $text.text(num-size);
+                }else{
+                    $ipt.val($ipt.val().substring(0,num));
+                    $text.text(0);
+                }
+            }).keyup();
+        });
+    }
+
     module.exports = {
         getCurParams: getCurParams, //获取url的参数
+        getCurUrl:getCurUrl,//获取当前页面的url
         getJquery: getJquery, //获得jquery对象
         strToJson: strToJson, //字符串转换成json
         convertComma: convertComma, //中文下的逗号转换成英文下的逗号
@@ -2654,6 +2706,7 @@ define('tools', function(require, exports, module) {
         gotoMember: gotoMember, //往会员中心跳转
         manageTips: manageTips, //网页右下角消息管理
         notification: notification, //html5的通知
-        _blank:_blank//触发新窗口打开
+        _blank:_blank,//触发新窗口打开
+        limitWord:limitWord//限制输入个数
     }
 });
