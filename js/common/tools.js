@@ -271,30 +271,7 @@ define('tools', function(require, exports, module) {
         returnResult.val = $target.attr(opts.content);
         return returnResult;
     }
-    //获得当前页面的url
-    var getCurUrl = function(a) {
-            var a = a || {};
-            var defaults = {
-                remove: []
-            };
-            var opts = $.extend(defaults, a);
-            var url = parseUrl(window.location.href);
-            var tpl = '/?';
-            for (var i in url.params) {
-                if (!opts.isPage && i == 'page') continue;
-                if (opts.remove.length > 0) {
-                    var isContinue = false;
-                    for (var j = 0; j < opts.remove.length; j++) {
-                        if (opts.remove[j] == i) isContinue = true;
-                    }
-                    if (isContinue) continue;
-                }
-                tpl = tpl + i + '=' + url.params[i] + '&';
-            }
-            if (tpl.charAt(tpl.length - 1) == '&') tpl = tpl.substr(0, tpl.length - 1);
-            return tpl;
-        }
-        //获取当前页面某个参数
+    //获取当前页面某个参数
     var getCurParams = function(a, url) {
             if (!a) return;
             var url = parseUrl(url ? url : window.location.href);
@@ -305,11 +282,12 @@ define('tools', function(require, exports, module) {
 	var getCurUrl=function(a){
 		var a=a||{};
 		var defaults={
+            url:window.location.href,
 			remove:[]
 		};
 		var opts=$.extend(defaults,a);
         if(opts.isRemove)opts.remove=opts.isRemove;//兼容老的一些用法
-		var url=parseUrl(window.location.href);
+		var url=parseUrl(opts.url);
 		var tpl='/?';
 		for(var i in url.params){
 			if(!opts.isPage && i=='page')continue;
@@ -1456,6 +1434,7 @@ define('tools', function(require, exports, module) {
         var defaults = {
             target: '[data-switchCheckbox]',
             box: '[data-switchCheckbox=box]',
+            isRemove: false,
             change: '',
             size: 1,
             contain: document //父对象
@@ -1465,7 +1444,14 @@ define('tools', function(require, exports, module) {
         $.each(contain, function(i, n) {
             var switchBtn = $(opts.target, $(n));
             var target = switchBtn.filter('input:checkbox');
+            var btns=switchBtn.filter(function(index){
+                return !$(this).is(opts.box);
+            });
             var box = switchBtn.filter(opts.box);
+            var boxClone=box.clone(true);
+            if(opts.isRemove){
+                box.html('');
+            }
             target.change(function() {
                 var _this = $(this);
                 if (opts.size == 1) {
@@ -1475,11 +1461,20 @@ define('tools', function(require, exports, module) {
                         box.hide();
                     }
                 } else {
-                    var index = _this.index(target);
+                    var index = btns.index(_this);
+                    var children=box.children().eq(index);
                     if (_this.is(':checked')) {
-                        box.eq(index).show();
+                        if(opts.isRemove){
+                            box.append(boxClone.children().eq(index).attr('data-index',index).clone(true).show());
+                        }else{
+                            box.children().eq(index).show();
+                        }
                     } else {
-                        box.eq(index).hide();
+                        if(opts.isRemove){
+                            box.children('[data-index='+index+']').remove();
+                        }else{
+                            box.children().eq(index).hide();
+                        }
                     }
                 }
                 if ($.isFunction(opts.change)) opts.change(_this[0]);
@@ -1557,7 +1552,24 @@ define('tools', function(require, exports, module) {
                         var attr = _this.attr('data-choose-val');
                         var arr = [];
                         for (var i in val) {
-                            arr.push(val[i][attr]);
+                            var tmp=attr;
+                            //单独处理nickname和realname的值
+                            if(attr=='realname' || attr=='nickname'){
+                                if(val[i]['realname'] && attr=='realname'){
+                                    tmp='realname';
+                                }else if(val[i]['nickname'] && attr=='realname'){
+                                    tmp='nickname';
+                                }else if(val[i]['nickname'] && attr=='nickname'){
+                                    tmp='realname';
+                                }else if(val[i]['realname'] && attr=='nickname'){
+                                    tmp='nickname';
+                                }else if(val[i]['account']){
+                                    tmp='account';
+                                }else if(val[i]['id']){
+                                    tmp='id';
+                                }
+                            }
+                            arr.push(val[i][tmp]);
                         }
                         if (n.nodeName == 'INPUT') {
                             _this.val(arr.join(','));
@@ -2659,6 +2671,40 @@ define('tools', function(require, exports, module) {
         });
     }
 
+    //协议
+    var agreement=function(a){
+        var a=a||{};
+        var defaults={
+            target:'.j-agreement'
+        }
+        var opts=$.extend(defaults,a);
+        var $target=$(opts.target);
+        if($target.size()==0)return;
+        require.async(['validForm'],function(validForm){
+            $target.each(function(){
+                var $this=$(this);
+                var type=$this.data('type');
+                if(!type)return;
+                var $agreement=$this.find('[data-agreement]');
+                if($agreement.size()==0)return;
+                validForm.request({
+                    url:'?m=member&a=agreement&name='+type,
+                    isJson:true,
+                    success:function(ret){
+                        if(ret.status){
+                            $agreement.each(function(){
+                                var _this=$(this);
+                                var arg=_this.data('agreement');
+                                if(!arg)return true;
+                                _this.text(ret.info[arg]);
+                            });
+                        }
+                    }
+                });
+            });
+        })
+    }
+
     module.exports = {
         getCurParams: getCurParams, //获取url的参数
         getCurUrl:getCurUrl,//获取当前页面的url
@@ -2707,6 +2753,7 @@ define('tools', function(require, exports, module) {
         manageTips: manageTips, //网页右下角消息管理
         notification: notification, //html5的通知
         _blank:_blank,//触发新窗口打开
-        limitWord:limitWord//限制输入个数
+        limitWord:limitWord,//限制输入个数
+        agreement:agreement//协议
     }
 });

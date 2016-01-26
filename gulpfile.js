@@ -55,8 +55,8 @@ gulp.task('lint',function(){
         .pipe(jshint.reporter('default'))
 });
 
-gulp.task('clean-dist',function(cb){
-    del(BASE+'dist/').then(function(paths){
+gulp.task('clean-dest',function(cb){
+    del(BASE+'dest/').then(function(paths){
         cb();
     });
 })
@@ -68,6 +68,8 @@ var Base_webpack=[
     BASE+'src/**/*.es6',
     BASE+'src/**/*.css',
 ];
+
+// NODE_ENV=production gulp webpack
 gulp.task('webpack',function(){
     gulp.src(BASE)
         .pipe(gulpWebpack(require('./webpack.config.js'),webpack))
@@ -75,10 +77,10 @@ gulp.task('webpack',function(){
         // .pipe(rename(function(path){
         //     path.extname='.min.js';
         // }))
-        .pipe(sourcemaps.init())
-        .pipe(uglify())
-        .pipe(sourcemaps.write('../maps'))
-        .pipe(gulp.dest('./public/js/dist'))
+        // .pipe(sourcemaps.init())
+        // .pipe(uglify())
+        // .pipe(sourcemaps.write('../maps'))
+        .pipe(gulp.dest('./public/js/dest'))
 });
 gulp.task('webpack-w',function(){
     gulp.watch(Base_webpack,['webpack']);

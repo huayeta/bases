@@ -491,7 +491,8 @@ define('aTools',function(require, exports, module){
                 url:'@atoolsAjax',
                 parames:'=parames',
                 paramesFn:'&paramesfn',
-                successFn:'&successfn'
+                successFn:'&successfn',
+				callback:'&callback'
             },
             link:function(scope,ele,attrs){
                 ele.bind('click',function(){
@@ -530,6 +531,7 @@ define('aTools',function(require, exports, module){
                     }
                     aForm.request({url:_url,isJson:true})
 					.success(function(ret){
+						if(attrs.callback){return scope.callback({ret:ret});}
 						if(ret.status){
 							if(attrs.successfn){scope.successFn({ret:ret});}
 							else{
@@ -588,6 +590,22 @@ define('aTools',function(require, exports, module){
 				// }else{
     //                 ele.remove();
 				// }
+			}
+		}
+	});
+	aTools.directive('agreement',function(aForm){
+		return{
+			restrict:'A',
+			link:function(scope,ele,attrs){
+				var type=attrs.agreement;
+				if(!type)return;
+				aForm.promise({
+					url:'?m=member&a=agreement&name='+type,
+					isJson:true
+				}).then(function(ret){
+					if(!ret.status)return;
+					angular.element(ele).text(ret.info.title)
+				});
 			}
 		}
 	});

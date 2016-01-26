@@ -526,10 +526,6 @@ define('mTools',function(require, exports, module){
         return result;
     }
 
-    var showDialog=function(a){
-
-    }
-
     return {
         tabs:tabs,//选项卡
         isNumber:isNumber,//判断是否是数字

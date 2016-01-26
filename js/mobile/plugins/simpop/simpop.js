@@ -185,8 +185,7 @@ define(function(require, exports, module){
             var ele = self.pop;
             //自动关闭
             if(self.time){
-                setTimeout(function(){
-                    self.close();
+                setTimeout(function(){self.close();
                 },self.time)
             }
             //关闭按钮
@@ -221,6 +220,7 @@ define(function(require, exports, module){
             };
         },
         close: function(){
+            if(!Simpop.list[this.id])return;
             d.body.removeChild(this.pop);
             delete Simpop.list[this.id];
         }

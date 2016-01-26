@@ -710,69 +710,70 @@ define('mBox',function(require, exports, module){
                         if(!mobile)return simpop.tips({content:'手机号码不能为空'});
                         var regM=/^13[0-9]{9}$|14[0-9]{9}|15[0-9]{9}$|18[0-9]{9}$/;
                         if(!regM.test(mobile))return simpop.tips({content:'请填写正确的手机号!'});
-                        aForm.promise({
+                        request({
                             url:'?m=member&c=index&a=verify&t=verify_mobile&no='+mobile,
-                            isJson:true
-                        }).then(function(ret){
-                            if(!ret.status){
-                                simpop.tips({content:'该手机已经被注册!'});
-                            }else{
-                                simpop.alert({
-                                    title:'填写图形安全验证码，获取短信',
-                                    okVal:'发送',
-                                    autoClose:false,
-                                    style:'padding:5px;',
-                                    content:function(){
-                                        var tpl='<div class="m-tabform">'+style+'<div class="tab-tr"><div class="tab-th">图码：</div><div class="tab-td"><img src="api.php?n=vcode&width=130&height=40" class="f-fr j-switch-vcode" align="absbottom" style="width:130px; height:40px;" /><div class="f-oh"><input type="text" class="u-txt" name="vcode" /></div></div></div></div>';
-                                        return tpl;
-                                    },
-                                    onShow:function(obj){
-                                        var $content=$(obj.pop);
-                                        $content.find('.j-switch-vcode').click(function(){
-                                            $(this).attr('src','api.php?n=vcode&width=130&height=40');
-                                        });
-                                    },
-                                    callback:function(obj){
-                                        var $content=$(obj.pop);
-                                        var $ipt=$content.find('input');
-                                        var vcode=$ipt.val();
-                                        if(!vcode)return simpop.tips({content:'请先填写验证码'});
-                                        request({
-                                            url:'?m=member&c=account&a=verify_mobile&mobile='+mobile+'&vcode='+vcode+'&verify=1',
-                                            success:function(ret){
-                                                if(!ret.status){
-                                                    if(ret.info.indexOf('一个手机')!=-1){
-                                                        return simpop.alert({
-                        											content:ret.info,
-                        											okVal:'去登录',
-                        											callback:function(){
-                        												request({
-                        													url:'?m=member&c=account&a=unbundling_wechat',
-                                                                            success:function(ret){
-                            													request({
-                            														url:'?m=member&a=logout',
-                            														isJson:true,
-                                                                                    success:function(ret){
-                                														if(ret.status){
-                                															getLogin();
-                                														}
-                                													}
-                            													})
-                            												}
-                        												})
-                        											}
-                        										});
+                            isJson:true,
+                            success:function(ret){
+                                if(!ret.status){
+                                    simpop.tips({content:'该手机已经被注册!'});
+                                }else{
+                                    simpop.alert({
+                                        title:'填写图形安全验证码，获取短信',
+                                        okVal:'发送',
+                                        autoClose:false,
+                                        style:'padding:5px;',
+                                        content:function(){
+                                            var tpl='<div class="m-tabform">'+style+'<div class="tab-tr"><div class="tab-th">图码：</div><div class="tab-td"><img src="api.php?n=vcode&width=130&height=40" class="f-fr j-switch-vcode" align="absbottom" style="width:130px; height:40px;" /><div class="f-oh"><input type="text" class="u-txt" name="vcode" /></div></div></div></div>';
+                                            return tpl;
+                                        },
+                                        onShow:function(obj){
+                                            var $content=$(obj.pop);
+                                            $content.find('.j-switch-vcode').click(function(){
+                                                $(this).attr('src','api.php?n=vcode&width=130&height=40');
+                                            });
+                                        },
+                                        callback:function(obj){
+                                            var $content=$(obj.pop);
+                                            var $ipt=$content.find('input');
+                                            var vcode=$ipt.val();
+                                            if(!vcode)return simpop.tips({content:'请先填写验证码'});
+                                            request({
+                                                url:'?m=member&c=account&a=verify_mobile&mobile='+mobile+'&vcode='+vcode+'&verify=1',
+                                                success:function(ret){
+                                                    if(!ret.status){
+                                                        if(ret.info.indexOf('一个手机')!=-1){
+                                                            return simpop.alert({
+                            											content:ret.info,
+                            											okVal:'去登录',
+                            											callback:function(){
+                            												request({
+                            													url:'?m=member&c=account&a=unbundling_wechat',
+                                                                                success:function(ret){
+                                													request({
+                                														url:'?m=member&a=logout',
+                                														isJson:true,
+                                                                                        success:function(ret){
+                                    														if(ret.status){
+                                    															getLogin();
+                                    														}
+                                    													}
+                                													})
+                                												}
+                            												})
+                            											}
+                            										});
+                                                        }
+                                                        return simpop.tips({content:ret.info});
                                                     }
-                                                    return simpop.tips({content:ret.info});
+                                                    simpop.tips({content:ret.info});
+                                                    obj.close();
                                                 }
-                                                simpop.tips({content:ret.info});
-                                                obj.close();
-                                            }
-                                        })
-                                    }
-                                });
+                                            })
+                                        }
+                                    });
+                                }
                             }
-                        });
+                        })
                     })
                 },
                 callback:function(obj){
