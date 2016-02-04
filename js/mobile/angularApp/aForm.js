@@ -36,7 +36,9 @@ define('aForm',function(require, exports, module){
 					scope.$apply();
 				});
 				//设置默认值
-				if(attrs.value){
+				if(model(scope)){
+					ele.val(model(scope));
+				}else if(attrs.value){
 					setScope(attrs.myModel,attrs.value);
 				}
 			}
@@ -168,6 +170,8 @@ define('aForm',function(require, exports, module){
 				var $tmp=$msg.clone().text(opts.msg);
 				MSG[opts.id]=$tmp[0];
 				$body.append($tmp);
+			}else{
+				$(MSG[opts.id]).html(opts.msg);
 			}
 			return opts.id;
 		};
@@ -401,7 +405,7 @@ define('aForm',function(require, exports, module){
 			transclude: true,
 			replace: true,
 			scope:true,
-            template: '<div class="j-ueditor m-editor"><div class="tools"><a class="btn f-fr f-mr10" ng-click="clear();">清空</a><a class="btn" my-sref="upload/image?id=editorImage&size=2" store="{{store}}"><i class="uploadimage"></i>上传图片</a></div><div class="editor-txtarea j-editor" contenteditable="true" style="width:100%;min-height:150px;" ng-style="style" ng-transclude="true"></div><div class="tools f-mt10"><a class="btn f-mr10" ng-click="br();">插入新一行</a></div></div>',
+            template: '<div class="j-ueditor m-editor"><div class="tools"><a class="btn f-fr f-mr10" ng-click="clear();">清空</a><a class="btn" my-sref="upload/image?id=editorImage&size=2" store="{{STORE}}"><i class="uploadimage"></i>上传图片</a></div><div class="editor-txtarea j-editor" contenteditable="true" style="width:100%;min-height:150px;" ng-style="style" ng-transclude="true"></div><div class="tools f-mt10"><a class="btn f-mr10" ng-click="br();">插入新一行</a></div></div>',
 	        link: function(scope, element, attrs, ngModel) {
 				var editor=element.find('.j-editor');
 	            // don't do anything unless this is actually bound to a model
@@ -421,7 +425,7 @@ define('aForm',function(require, exports, module){
 	                opts[opt] = o && o !== 'false'
 	            })
 				scope.style={};
-				scope.store=attrs.store;
+				scope.STORE=attrs.store?attrs.store:scope.$parent.STORE;
 
 				//默认值
 				if(!$parse(attrs.ngModel)(scope))ngModel.$setViewValue(editor.html());
@@ -699,6 +703,7 @@ define('aForm',function(require, exports, module){
             require:'?ngModel',
             link:function(scope,ele,attrs,ngModel){
 				var ishours=attrs.ishours=='false'?false:true;
+				var isdate=attrs.isdate=='false'?false:true;
             	//设置默认值
                 var VAL=$parse(attrs.ngModel)(scope.$parent);
                 if(!VAL){
@@ -723,7 +728,11 @@ define('aForm',function(require, exports, module){
 							if(ishours){
 	                            $parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date+' '+val.hours+':'+val.minutes+':00');
 							}else{
-								$parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date);
+								if(!isdate){
+									$parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month);
+								}else{
+									$parse(attrs.ngModel).assign(scope.$parent,val.year+'-'+val.month+'-'+val.date);
+								}
 							}
                             scope.$parent.$apply();
                         }

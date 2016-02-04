@@ -42,6 +42,7 @@ define('mWbmc',function(require, exports, module){
                     }
                 });
             }
+			if(!obj.json)return;
             obj.findIdObj={};//id->pid的对应
             obj.DATA={};
             obj.findId={};//id->{}
@@ -61,7 +62,9 @@ define('mWbmc',function(require, exports, module){
         var itemHeight = 48;
         var ARR=[];
         var TTT=true;
-        var json=getJson(opts.name).json;//储存原始json数据
+		var jsonTmp=getJson(opts.name);
+		if(!jsonTmp)return;
+        var json=jsonTmp.json;//储存原始json数据
         var DATA=getJson(opts.name).DATA;//储存重新排版后的json数据
         var findIdObj=getJson(opts.name).findIdObj;
         var findId=getJson(opts.name).findId;

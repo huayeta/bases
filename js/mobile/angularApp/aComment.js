@@ -119,6 +119,7 @@ define('aComment',function(require, exports, module){
         });
         //切换评论和回复
         $scope.comment.addReply=function(commentid,children){
+            if(!getLoginInfo().status)mBox.getLogin();
             $scope.comment.reply=true;
             if(!commentid){
                 delete $scope.comment.form.commentid;

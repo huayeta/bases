@@ -202,6 +202,8 @@ define('mCart',function(require, exports, module){
         var $orderForm=$spicBox.find('form');
         var $orderSales=$spicBox.find('.j-sales');//
         var $givepoint=$('.j-givepoint');//赠送的积分的jquery对象
+		var	$pointB=$('.j-pointB');
+		var $pointBNum=$pointB.find('.j-pointBNum');
         if(opts.spic)$isSpic.show();
         $price.data('defaultValue',$price.html());
         $stock.data('defaultValue',$stock.html());
@@ -254,8 +256,12 @@ define('mCart',function(require, exports, module){
 				var givepoint=opts.give_point_json[diff]?opts.give_point_json[diff]:0;
 				return $givepoint.show().find('b').text(givepoint);
 			}else{
+				$givepoint.show();
+				$pointB.show();
+				$pointBNum.text(opts.price);
 				return $givepoint.show().find('b').text(opts.give_point);
 			}
+
 		}
         if($.isEmptyObject(opts.sales_attribute)){
 			getGivepoint();
@@ -310,8 +316,16 @@ define('mCart',function(require, exports, module){
                 function updateSales(result){
                     if(result){
                         //当匹配出规格的时候
-                        if(result.price){$price.html('￥<b>'+result.price+'</b>');}
-                        else{$price.html($price.data('defaultValue'))}
+                        if(result.price){
+							$price.html('￥<b>'+result.price+'</b>');
+							$pointB.show();
+							$pointBNum.text(result.price);
+						}
+                        else{
+							$price.html($price.data('defaultValue'));
+							$pointB.hide();
+							$pointBNum.text('0');
+						}
                         $stock.html('库存'+result.stock+'件');
                         $orderSales.val(sales.sels.join(','));
 						//赠送的积分
@@ -319,6 +333,8 @@ define('mCart',function(require, exports, module){
                     }else{
                         //出现没匹配到的问题
                        $price.html($price.data('defaultValue'));
+					   $pointB.hide();
+					   $pointBNum.text('0');
                         $stock.html('库存0件');
                         $orderSales.val('');
 						//赠送的积分

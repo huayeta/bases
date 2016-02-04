@@ -447,7 +447,7 @@ define('aBox',function(require, exports, module){
 							var mySwiper=new swiper('.swiper-container',{
 								pagination:'.swiper-pagination',
 								direction:'horizontal',
-								autoplay:3000,
+								autoplay:parseInt(attrs.autoplay,10)?parseInt(attrs.autoplay,10):3000,
 								speed:800,
 								// autoplayDisableOnInteraction:false,
 								onInit:function(swiper){

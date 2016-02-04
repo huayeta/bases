@@ -835,6 +835,7 @@ define('tools', function(require, exports, module) {
                 title: '修改',
                 data: '',
                 html: '',
+                width:'',
                 event: 'click',
                 padding: '',
                 before: function() {},
@@ -853,6 +854,7 @@ define('tools', function(require, exports, module) {
                     require.async(['fnDialog'], function(dialog) {
                         dialog.alert({
                             icon: false,
+                            width:opts.width,
                             title: opts.title,
                             data: opts.data,
                             content: $.isFunction(opts.html) ? opts.html(_this[0]) : opts.html,
@@ -949,6 +951,7 @@ define('tools', function(require, exports, module) {
             var defaults = {
                 target: '[data-upload]',
                 contain: '',
+                beforeClick:'',
                 before: '',
                 success: '',
                 size: 1,
@@ -971,6 +974,7 @@ define('tools', function(require, exports, module) {
                 $(document).delegate(opts.target, 'click', function() {
                     var _this = this;
                     var _url = url;
+                    if(opts.beforeClick && $.isFunction(opts.beforeClick) && opts.beforeClick(_this[0])===false)return;
                     var sx = opts.target.substring(1, opts.target.length - 1);
                     if ($(_this).attr(sx) == 'file') _url = '?m=attachment&c=attachment&a=dialog';
                     if ($(_this).attr(sx) == 'image') _url = '?m=attachment&c=images&a=dialog';
@@ -1408,7 +1412,7 @@ define('tools', function(require, exports, module) {
                     }).change();
                 } else {
                     var children = box.children();
-                    var clone = children.clone();
+                    var clone = children.clone(true);
                     target.change(function() {
                         var _this = target.filter(':checked');
                         if (_this.size() > 0) {
@@ -1422,7 +1426,7 @@ define('tools', function(require, exports, module) {
                             } else {
                                 children.hide().eq(index).show();
                             }
-                            if ($.isFunction(opts.change)) opts.change($n[0], box[0]);
+                            if ($.isFunction(opts.change)) opts.change(_this[0], box[0]);
                         }
                     }).change();
                 }
@@ -1560,9 +1564,9 @@ define('tools', function(require, exports, module) {
                                 }else if(val[i]['nickname'] && attr=='realname'){
                                     tmp='nickname';
                                 }else if(val[i]['nickname'] && attr=='nickname'){
-                                    tmp='realname';
-                                }else if(val[i]['realname'] && attr=='nickname'){
                                     tmp='nickname';
+                                }else if(val[i]['realname'] && attr=='nickname'){
+                                    tmp='realname';
                                 }else if(val[i]['account']){
                                     tmp='account';
                                 }else if(val[i]['id']){
@@ -2696,7 +2700,7 @@ define('tools', function(require, exports, module) {
                                 var _this=$(this);
                                 var arg=_this.data('agreement');
                                 if(!arg)return true;
-                                _this.text(ret.info[arg]);
+                                _this.text(ret.info[arg]?ret.info[arg]:'');
                             });
                         }
                     }

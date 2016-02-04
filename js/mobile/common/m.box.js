@@ -746,20 +746,15 @@ define('mBox',function(require, exports, module){
                             											content:ret.info,
                             											okVal:'去登录',
                             											callback:function(){
-                            												request({
-                            													url:'?m=member&c=account&a=unbundling_wechat',
+                                                                            request({
+                                                                                url:'?m=member&a=logout',
+                                                                                isJson:true,
                                                                                 success:function(ret){
-                                													request({
-                                														url:'?m=member&a=logout',
-                                														isJson:true,
-                                                                                        success:function(ret){
-                                    														if(ret.status){
-                                    															getLogin();
-                                    														}
-                                    													}
-                                													})
-                                												}
-                            												})
+                                                                                    if(ret.status){
+                                                                                        getLogin();
+                                                                                    }
+                                                                                }
+                                                                            })
                             											}
                             										});
                                                         }

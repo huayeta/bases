@@ -228,7 +228,12 @@ define('aUpload',function(require, exports, module){
                                 if(ret.status){
                                     var thumb=children.thumb;
                                     var obj=$.extend({},ret.info);
-                                    obj.thumb=thumb;
+                                    if(obj.thumb && obj.thumb[0]){
+                                        obj.thumb=obj.thumb[0];
+                                    }else{
+                                        obj.thumb=ret.info.filepath;
+                                    }
+                                    // obj.thumb=thumb;
                                     obj.isProgress=false;
                                     $scope.items[pIndex].childrens.splice(index,1,obj);
                                     $scope.handleChildrenCheck(pIndex,index);

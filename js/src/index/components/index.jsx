@@ -2,6 +2,7 @@ import React from 'react';
 import {If,Then,Else} from 'react-if';
 import Simpop from 'common/simpop';
 import guideUser from 'common/guideUser.es6';
+import Slider from 'react-slick';
 
 export class Index extends React.Component {
     constructor() {
@@ -30,6 +31,7 @@ export class Index extends React.Component {
                 }).show();
             }
         }
+        // console.log(1);
         //引导认证
         guideUser();
     }
@@ -106,14 +108,17 @@ export class Index extends React.Component {
                     </Then>
                 </If>
                 <div className="m-index-line f-mb10">
-                    <If condition={this.msg.gift!=='0'}>
-                        <Then>
-                            <a className="item-icon" href="?m=financial&c=gift&a=index">
-                    	        <div className="pic"><img src="/member/images/panel/sphd.png" /></div>
-                                <h2 className="title"><i className="f-fr ion-ios-arrow-right icon f-ml5"></i><span className="f-fr s-blue f-fs12">我有<i>{this.msg.gift?this.msg.gift:'0'}</i>个礼品未领取</span>我的礼品</h2>
-                    	    </a>
-                        </Then>
-                    </If>
+                    <a className="item-icon" href="?m=financial&c=gift&a=index">
+                        <div className="pic"><img src="/member/images/panel/sphd.png" /></div>
+                        <h2 className="title"><i className="f-fr ion-ios-arrow-right icon f-ml5"></i>
+                            <If condition={this.msg.gift!=='0'}>
+                                <Then>
+                                    <span className="f-fr s-blue f-fs12">我有<i>{this.msg.gift}</i>个礼品未领取</span>
+                                </Then>
+                            </If>
+                            我的礼品
+                        </h2>
+                    </a>
                     <If condition={this.msg.transaction_reply!=='0'}>
                         <Then>
                             <a className="item-icon" href="?m=transaction&c=transaction&a=index">
@@ -122,25 +127,18 @@ export class Index extends React.Component {
                     	    </a>
                         </Then>
                     </If>
-                    <If condition={this.msg.product_order!=='0'}>
-                        <Then>
-                            <a className="item-icon" href="?m=product&c=order&a=buy">
-                    	        <div className="pic"><img src="/member/images/panel/wddd.png" /></div>
-                                <h2 className="title"><i className="f-fr ion-ios-arrow-right icon f-ml5"></i><span className="f-fr s-blue f-fs12">我有<i>{this.msg.product_order}</i>条订单</span>我的订单</h2>
-                    	    </a>
-                        </Then>
-                    </If>
+                    <a className="item-icon" href="?m=product&c=order&a=buy">
+                        <div className="pic"><img src="/member/images/panel/wddd.png" /></div>
+                        <h2 className="title"><i className="f-fr ion-ios-arrow-right icon f-ml5"></i>
+                            <If condition={this.msg.product_order!=='0'}>
+                                <Then>
+                                    <span className="f-fr s-blue f-fs12">我有<i>{this.msg.product_order}</i>条订单</span>
+                                </Then>
+                            </If>
+                            我的订单
+                        </h2>
+                    </a>
             	</div>
-                <div className="m-index-line f-mb10">
-                    {this.configs.menus.map((menu,index)=>{
-                        return(
-                    		<a className="item-icon" href={menu.url} key={index}>
-                    			<div className="pic"><img src={menu.icon} /></div>
-                    			<h2 className="title"><i className="f-fr ion-ios-arrow-right icon"></i>{menu.name}</h2>
-                    		</a>
-                        )
-                    })}
-                </div>
                 <div className="m-index-line f-mb10">
                     <If condition={!!this.configs.site_10_url}>
                         <Then>
@@ -161,6 +159,29 @@ export class Index extends React.Component {
             			<div className="pic"><img src="/member/images/panel/ymgl.png" /></div>
             			<h2 className="title"><i className="f-fr ion-arrow-down-b f-ml10 icon"></i><span className="f-fr f-fs12 s-orange">购物获得更高权益</span><a href="/">官方网站</a></h2>
             		</div>
+            	</div>
+                <div className="m-product-items">
+                    <Slider
+                        dots={false}
+                        infinite={false}
+                        slidesToShow="3"
+                        slidesToScroll="3"
+                        >
+                        {this.configs.productItems.map((item,index)=>{
+                            return(
+                                <div>
+                					<a href={'?m=product&a=item&id='+item.id} title={item.title} key={index}>
+                						<i style={{'backgroundImage':'url('+(item.thumb?item.thumb:'/member/images/common/m-shop-add-pic.gif')+')'}}></i>
+                						<h2 className="f-toe">{item.title}</h2>
+                						<p>￥{item.price}</p>
+                					</a>
+                				</div>
+                            )
+                        })}
+                    </Slider>
+                </div>
+                <div className="f-pdlr10 m-index-line f-pdb10">
+                    <a className="u-btn-gray u-btn-full u-btn-biger" href="?m=member&a=senior">管理中心</a>
             	</div>
             </div>
         )

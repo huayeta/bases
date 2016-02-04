@@ -24,11 +24,11 @@ define('aTemplate',function(require, exports, module){
 			template:'<ui-view/>'
 		})
 		.state('template.list',{
-			url:'/list?id&type&typeid&returnResult',
+			url:'/list?id&type&typeid&returnResult&url',
 			resolve:{
 				DATA:function($stateParams){
 					var data={};
-					data.url="?m=member&c=account&a=config_template&type="+$stateParams.type+'&typeid='+$stateParams.typeid;
+					data.url=($stateParams.url?$stateParams.url:"?m=member&c=account&a=config_template&type="+$stateParams.type+'&typeid='+$stateParams.typeid);
 					data.title=$stateParams.type=='1'?'电脑模板':'手机模板';
 					data.type=$stateParams.type;
 					data.typeid=$stateParams.typeid;

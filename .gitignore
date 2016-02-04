@@ -16,6 +16,7 @@ npm-debug.log
 
 #js
 /node_modules
+/js/bower_components/
 /js/components/
 /js/maps/
 /js/activity/
@@ -25,3 +26,4 @@ npm-debug.log
 /js/label/
 /js/react/
 /js/dest/
+/js/src/test/
