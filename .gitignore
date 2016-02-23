@@ -27,3 +27,7 @@ npm-debug.log
 /js/react/
 /js/dest/
 /js/src/test/
+
+#wap
+/wap/dest/
+/wap/images/
