@@ -1,0 +1,41 @@
+@import url('page.css');
+
+/* 购物订单列表 */
+.m-product-list{ background: #fff;}
+.m-product-list .title{ padding: 0 10px; color: #000; font-size: 13px; line-height: 40px;}
+.m-product-list .item{ margin-left: 10px; margin-right: 10px; padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;}
+.m-product-list .item .pic{ float: left; width: 70px; height: 70px; border: 1px solid #f0f0f0; padding: 1px; margin-right: 10px;}
+.m-product-list .item .pic a,.m-product-list .item .pic a img{ display: inline-block; vertical-align: top; height: 100%; width: 100%;}
+.m-product-list .item .info{ overflow: hidden; padding-top: 3px; color: #333; font-size: 12px;}
+.m-product-list .item .info .tt,.m-product-list .item .info .other{ margin-bottom: 4px;}
+.m-product-list .item:last-child{ border-bottom: 0;}
+.m-product-list .txt{ line-height: 40px; border-bottom: 1px solid #f0f0f0; margin-left: 10px; margin-right: 10px; font-size: 12px;}
+.m-product-list .txt:last-child{ border-bottom: 0;}
+
+/* 退款、退货 */
+.m-refund{ background: #fff;}
+.m-refund .title{ color: #000; font-size: 13px; line-height: 40px; margin-left: 10px; margin-right: 10px; border-bottom: 1px solid #eee;}
+.m-refund .con{ padding: 15px;}
+.m-refund .con .tt{ font-size: 14px; color: #333; font-weight: bold; font-family: "黑体";}
+.m-refund .con .list{ padding-left: 20px;}
+.m-refund .con .list li{ font-size: 13px; line-height: 25px; list-style-type: inherit; color: #808080;}
+
+.m-refund-message{ background: #fff;}
+.m-refund-message .title{ color: #000; font-size: 13px; line-height: 40px; margin-left: 10px; margin-right: 10px; border-bottom: 1px solid #eee;}
+.m-refund-message .con{ padding-left: 10px; padding-right: 10px;}
+.m-refund-message .item{ margin-left: 10px; margin-right: 10px; padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;}
+.m-refund-message .item .pic{ float: left; width: 40px; height: 40px; border: 1px solid #f0f0f0; padding: 1px; margin-right: 10px;}
+.m-refund-message .item .pic a,.m-refund-message .item .pic img{ display: inline-block; vertical-align: top; height: 100%; width: 100%;}
+.m-refund-message .item .info{ overflow: hidden; padding-top: 3px; color: #333; font-size: 12px;}
+.m-refund-message .item .info .tt,.m-refund-message .item .info .other{ margin-bottom: 4px;}
+.m-refund-message .item:last-child{ border-bottom: 0;}
+.m-refund-message .item .images a{ display: inline-block; float: left; height: 45px; border: 1px solid #f0f0f0; padding: 1px; margin-right: 10px;}
+.m-refund-message .item .images a img{ display: inline-block; vertical-align: top; height: 100%; width: auto;}
+
+.m-refund-form .form-item{ padding: 7px 0; line-height: 30px;}
+.m-refund-form .form-item .ipt{ width: 100%;}
+.m-refund-form .form-item  .ipt input[type="text"]{ box-sizing: border-box; width: 100%;}
+.m-refund-form .form-item  .ipt select{ width:100%;}
+.m-refund-form .form-item  .ipt textarea{ width:100%; box-sizing: border-box;}
+.m-refund-form .form-item .images a{ display: inline-block; float: left; height: 45px; border: 1px solid #f0f0f0; padding: 1px; margin-right: 10px;}
+.m-refund-form .form-item .images a img{ display: inline-block; vertical-align: top; height: 100%; width: auto;}

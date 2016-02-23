@@ -1,0 +1,316 @@
+@import "base.css";
+@import "form.css";
+@import "../font/iconfont.css";
+@import "button.css";
+
+body{ background-color: #f5f5f5;}
+
+/*引导图片*/
+.m-guide{ background-image: url('/wap/images/index/yst.jpg'); background-position: top center; background-repeat: no-repeat; background-size: cover; z-index: 2;}
+
+/*头部*/
+.m-index-header{
+    min-height: 8rem; background-image: linear-gradient(0deg, #0099e5, #0066cc); color: #fff; padding: 1.4rem 0; position: relative; width: 100%; overflow: hidden;
+    .btn-code{
+        position: absolute; top: .6rem; left: .6rem; font-size: .8rem; width: .8rem; height: .8rem; vertical-align: top; color: #fff; display: inline-block; line-height: .6rem;
+    }
+    .btn-right{
+        position: absolute; top: .6rem; right: .6rem; font-size: .7rem; color: #fff;
+        i{
+            display: block; position: absolute; top: -0.04rem; right: -0.2rem; width: .3rem; height: .3rem; line-height: .3rem; border-radius: 50%; background-color: #ff0000;
+        }
+    }
+    @for $i form 1 to 2 {
+        .bg-0$i{
+            position: absolute; top:calc(1.4rem+3.4rem/2-.5rem); bottom: 0; left: 0rem; right: 0; @extend nowrap;
+            img{
+                width: 15rem; max-width: 15rem; display: inline-block;
+                position: absolute; top: 0;
+            }
+        }
+    }
+    .bg-01{
+        top:calc(1.4rem+3.4rem/2-.1rem);
+        z-index: 2;
+        /*img:nth-child(1){
+            right: 0;
+            animation: bgLeft-1-1 16s linear infinite both;
+        }
+        img:nth-child(2){
+            right:  -30rem;
+            animation: bgLeft-1-2 16s linear infinite both;
+        }*/
+    }
+    .bg-02{
+        z-index: 1;
+
+        /*img:nth-child(1){
+            right: 0;
+            animation: bgLeft-2-1 24s linear infinite both;
+        }
+        img:nth-child(2){
+            right:  -30rem;
+            animation: bgLeft-2-2 24s linear infinite both;
+        }*/
+    }
+    .info{
+        position: relative; z-index: 3;
+        .pic{
+            text-align: center;
+            a{
+                display: inline-block; width: 3.4rem; height: 3.4rem; background: #fff; border-radius: 50%; border: .1rem solid #fff; background-size: 100% 100%; vertical-align: top;
+
+            }
+        }
+        .title{
+            font-size: .8rem; margin: .15rem 0; text-align: center; padding: 0 .2rem; text-shadow: 1px 1px 0 rgba(0,0,0,.2);
+            a{
+                color: #fff;
+            }
+            .icon{
+                color: #fff; font-size: .8rem; position: relative;
+            }
+            i{
+                display: block; position: absolute; top: -0.04rem; right: -0.04rem; width: .16rem; height: .16rem; border-radius: 50%; background-color: #ff0000;
+            }
+        }
+        .des{
+            font-size: .5rem; text-align: center; padding: 0 .2rem;text-shadow: 1px 1px 2px rgba(0,0,0,.1);
+        }
+    }
+}
+@keyframes bgLeft-1-1{
+    0%{right: 0;}
+    25%{right:15rem; opacity: 1;}
+    39%{right: 15rem; opacity: 0;}
+    40%{right: -30rem; opacity: 0;}
+    50%{right: -30rem; opacity: 1;}
+    100%{right:0;}
+}
+@keyframes bgLeft-1-2{
+    0%{right: -30rem;}
+    50%{right:0;}
+    75%{right: 15rem; opacity:1;}
+    89%{right: 15rem; opacity: 0;}
+    90%{right: -30rem; opacity: 0;}
+    100%{right:-30rem; opacity: 1;}
+}
+
+@keyframes bgLeft-2-1{
+    0%{right: 0;}
+    25%{right:15rem; opacity: 1;}
+    39%{right: 15rem; opacity: 0;}
+    40%{right: -30rem; opacity: 0;}
+    50%{right: -30rem; opacity: 1;}
+    100%{right:0;}
+}
+@keyframes bgLeft-2-2{
+    0%{right: -30rem;}
+    50%{right:0;}
+    75%{right: 15rem; opacity:1;}
+    89%{right: 15rem; opacity: 0;}
+    90%{right: -30rem; opacity: 0;}
+    100%{right:-30rem; opacity: 1;}
+}
+
+/*通知*/
+.m-index-notice{
+    background-color: #fff; padding: .6rem 0; margin-bottom: .3rem;
+    ul{
+        display: flex; justify-content:space-between;
+        li{
+            flex:1; text-align: center; border-right: 1px solid #f8f8f8; color: #666;
+            a{
+                display: inline-block; vertical-align: top;
+                .icon{
+                    font-size: 1.2rem; line-height: 1.2rem; margin-bottom: .3rem; position: relative;
+                    i{
+                        width: .8rem; height: .8rem; line-height: .8rem; transform: scale(.7); text-align: center; font-size: .4rem;  border-radius: 50%;position: absolute; top:-0.2rem; right: -0.2rem; background-color: red; color: #fff; box-shadow: 0 0 2 0 rgba(0,0,0,.1);
+                    }
+                }
+                .tt{
+                    font-size: .5rem; line-height: .5rem;
+                }
+            }
+        }
+        li:last-child{border-right: 0;}
+    }
+}
+
+.m-index-box{
+    background-color: #fff; margin-bottom: .3rem;
+    .title{
+        margin: 0 .4rem; font-size: .6rem; border-bottom: 1px solid #f8f8f8; height: 2rem; line-height: 2.2rem;
+        .fr{
+            float: right; font-size: .5rem; color: #bbb;
+            i{
+                margin-left: .2rem; font-size: .5rem;
+            }
+        }
+    }
+    .con{ overflow: hidden; width: 100%;}
+    .items{
+        margin: .7rem .3rem; position: relative;
+        .item{
+            float: left; width: 25%; text-align: center;
+            .price{
+                font-size: .6rem; color: #333; font-weight: 700;
+            }
+            .tt{
+                color: #808080;
+            }
+        }
+    }
+    .slick-dots{
+        width: 100%; text-align: center; font-size: 0; position: absolute; bottom:-0.4rem;
+        li{
+            display: inline-block; width: .2rem; height: .2rem; border-radius: 50%; background-color: #f0f0f0; margin-right: .2rem;
+            button{ display: none;}
+        }
+        li.slick-active{
+            background-color: #0099e5;
+        }
+    }
+    ul.lists{
+        display: flex; justify-content: space-between;  margin: .7rem .3rem;
+        li{
+            flex: 1; text-align: center; color: #666;
+            a{
+                display: inline-block; vertical-align: top;
+                .icon{
+                    font-size: 1rem; line-height: 1rem; margin-bottom: .3rem; position: relative; color: #333;
+                    i{
+                        width: .8rem; height: .8rem; line-height: .8rem; transform: scale(.7); text-align: center; font-size: .4rem; border-radius: 50%;position: absolute; top:-0.3rem; right: -0.2rem; background-color: red; color: #fff; box-shadow: 0 0 2 0 rgba(0,0,0,.1);
+                    }
+                }
+                .tt{ font-size: .5rem; line-height: .5rem; color: #808080; }
+            }
+        }
+    }
+}
+
+/*图标菜单*/
+.m-row-4{
+    .title{
+        font-size: .6rem; color: #555; padding: 0 .6rem; line-height: 1rem;
+    }
+    .con{
+        overflow: hidden; background-color: #fff;
+        .item{
+            width: calc(15rem/4); height: calc(15rem/4); float: left; border-right: 1px solid #f8f8f8; border-bottom: 1px solid #f8f8f8; text-align: center;
+            a{
+                display: inline-block; color: #777; text-decoration: none; padding-top: .85rem;
+                .pic{
+                    width: 1.2rem; height: 1.2rem; display: inline-block;
+                    img{
+                        display: inline-block; vertical-align: top; width: 100%; height: 100%;
+                    }
+                }
+                .tt{
+                    font-size: .5rem; line-height: .5rem; margin-top: .3rem;
+                }
+            }
+        }
+    }
+    &.radius{
+        a{
+            padding-top: .7rem;
+            .pic{
+                width: 1.4rem; height: 1.4rem;
+                img{
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+
+/*广告*/
+.m-index-ads{
+    position: relative; margin-bottom: .3rem;
+    img{
+        width: 15rem; height: 3rem;
+    }
+    .slick-dots{
+        width: 100%; text-align: center; font-size: 0; position: absolute; bottom:0.4rem;
+        li{
+            display: inline-block; width: .2rem; height: .2rem; border-radius: 50%; background-color: #f0f0f0; margin-right: .2rem;
+            button{ display: none;}
+        }
+        li.slick-active{
+            background-color: #0099e5;
+        }
+    }
+}
+
+/*底部菜单*/
+.m-index-footer{
+    height: 100%; border-top: 1px solid #eee; background-color: #fff;
+    background-image: linear-gradient(0deg,#fafafa,#fff);
+    ul{
+        display: flex; justify-content: space-between;
+        li{
+            flex:1; text-align: center; padding-top: .3rem; border-right: 1px solid #eee; height: 2rem;
+            .icon{
+                font-size: .8rem; line-height: .8rem;
+            }
+            .tt{
+                font-size: .4rem; line-height: .4rem; margin-top: .15rem;
+            }
+        }
+        li:last-child{
+            border-right: 0;
+        }
+    }
+}
+
+/*完善信息*/
+.img-radius,.upload-radius{
+    display: inline-block; vertical-align: middle; width: 2rem; height: 2rem; border-radius: 50%; margin: .3rem 0;
+}
+.img-radius{
+    margin-right: .2rem;
+}
+.upload-radius{
+    border: 1px solid #008ed4; color: #008ed4; font-size: .3rem; text-align: center; line-height: 2rem;
+}
+
+/*管理中心使用说明*/
+.m-senior-info{
+    background: #2693ff url('/wap/images/index/info-bg.jpg') top center no-repeat; background-size: 100%; min-height: 30rem; color: #fff;
+    img{
+        max-width: 100%;
+    }
+    .header{
+        padding-top: 1.6rem; padding-bottom: 1.6rem;
+    }
+    .box{
+        padding: 0 .6rem; margin-bottom: 2rem; overflow: hidden;
+        .tt{
+            b{
+                line-height: 1.2rem; background-color: #fff; padding: 0 .3rem; font-size: .7rem; color: #2693ff; display: inline-block; position: relative;
+                &::before{
+                    content:''; display: block; height: 0; width: 0; border-width: .2rem; border-style: solid dotted solid dotted; border-color: #fff transparent transparent #fff; position: absolute; left: 0; bottom:-.3rem;
+                }
+            }
+        }
+        .img{
+            text-align: center; padding:.2rem 0 1rem;
+            img{
+                max-width: 100%; display: inline-block; vertical-align: top;
+            }
+        }
+        .des{
+            font-size: .65rem; line-height: 1rem; text-shadow: 1px 1px 0 rgba(0, 0, 0, .2);
+        }
+    }
+    .btn{
+        text-align: center; padding:1rem .6rem;
+        a{
+            display: block; background-color: #ff5e5e; color: #fff; line-height: 2rem; font-size: 1rem; text-decoration: none; text-align: center;
+            &:active{
+                opaticy:.9
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ var webpack=require('webpack');
 var JS_PATH=path.resolve(__dirname,'./public/js/');
 var bower_components=path.resolve(JS_PATH,'bower_components');
 var node_modules=path.resolve(__dirname,'node_modules');
+var date=Date.now();
 
 var isProduction = function () {
   return process.env.NODE_ENV === 'production';
@@ -51,11 +52,12 @@ module.exports={
     entry:{
         'photo/index':'src/photo/index.jsx',
         'index/m.index':'src/index/m.index.jsx',
+        'test/index':'src/test/index.jsx',
     },
     output:{
         path:path.resolve(__dirname,'./public/js/'),
         publicPath:'/js/dest/',
-        chunkFilename:'[name].chunk.js',
+        chunkFilename:date+'[name].chunk.js',
         filename:'[name].js'
     },
     module:{

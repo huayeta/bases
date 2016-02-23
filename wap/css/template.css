@@ -1,0 +1,12 @@
+@import "./page.css";
+
+.m-template{}
+.m-template .title{ margin: 0 10px; line-height: 25px; margin-bottom: 10px;}
+.m-template .title h2{ display: inline-block; padding: 0 10px;}
+.m-template ul{ padding: 0 5px;}
+.m-template ul li{ box-sizing: border-box; width: 50%; float: left; margin-bottom: 6px; padding: 0 5px; position: relative; background-color: #fff;}
+.m-template ul li .pic{ width: 100%; height: 0; padding-bottom: 100%; overflow: hidden; position: relative;}
+.m-template ul li .pic a{ display: block; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+.m-template ul li .pic a img{ display: block; width: 100%; height: 100%;}
+.m-template ul li h2{ font-size: 14px; text-align: center; padding: 0 5px; line-height: 25px;}
+.m-template ul li .other{ padding: 0 5px; line-height: 25px; padding-bottom: 5px;}

@@ -1,0 +1,16 @@
+@import url('page.css');
+
+.g-nav{ max-width: 480px; padding: 0 10px; margin: 0 auto;}
+
+.m-nav-hd{ padding: 10px 0; line-height: 22px; position: relative;}
+.m-nav-hd:before{ content: ''; display: block; position: absolute; z-index: 0; height: 1px; background: #ddd; width: 100%; top: 50%;-webkit-transform: translateY(-50%;);-ms-transform: translateY(-50%;);transform: translateY(-50%;)}
+.m-nav-hd h2{ display: inline-block; background: #f5f5f5; position: relative; z-index: 1;}
+.m-nav-hd h2 a{color: #000;}
+.m-nav-hd i{ display: inline-block; height: 12px; width: 12px; border-radius: 100%; background-color: #fff; border:1px solid #ccc; vertical-align: 0px;}
+.m-nav-hd b{ font-size: 18px; padding: 0 10px; display: inline-block;}
+
+.m-nav-box{ background: #fff; box-sizing: border-box; width: 100%; overflow: hidden; border: 1px solid #f0f0f0;}
+.m-nav-box:before,.m-nav-box:after{content: ''; display: block; height: 0; clear: both; visibility: hidden;}
+.m-nav-box .item{ box-sizing: border-box; width: 25%; float: left; height: 35px;line-height: 35px; text-align: center; word-wrap:normal;white-space:nowrap; overflow: hidden;padding: 0 3px;border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; position: relative; top: 1px;}
+.m-nav-box .item a{color: #909090; font-size: 12px;}
+.m-nav-box .item:first-child a{ font-weight: bold; color: #444;}

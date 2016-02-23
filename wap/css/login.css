@@ -1,0 +1,35 @@
+@import url('common.css');
+
+/* 微信登陆 */
+.m-wechat{ padding-top: 30px;}
+.m-wechat .title{ margin: 0 auto; width: 70%;}
+.m-wechat .title .tt1{ position: relative; line-height: 35px; text-align: center;}
+.m-wechat .title .tt1 i{ position: absolute; top: 50%;left: 0; margin-top: -1px; height: 1px; width: 100%; background: #bbb;}
+.m-wechat .title .tt1 span{ background: #f5f5f5; padding: 0 15px; display: inline-block; position: relative; z-index: 1; font-size: 25px; color: #999;}
+.m-wechat .title .tt2{ font-size: 25px; color: #999; text-align: center; line-height: 35px;}
+.m-wechat .logo{ text-align: center; padding: 20px 0;}
+.m-wechat .logo img{width: 20%; height: auto;}
+.m-wechat .btn{ width: 85%; margin: 0 auto;}
+.m-wechat .btn .btn1,.m-wechat .btn .btn2{ display: block; background: #86C610; color: #fff; line-height: 40px; border-radius: 3%; font-size: 16px; text-align: center;}
+.m-wechat .btn .btn2{ background: #fff; color: #333;}
+
+/* 新登录 */
+.m-login{ margin: 0 15px;}
+.m-login .pic{ text-align: center; margin: 20px 0;}
+.m-login .pic img { border-radius: 100%; width: 100px; height: 100px;}
+.m-login .form-group{ background: #fff; border-radius: 5px; border: 1px solid #f0f0f0;}
+.m-login .form-group .label{ padding: 15px 10px; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #000; position: relative;}
+.m-login .form-group .label label{ float: left; width: 40px; display: block; height: 20px; text-align: center;}
+.m-login .form-group .label label img{ height: 20px; width: auto; display: block; position: absolute; top: 50%; -webkit-transform: translateY(-50%); -ms-transform: translateY(-50%); transform: translateY(-50%); left: 15px;}
+.m-login .form-group .label .ipt{ overflow: hidden;}
+.m-login .form-group .label .ipt input{ box-sizing: border-box; width: 100%; border: 0; outline: none; padding-right: 20px;}
+.m-login .form-group .label .vcode{ position: relative; top: -5px; height: 32px; right: 5px;}
+.m-login .form-group .cancel{ position: absolute; right: 15px; top: 11px; color: #808080; font-size: 20px;}
+.m-login .btn-submit{ margin-top: 15px;}
+.m-login .btn-submit input{ height: 50px; line-height: 50px; border: 0; background: #6cabea; color: #fff; display: block; border-radius: 5px; width: 100%; box-sizing: border-box; font-size: 18px; cursor: pointer;}
+.m-login .btn-submit input:hover,.m-login .btn-submit input:focus,.m-login .btn-submit input:active{ background: #72ade8; outline: none;}
+.m-login .des{ line-height: 26px; margin-top: 5px;}
+.m-login .des a{ color: #333;}
+
+.m-login-btn{ margin-top: 50px; text-align: center; margin-bottom: 10px;}
+.m-login-btn .btn{ display: inline-block; border: 1px solid #6cabea; line-height: 40px; padding: 0 35px; border-radius: 5px; color: #6cabea; font-size: 16px;}

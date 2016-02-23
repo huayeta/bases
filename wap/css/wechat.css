@@ -1,0 +1,5 @@
+@import url('page.css');
+
+.wechat-icon-var,.wechat-icon-no-var{ position: absolute; top: 25px; right: 30px; display: block; width: 100px; height: 100px;}
+.wechat-icon-var{ background: url("../images/icon/icon-var.png") no-repeat;}
+.wechat-icon-no-var{ background: url("../images/icon/icon-no-var.png") no-repeat;}

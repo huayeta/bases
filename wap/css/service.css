@@ -1,0 +1,10 @@
+@import url('page.css');
+
+.m-service-site .content{ line-height: 24px; font-size: 14px; color: #111;}
+
+.m-service-tt{ border: 4px solid #f8f8f8;margin-top: 10px;}
+.m-service-tt .inner{ border: 1px solid #e5e5e5; padding: 10px; }
+
+.m-citybuy ul{ padding-top: 5px; padding-bottom: 5px; overflow: hidden; background: #f8f8f8;}
+.m-citybuy ul li{ padding: 5px 10px; width: 50%; float: left; box-sizing: border-box;}
+.m-citybuy ul li label{ display: block;}

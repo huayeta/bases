@@ -1,0 +1,37 @@
+@charset "utf-8";
+@import url("common.css");
+.member-card *{ box-sizing: border-box;}
+
+.member-card{width:100%; max-width:640px; min-width:320px; margin:0 auto; position:relative; top:0; left:0; font-size: 12px;}
+.member-card .head{background:#3b383c; width:100%; height:0; padding-bottom:20%; position:relative; top:0; left:0;}
+.member-card .head .jiantou{background:url(../images/jt.png) repeat-x; width:100%; height:5px; display:block; position:absolute; bottom:0; left:0;}
+.member-card .card{width:90%; height:0; padding-bottom:55%; position:relative; margin-top:-15%; left:5%; border-radius:20px; border-bottom:3px solid rgba(0,0,0,0.4); overflow:hidden;}
+.member-card .bg{width:100%; height:100%; position:absolute; top:0; z-index:1;}
+.member-card .bg img{width:100%; height:100%; border-radius: 12px;}
+.member-card .logo{width:88%;position:absolute; top:10%; left:6%; z-index:2;}
+.member-card .logo .pic{width:30%; height:0; padding-bottom:30%; border-radius:100%;background: rgba(255,255,255,0.3);float:left;margin-right:10px;overflow: hidden;}
+.member-card .logo i{ width: 96%; height: 0;padding-bottom: 96%;display: block; overflow:hidden;border-radius: 100%; margin:2%; background-size: cover;background-repeat: no-repeat;background-position: center top;}
+.member-card .logo h2{color:#fff; font-size:1.6em; text-shadow:1px 1px 1px rgba(0,0,0,0.3); padding-top:11%;}
+.member-card .logo h2 span{font-size:0.4em; padding-left:5px;}
+.member-card .card-info{width:88%; height:20px; line-height:20px; position:absolute; bottom:10%; left:6%; z-index:2; color:#fff; text-shadow:1px 1px 1px rgba(0,0,0,0.3);}
+.member-card .card-info .info{float:left;white-space:normal;word-wrap:break-word;word-break:break-all; width: 50%; height: 20px; overflow: hidden;}
+.member-card .card-info .number{float:right; font-size:1.5em;}
+.member-card .card .card-name{ position: absolute; right: 6%; top: 6%; z-index: 3; color: #fff; font-size: 0.4em;}
+.member-card .card .card-name a{text-decoration: none;color: #FFF}
+.member-card .quick{padding:15px 20%; border-bottom:1px solid #f5f5f5;}
+.member-card .quick a{display:inline-block; width:50%;  font-size:1.5em; line-height:20px; text-align:center; padding:5px 0;}
+.member-card .quick a i{width:20px; height:20px; display:inline-block; margin-right:10px; vertical-align:top;}
+.member-card .quick .a1{border-right:1px solid #f0f0f0;}
+.member-card .quick .a1 i{background:url(../images/vip.gif) no-repeat; background-size:100%;}
+.member-card .quick .a2 i{background:url(../images/ma.gif) no-repeat; background-size:100%;}
+.member-card .bt20{border-bottom:20px solid #f5f5f5; }
+.member-card .money ul{border-bottom:1px solid #e5e5e5; overflow:hidden;}
+.member-card .money ul li{width:33.33%; border-left:1px solid #f5f5f5; font-size:14px; padding:15px 0; float:left; text-align:center;}
+.member-card .money ul li:nth-child(1){border:none;}
+.member-card .menu{border-top:1px solid #e5e5e5;}
+.member-card .menu li{height:60px; padding:15px 10px; line-height:30px; border-bottom:1px solid #f5f5f5;}
+.member-card .menu li i{background:url(../images/jt.gif) center center no-repeat; background-size:60%; width:20px; vertical-align:top; float:right; height: 30px;}
+.member-card .menu li b{width:30px; height:30px; display:inline-block; margin-right:10px; vertical-align:top;}
+.member-card .menu li b img{width:100%; height:auto;}
+.member-card .menu li span{font-size:1.3em; line-height:30px;}
+.member-card .menu li:last-child{border:none;}

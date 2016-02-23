@@ -1,0 +1,6 @@
+@import url('page.css');
+
+/* 文章的内容 */
+.m-article-view .view-title{ font-size: 24px; line-height: 30px; padding: 10px 0px;}
+.m-article-view .view-time{ height: 30px; line-height: 30px; background-color: #f8f8f8; color: #999; padding: 0 10px; margin-bottom: 10px;}
+.m-article-view .view-content{ font-size: 14px; line-height: 1.5;}

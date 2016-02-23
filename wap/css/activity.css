@@ -1,0 +1,14 @@
+@import url('page.css');
+
+.m-join .join-item{ text-align: center; position: relative; display: inline-block; margin-right: 5px; padding: 0 15px; border: 1px solid #49b7e8; border-radius: 6px; color: #666; height: 28px; line-height: 28px; margin-bottom: 2px; margin-top: 3px; cursor: pointer; font-size: 14px;}
+.m-join .join-item.sel{ background: #49b7e8; color: #fff;}
+.m-join .join-item.add{ font-size: 18px; line-height: 22px;}
+.m-join .join-item.isremove .remove{ position: absolute; top: -12px; right: -6px; color: #53bbea; font-size: 18px;}
+
+/* 列表页 右边一个图标 左边标题*/ 
+.m-activity-list .item{ background: #fff; padding: 5px 10px; border-bottom: 1px solid #f0f0f0; -webkit-transition: -webkit-transform .3s ease-in-out 0s; transition: transform .3s ease-in-out 0s;}
+.m-activity-list .item.left{ -webkit-transform: translate3d(-50px,0,0); transform: translate3d(-50px,0,0);}
+.m-activity-list .item:active{background-color: #d9d9d9;}
+.m-activity-list .item .title{ padding-bottom: 5px;}
+.m-activity-list .item .title .icon{ display: inline-block; margin-left: 10px; width: 40px; height: 40px; background: url(../images/activity/party.png) center center no-repeat; background-size: contain;}
+.m-activity-list .item .message{ font-size: 12px; height: 20px; line-height: 20px; color: #999;}

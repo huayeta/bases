@@ -1,0 +1,81 @@
+@import url('page.css');
+
+
+/*字体*/
+.layout-right::after{ display: inline-block; font-family: "Ionicons"; speak:none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; text-rendering: auto; line-height: 1; -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/*新的表单列表*/
+.m-tabform{ background-color: #fff;}
+.m-tabform .tab-tr{ margin: 0 10px; line-height: 42px; border-bottom: 1px solid #f5f5f5; font-size: 16px; overflow: hidden;}
+.m-tabform .tab-tr .tab-th{ width: 80px; float: left; color: #808080;}
+.m-tabform .tab-tr .tab-td{ overflow: hidden; color: #333; min-height: 42px;}
+.m-tabform .tab-tr .tab-td .u-txt{display: inline-block; width: 100%; box-sizing: border-box; height: 100%; line-height: normal; border: 0 none; box-shadow: none; color: #333; padding: 0;}
+.m-tabform .tab-tr .tab-td .u-txt::-webkit-input-placeholder{ color: #bbb;}
+.m-tabform .tab-tr .tab-td .u-txt:disabled{ opacity: .8; background:none;}
+.m-tabform .tab-tr .tab-td select{-webkit-appearance:none; border: none; background: none; font-size: 16px; width: 100%; box-sizing: border-box; outline: none; padding: 0;}
+.m-tabform .tab-tr .tab-td .u-txtarea{ box-sizing: border-box; width: 100%; margin: 5px 0;}
+/*右箭头*/
+.layout-right{ position: relative; padding-right: 25px;}
+.layout-right::after{color: #808080;  position: absolute; right: 10px; font-size: 20px; top: 50%; -webkit-transform: translateY(-50%); -ms-transform: translateY(-50%); transform: translateY(-50%);}
+.layout-right::after{content: "\f3d3";}
+
+/* 字体合集 */
+.u-btn-upload-radius::before{ display: inline-block; font-family: "Ionicons"; speak:none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; text-rendering: auto; line-height: 1; -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+.u-upload{ overflow: hidden; background-color: #fff;}
+.u-upload .item-upload{ display: block; float: left; cursor: pointer; vertical-align: top; box-sizing: border-box; border-right: 1px solid #f0f0f0; width: 33.33%; padding: 20px 0; border-bottom: 1px solid #f0f0f0; text-align: center;}
+.u-upload .item-upload:last-child{border-right: none;}
+.u-upload .item-upload .pic{width: 80px; height: 80px; overflow: hidden; display: inline-block; vertical-align: top;}
+.u-upload .item-upload .pic img{ width: 100%; height: 100%; display: inline-block;}
+.u-upload .item-upload .btn{ width: 80px; height: 80px; display: inline-block; background-color: #8C5C4A; color: #fff;}
+.u-upload .item-upload .btn .icon{ font-size: 50px; position: relative; top: 4px;}
+.u-upload .item-upload h2{ color: #505050; line-height: 20px; margin-top: 5px;}
+
+.u-upload .item-upload:nth-child(2) .btn{ background-color: #D66548;}
+.u-upload .item-upload:nth-child(3) .btn{ background-color: #CC7C3C;}
+.u-upload .item-upload:nth-child(4) .btn{ background-color: #448ACA;}
+.u-upload .item-upload:nth-child(5) .btn{ background-color: #3dcc55;}
+
+.u-upload.two .item-upload{ width: 50%;}
+.u-upload.four .item-upload{ width: 25%;}
+.u-upload.four .item-upload .pic,.u-upload.four .item-upload .btn{width: 60px; height: 60px;}
+.u-upload.four .item-upload .btn .icon{ font-size: 40px; top: 1px;}
+
+/*底部按钮组*/
+.m-btn-group{display: -webkit-flex; display: -ms-flexbox; display: -webkit-box; display: flex; box-sizing: border-box; height: 100%; border-top: 1px solid #e0e0e0;}
+.m-btn-group .btn{ -webkit-flex: 1; -ms-flex: 1; -webkit-box-flex: 1; flex: 1; margin-right: 10px; height: 36px; margin-top: 4px; line-height: 36px; box-sizing: border-box; padding: 0; text-align: center; font-size: 20px;}
+.m-btn-group .btn:first-child{ margin-left: 10px;}
+
+.u-btn-upload-radius{ display: inline-block; width: 60px; height: 60px; border: 1px solid #008ed4; border-radius: 100%; color: #008ed4; font-size: 9px; text-align: center; position: relative; box-sizing: border-box; line-height: 66px;}
+.u-btn-upload-radius::before{ content: '\f217'; position: absolute; top: 0px; bottom: 0; left: 0; right: 0; text-align: center; width: inherit; font-size: 20px; padding-top: 5px;}
+.u-btn-upload-image{ width: 60px; height: 60px; border-radius: 100%;}
+.u-txt.txt-tar{ text-align: right; width: 100%; box-sizing: border-box; height:32px; border: 0 none; box-shadow: none; font-size: 14px;}
+.u-txt.txt-tar:focus{ text-align: left;}
+
+.m-simform{ font-size: 14px;}
+.m-simform .shead{ padding: 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; color: #808080;}
+.m-simform .str{display: table; table-layout: fixed; padding: 0 10px; width: 100%; box-sizing: border-box;}
+.m-simform .str>div{ display: table-cell; padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #ddd; word-break: break-all; word-wrap: break-word;}
+.m-simform .str .sth{ width: 20%; vertical-align: middle; color: #808080;}
+.m-simform .str .std{ width: 80%;}
+
+/* 写消息 */
+.u-msg-add{ display: block; width: 100%; font-size: 13px; line-height: 1.1; height: 100px; border: 0; outline:none; padding: 10px; box-sizing: border-box;}
+.u-msg-add::focus{ border: 0;}
+
+.m-msg-upload { margin-right: -10px; overflow: hidden;}
+.m-msg-upload .pic{ float: left; width: 25%; height: 0; padding-bottom: 25%; overflow: hidden; position: relative;}
+.m-msg-upload .pic>div{ background-position: center center; background-size: cover; position: absolute; top: 0; right: 10px; bottom: 10px; left: 0;}
+.m-msg-upload .pic>div.add{ border: 3px dotted #ccc; border-radius: 4px; text-align: center; font-size: 20px; color: #ccc;}
+.m-msg-upload .pic>div.add:after{ content: ''; display: inline-block; height: 100%; width: 0; vertical-align: middle;}
+
+.m-boxform{ background-color: #fff;}
+.m-boxform .item{padding: 10px; display: block; line-height: 22px; border: 1px solid #f0f0f0; border-top: 0 none; font-size: 16px;}
+.m-boxform .item:first{ border-top: 1px solid #f0f0f0;}
+.m-boxform .item .u-txt,.m-boxform .item .u-txtarea{ box-sizing: border-box; border: 0; height: 22px; line-height: 22px; width: 100%; border: 0; font-size: 16px; color: #000; outline: none; padding: 0; box-shadow: none;}
+.m-boxform .item .u-txtarea{ height: auto;}
+.m-boxform .item .u-txtarea.heighter{ height: 300px;}
+.m-boxform .item .icon{ width: 14px; display: inline-block; text-align: center; vertical-align: middle;}
+.m-boxform .item .icon::before{ font-size: 24px; color: #ccc;}
+
+.m-boxform .item .item{ border-left: 0; border-right: 0;}

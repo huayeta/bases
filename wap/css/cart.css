@@ -1,0 +1,62 @@
+@import url('page.css');
+
+.f-bgf5{ background: #f5f5f5;}
+
+.u-list-cart{ background: #fff;width: 100%; box-sizing: border-box; padding: 0 10px; border-bottom: 1px solid #f0f0f0;}
+.u-list-cart .hd{ padding: 10px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0;}
+.u-list-cart .box .item{ padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 12px;}
+.u-list-cart .box .item>div{ vertical-align: top;}
+.u-list-cart .box .item>div:nth-child(1){ width: 26px;}
+.u-list-cart .box .item>div:nth-child(2){ width: 60px;}
+.u-list-cart .box .item>div:nth-child(2) .pic{ width: 50px; height: 50px; overflow: hidden;}
+.u-list-cart .box .item>div:nth-child(2) .pic a{ display: block; width: 100%; height: 100%;}
+.u-list-cart .box .item>div:nth-child(2) .pic a img{ display: block;width: 100%; height: 100%;}
+.u-list-cart .box .item>div:nth-child(3) a{ color: #000;}
+.u-list-cart .box .item>div:last-child{ width: 80px; font-family: Arial; font-size: 12px;}
+.u-list-cart .box .item-txt{ padding: 10px 15px; display: block;}
+.u-list-cart .buttom{ padding: 10px 0; overflow: hidden;}
+.u-list-cart .buttom i{ font-style: normal;}
+
+.u-cart-footer{ background: #f8f8f8; padding: 0 10px;}
+.u-cart-footer .inner>div:nth-child(1){width: 100px;}
+.u-cart-footer .total{ font-size: 14px; color: #f07900;}
+
+.u-cart-addr{ background: #677990; padding: 15px 10px; box-sizing: border-box;}
+.u-cart-addr>div:first-child,.u-cart-addr>div:nth-child(3){ font-size: 2.5rem;color: #fff; width: 33px; vertical-align: middle;}
+.u-cart-addr>div:nth-child(2){ color: #fff; vertical-align: top;}
+.u-cart-addr>div:nth-child(2) .hd{ font-size: 14px;margin-bottom: 5px; font-weight: bold;}
+.u-cart-addr>div:nth-child(2) .bd{ font-size: 12px;}
+
+/* 购物车页面 */
+.m-list-cart{ background-color: #fff;}
+.m-list-cart .checkbox{ float: left; margin-right: 10px;}
+.m-list-cart .checkbox.center{ padding-top: 28px;}
+.m-list-cart .title{ padding:10px 15px; background-color: #fff; color: #000; font-size: 14px;}
+.m-list-cart .item{ padding: 10px 15px; border-top: 1px solid #f0f0f0;}
+.m-list-cart .item .pic{ width: 80px; height: 80px; float: left;}
+.m-list-cart .item .pic img{ width: 100%; height: 100%;}
+.m-list-cart .item .info{ overflow: hidden; padding: 0 10px; }
+.m-list-cart .item .info .tt{ color: #000; height: 40px; overflow: hidden;}
+.m-list-cart .item .info .des{ min-height: 20px; line-height: 20px; color: #888;font-size: 12px;}
+.m-list-cart .item .info .other .u-price{ color: #e50000}
+.m-list-cart .item .editor{ overflow: hidden;}
+.m-list-cart .item .editor>div{ display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex;}
+.m-list-cart .item .editor>div>div:nth-child(1){ -webkit-box-flex: 1; -webkit-flex: 1; -ms-flex: 1; flex: 1; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center}
+.m-list-cart .item .editor>div>div:nth-child(2){ width: 50px; color: #fff; text-align: center; height: 80px; line-height: 80px; font-size: 14px; background-color: #ff7000;}
+
+.m-cart-footer .checkbox{ float: left; width: 35px; text-align: center;}
+.m-cart-footer .btn1{ border: 0; height: 50px; line-height: 100%; color: #fff; padding: 0 15px; font-size: 14px; background-color: #e50000;}
+.m-cart-footer .u-price{ color: #e50000;}
+
+/* 购物卡 */
+.m-cart-card{}
+.m-cart-card .item{ padding: 10px 0; border-bottom: 1px solid #f0f0f0; margin: 0 10px;}
+.m-cart-card .item .title h2{ font-size: 13px; color: #000;}
+.m-cart-card .item .info{ color: #808080; margin-top: 5px; font-size: 12px;}
+
+/* 购物车为空 */
+.m-cart-empty{ padding-top: 25px; text-align: center; color: #aaa;}
+.m-cart-empty .pic{ padding: 10px 0;}
+.m-cart-empty .pic .icon{ font-size: 90px;}
+.m-cart-empty .tt1{ font-size: 16px; margin-bottom: 5px;}
+.m-cart-empty .tt2{ font-size: 12px; margin-bottom: 10px;}

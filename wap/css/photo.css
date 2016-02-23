@@ -1,0 +1,62 @@
+@import url('page.css');
+@import url('progress.css');
+
+.m-photo-list{ padding:0 6px;}
+.m-photo-list .item-photo{ box-sizing: border-box; width: 33.333%; float: left; margin-bottom: 6px; padding: 0 3px; position: relative;}
+.m-photo-list .item-photo .box{ border: 1px solid #eee; padding: 2px;}
+.m-photo-list .item-photo .box .pic{ width: 100%; height: 0; padding-bottom: 100%; overflow: hidden; display: block; position: relative;}
+.m-photo-list .item-photo .box .pic a{ display: block; width: 100%; height: 0;padding-bottom: 100%;}
+.m-photo-list .item-photo .box .pic img{ display:block; vertical-align: top; width: 100%; height: auto;}
+.m-photo-list .item-photo .box .pic .isCheckbox{ position: absolute; top: 0; left: 0px; right: 0; bottom: 0; z-index: 1;}
+.m-photo-list .item-photo .box .pic .isCheckbox input[type=checkbox]{ position: absolute; top: 0; right: 0px; width: 20px; height: 20px;}
+.m-photo-list .item-photo .box .pic .isCheckbox input[type=checkbox]:after{ width: 11px; height: 5px; margin-left: 3px;}
+.m-photo-list .item-photo .box .title{ line-height: 30px; height: 30px; padding: 0 3px;}
+.m-photo-list .item-photo .box .title h2{ font-size: 14px; line-height: 30px;}
+
+.m-photo-list{ padding:0 6px;}
+.m-photo-list .item-view{ box-sizing: border-box; width: 33.333%; float: left; margin-bottom: 6px; padding: 0 3px; position: relative;overflow: hidden;}
+.m-photo-list .item-view input[type=file]{ position: absolute; top: 0; left:0; font-size: 100; width: 100%; height: 100%; z-index: 1; opacity: 0;}
+.m-photo-list .item-view .pic{ display: block; position: relative;height: 0; width: 100%; padding-bottom: 100%; overflow: hidden;}
+.m-photo-list .item-view .pic img{ width: 100%; height: auto;}
+.m-photo-list .item-view .pic .isCheckbox{ position: absolute; top: 0; left: 0px; right: 0; bottom: 0; z-index: 1;}
+.m-photo-list .item-view .pic .isCheckbox input[type=checkbox]{ position: absolute; top: 0; right: 0px; width: 20px; height: 20px;}
+.m-photo-list .item-view .pic .isCheckbox input[type=checkbox]:after{ width: 11px; height: 5px; margin-left: 3px;}
+.m-photo-list .item-view.slt .pic{ opacity: 0.75;}
+.m-photo-list .item-view .icon:before{display:none;position:absolute; z-index: 3; right:12px; bottom:5px; font-size: 2rem; color: #0d8e1c}
+.m-photo-list .item-view.slt .icon:before{ display:block;}
+.m-photo-list .item-view .progress{ position: absolute; z-index: 1; bottom: 0; left: 0px; right: 0px; height: 12px;}
+.m-photo-list .item-view .progress .u-progress{ border-radius: 0; width: 0;}
+.webuploader-element-invisible{ position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px);}
+.m-photo-list .item-view .title{ line-height: 30px; height: 30px; padding: 0 3px;}
+.m-photo-list .item-view .title h2{ font-size: 14px; line-height: 30px; }
+
+/* 选择模板那块的css */
+.m-template-list{ padding: 0 5px; overflow: hidden;}
+.m-template-list .item-list{ box-sizing: border-box; width: 50%; float: left; margin-bottom: 10px; padding: 0 5px; position: relative;}
+.m-template-list .item-list .inner{ background-color: #fff; border-radius: 4px; overflow: hidden;}
+.m-template-list .item-list .pic{ width: 100%;height: 0; overflow: hidden; padding-bottom: 100%; position: relative;}
+.m-template-list .item-list .pic a{ display: block; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+.m-template-list .item-list .pic img{ display: block; vertical-align: top; width: 100%; height: auto;}
+.m-template-list .item-list .pic .pic-tt{ position: absolute; bottom: 0;left:0; right: 0; line-height: 30px; box-sizing: border-box; padding: 0 10px; background-color: rgba(0,0,0,.4); color: #fff; font-size: 12px;}
+.m-template-list .item-list .title{ line-height: 20px; height: 40px; padding: 0 3px; overflow: hidden; padding:5px;}
+.m-template-list .item-list .title h2{ font-size: 14px; color: #403e39;}
+.m-template-list .item-list .des{ font-size: 12px; color: #808080; padding: 0 5px 5px;}
+.m-template-list .item-list .btn-group{ padding:5px; border-top: 1px solid #fafafa; line-height: 28px;}
+.m-template-list .item-list .btn-group .btn{ border: 1px solid #e0e0e0; padding: 0 5px; line-height: 26px; text-align: center; border-radius: 2px; color: #505050; font-size: 12px;}
+.m-template-list .item-list .btn-group .btn:active{opacity: .5}
+
+.m-template-view{ padding: 0 5px;}
+.m-template-view .pic{ width:100%; margin-bottom: 10px;}
+.m-template-view .pic img{ width: 100%; display: inline-block; vertical-align: top; height: auto;}
+.m-template-view .title{ line-height: 30px; height: 30px; padding: 0 3px; margin-bottom: 10px;}
+.m-template-view .title h2{ font-size: 16px; color: #000;}
+.m-template-view .desc{ width: 100%; padding: 0 3px; box-sizing: border-box; overflow: hidden; color: #808080; margin-bottom: 15px; line-height: 1.5;}
+.m-template-view-footer{ padding: 0 10px; background-color: #f8f8f8;}
+
+.u-list .item{padding: 16px; border-bottom: 1px solid #ddd; display: block; position: relative;}
+.u-list .item h2{ color: #333;}
+.u-list .item h2 .icon{ float: right;}
+.u-list .item .icon:before{ display: none; font-size: 2rem; color: #0d8e1c;}
+.u-list .item.slt{ opacity: 0.75;}
+.u-list .item.slt .icon:before{ display: block;}
+.u-list .item .progress{ margin-top: 3px;}

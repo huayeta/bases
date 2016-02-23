@@ -1,66 +1,79 @@
 var gulp=require("gulp");
-var combiner=require('stream-combiner2');
-var concat=require('gulp-concat');
-var uglify=require('gulp-uglify');
-var rename=require('gulp-rename');
 var del=require('del');
-var changed=require('gulp-changed');
-var babel=require('gulp-babel');
-var sequence=require('gulp-sequence');//顺序or并行执行任务
-var jshint=require('gulp-jshint');
 var webpack=require('webpack');
 var gulpWebpack=require('webpack-stream');
+var shell=require('gulp-shell');
+var postcss=require('gulp-postcss');
 var sourcemaps=require('gulp-sourcemaps');
+var combine=require('stream-combiner');
 
 var BASE='./public/js/';
+var BASE_CSS='./public/wap/';
 
-//babel
-var BABELDEST='./public/js/build/';
-var BABELSRC=['./public/js/*/*.es6','./public/js/*/*.jsx'];
-gulp.task('clean:babel',function(cb){
-    del(BABELDEST).then(function(paths){
+gulp.task('default',['start']);
+
+//清除任务
+gulp.task('clean',function(cb){
+    del([BASE+'dest/']).then((path)=>{
+        console.log(path);
         cb();
-    });
-});
-gulp.task('babel',function(){
-    var combined=combiner.obj([
-        gulp.src(BABELSRC),
-        changed(BABELDEST),
-        babel(),
-        uglify(),
-        rename(function(path){
-            path.extname='.min.js';
-        }),
-        gulp.dest(BABELDEST)
-    ]);
-    combined.on('error',console.log.bind(console));
-    return combined;
-});
-gulp.task('w-babel',function(){
-    gulp.watch(BABELSRC,['babel']);
-});
-//clean
-gulp.task('clean',['clean:babel']);
-//build
-gulp.task('build',sequence('clean:babel','babel'));
-//watch
-gulp.task('watch',['w-babel']);
-//default
-// gulp.task('default',['build']);
-
-//lint
-gulp.task('lint',function(){
-    gulp.src(BASE+'react/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
-});
-
-gulp.task('clean-dest',function(cb){
-    del(BASE+'dest/').then(function(paths){
-        cb();
-    });
+    })
 })
 
+// 开始任务
+gulp.task('start',shell.task([
+    'gulp webpack-w'
+]))
+
+//发布任务
+gulp.task('publish',['clean'],function(cb){
+    shell.task([
+        'NODE_ENV="production" gulp webpack'
+    ])(cb);
+})
+
+//postcss
+var base_postcss=[
+    BASE_CSS+'src/*.css',
+    BASE_CSS+'src/**/*.css',
+];
+gulp.task('postcss',function(){
+    //插件
+    var processors=[
+        require('postcss-import'),//合并@import的样式到主样式里面
+        // require('cssnext'),
+        require('precss'),//预处理语言
+        require('postcss-will-change'),//提前动画
+        require('postcss-color-rgba-fallback'),//rgba的兼容
+        require('postcss-opacity'),//opacity的兼容
+        require('postcss-pseudoelements'),//::伪元素的兼容
+        require('postcss-vmin'),//vmin单位的兼容
+        require('pixrem'),//rem单位的兼容
+        require('css-mqpacker'),//合并媒体查询的样式
+        require('autoprefixer'),//自动添加前缀
+        require('cssnano'),//压缩合并优化
+    ];
+    return gulp.src(base_postcss)
+        .pipe(combine(
+            sourcemaps.init(),
+            postcss(processors),
+            sourcemaps.write('.')
+        ))
+        .pipe(gulp.dest('./public/wap/dest'))
+})
+
+gulp.task('postcss-w',['postcss'],function(){
+    gulp.watch(base_postcss,['postcss']);
+})
+
+gulp.task('postcss-clean',function(cb){
+    del([BASE_CSS+'dest/']).then((path)=>{
+        console.log(path);
+        cb();
+    })
+})
+
+//webpack
 var Base_webpack=[
     BASE+'src/*.jsx',
     BASE+'src/*.es6',
@@ -73,13 +86,6 @@ var Base_webpack=[
 gulp.task('webpack',function(){
     gulp.src(BASE)
         .pipe(gulpWebpack(require('./webpack.config.js'),webpack))
-        // .pipe(gulp.dest('./'))
-        // .pipe(rename(function(path){
-        //     path.extname='.min.js';
-        // }))
-        // .pipe(sourcemaps.init())
-        // .pipe(uglify())
-        // .pipe(sourcemaps.write('../maps'))
         .pipe(gulp.dest('./public/js/dest'))
 });
 gulp.task('webpack-w',function(){
