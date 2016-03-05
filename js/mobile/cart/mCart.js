@@ -247,19 +247,29 @@ define('mCart',function(require, exports, module){
         //设置规格
         // console.log(opts.sales_attributes);
         // console.log(opts.sales_attribute);
+		//积分B的显示
+		function pointBFn(price){
+			$pointB.show();
+			$pointBNum.text(price * opts.pointB_allot_self);
+		}
 		function getGivepoint(result){
-			if(opts.give_point_json && !$.isEmptyObject(opts.give_point_json)){
+			if(opts.give_point_json){
 				if(!result)return $givepoint.find('b').text('0');
 				var diff=parseFloat(result.price)-parseFloat(result.cost);
 				// console.log(opts.give_point_json);
 				// console.log(diff);
 				var givepoint=opts.give_point_json[diff]?opts.give_point_json[diff]:0;
-				return $givepoint.show().find('b').text(givepoint);
+				if(givepoint && givepoint>0){
+					$givepoint.show().find('b').text(givepoint);
+				}else{
+					$givepoint.hide().find('b').text(0);
+				}
 			}else{
-				$givepoint.show();
-				$pointB.show();
-				$pointBNum.text(opts.price);
-				return $givepoint.show().find('b').text(opts.give_point);
+				if(opts.give_point){
+					$givepoint.show().find('b').text(opts.give_point);
+				}
+				pointBFn(opts.price);
+				return;
 			}
 
 		}

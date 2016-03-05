@@ -471,6 +471,28 @@ define('aBox',function(require, exports, module){
 			}
 		}
 	})
+	aBox.directive('slick',function(){
+		return{
+			restrict:'EAC',
+			compile:function(ele,attrs){
+				var opts={
+					arrows:false,//前后左右按钮
+					infinite: false,
+					dots:true,//分页
+					autoplay:false
+				};
+				if(attrs.infinite)opts.infinite=attrs.slickInfinite;
+				if(attrs.slickShow)opts.slidesToShow=parseInt(attrs.slickShow,10);//显示多少个
+				if(attrs.slickScroll)opts.slidesToScroll=parseInt(attrs.slickScroll,10);//滚动多少个
+				if(attrs.slickDots)opts.dots=attrs.slickDots;//分页是否显示
+				if(attrs.slickAutoplay)opts.autoplay=!!attrs.slickAutoplay;
+				if(attrs.slickVertical)opts.vertical=!!attrs.slickVertical;
+				require.async(['slick'],function(slick){
+					slick(ele[0]).slick(opts);
+				});
+			}
+		}
+	})
 
 	/************ 复制一些另类的函数 ************/
 

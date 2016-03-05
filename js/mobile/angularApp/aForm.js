@@ -6,7 +6,7 @@ define('aForm',function(require, exports, module){
 	var form=angular.module('aForm',['aHttp']);
 	form.directive('uTxt',function($parse){
 		return {
-			restrict:'C',
+			restrict:'CAE',
 			require:'?ngModel',
 			link:function(scope,ele,attrs,ngModel){
 				if(ngModel && !$parse(attrs.ngModel)(scope) && attrs.value){
@@ -791,9 +791,11 @@ define('aForm',function(require, exports, module){
                 	}
                 	if(!nameArray)return;
                     mWbmc.wbmc({target:ele[0],name:nameArray,pid:attrs.pid,select:attrs.select?attrs.select:selectNum,root:attrs.root?attrs.root:0,val:attrs.val,defId:attrs.defid,def:attrs.def?attrs.def.split(','):'',init:function(obj){
+						var opts=obj.opts;
                     	if(attrs.defid){
                     		for(var i in obj.opts.def){
                     			if(obj.opts.def[i])$parse(model[i]).assign(scope.$parent,obj.opts.def[i]);
+								scope.$parent.$apply();
                     		}
                     		// scope.$parent.$apply();
                     	}

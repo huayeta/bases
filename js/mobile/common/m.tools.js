@@ -274,15 +274,23 @@ define('mTools',function(require, exports, module){
         opts.init=function(obj){
             var _this=$(obj);
             var $body=$('body');
-            var $msg=$('<div class="u-showBtn"><div class="con"></div></div>');
+            var $msg=$('<div class="u-showBtn"><style>.u-showBtn{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 998; background: rgba(0,0,0,.4); overflow: hidden;}.u-showBtn .con{ position: absolute; bottom: 0; left: 15px; right: 15px; bottom: 0; z-index: 999;transform: translateY(100%);transition: transform .2s linear 0s;}.u-showBtn .con.show{transform: translateY(0);}.u-showBtn .con ul{ background: #fff; border-radius: 3px; margin-bottom: 5px; box-shadow: 0 0 10px 0px gray}.u-showBtn .con ul li{ border-bottom: 1px solid #f5f5f5;}.u-showBtn .con ul li:last-child{ border-bottom: 0;}.u-showBtn .con ul li{ display: block; width: 100%; box-sizing: border-box; padding: 13px; font-size: 15px; font-family: "Microsoft Yahei"; text-align: center; color: #333;}.u-showBtn .con ul.del li{ color: #ff7000;}.u-showBtn .con ul li:active{ color: #444;}</style><div class="con"></div></div>');
             var $con=$msg.find('.con');
-            $msg.click(function(){$msg.remove();});
+			opts.distory=function(){
+				$con.removeClass('show');
+				setTimeout(function(){
+					$msg.remove();
+				},300)
+			}
+            $msg.click(function(){
+				opts.distory();
+			});
             $con.click(function(event){event.stopPropagation();});
             //取消按钮
             $con.append('<ul class="cancel"><li>'+opts.cancelText+'</li></ul>');
             $con.on('click','.cancel',function(){
                 if($.isFunction(opts.cancel)){opts.cancel($msg);}
-                $msg.remove();
+                opts.distory();
             })
             //删除按钮
             if(($.isFunction(opts.isdel) && opts.isdel(_this[0])===true) || (!$.isFunction(opts.isdel) && opts.isdel)){
@@ -309,6 +317,9 @@ define('mTools',function(require, exports, module){
                 $con.prepend(tpl);
             }
             $body.append($msg);
+			requestAnimationFrame(function(){
+				$con.addClass('show');
+			})
         }
         if(opts.isTarget && opts.target){
             $(document).on('click',opts.target,function(){
@@ -316,7 +327,6 @@ define('mTools',function(require, exports, module){
                 opts.init(this);
             })
         }else{
-            // console.log(this);
             if(opts.before(this)==false)return;
             opts.init(this);
         }
@@ -339,7 +349,7 @@ define('mTools',function(require, exports, module){
         opts.init=function(obj){
             var _this=$(obj);
             var $body=$('body');
-            var $msg=$('<div class="u-showButton"><div class="con"><div class="title">'+opts.title+'</div></div></div>');
+            var $msg=$('<div class="u-showButton"><style>.u-showButton{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 998; background: rgba(0,0,0,.5); overflow: hidden; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-align: center; -webkit-align-items: center; -ms-flex-align: center; align-items: center; -webkit-box-pack: center; -webkit-justify-content: center; -ms-flex-pack: center; justify-content: center;}.u-showButton .con{ width: 80%; background-color: #fff; border-radius: 3px; border: 1px solid #999;}.u-showButton .con .title{width: 100%; box-sizing: border-box; padding: 10px; font-size: 14px; font-family: "Microsoft Yahei"; color: #333; border-bottom: 1px solid #f0f0f0;}.u-showButton .con ul{ width: 100%; max-height: 100%; overflow-y: auto;}.u-showButton .con ul li{ border-bottom: 1px solid #f0f0f0;}.u-showButton .con ul li:last-child{ border-bottom: 0;}.u-showButton .con ul li{ display: block; width: 100%; box-sizing: border-box; padding: 10px; font-size: 14px; font-family: "Microsoft Yahei"; color: #333;}.u-showButton .con ul li:active{ color: #444;}</style><div class="con"><div class="title">'+opts.title+'</div></div></div>');
             var $con=$msg.find('.con');
             $msg.click(function(){$msg.remove();});
             $con.click(function(event){event.stopPropagation();});

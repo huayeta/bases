@@ -15,11 +15,13 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-set:before { content: "\e648"; }
 .icon-user:before { content: "\e612"; }
 .icon-home-1:before { content: "\e613"; }
 .icon-password:before { content: "\e614"; }
 .icon-key:before { content: "\e615"; }
 .icon-search:before { content: "\e616"; }
+.icon-fabu:before { content: "\e637"; }
 .icon-address:before { content: "\e617"; }
 .icon-note:before { content: "\e618"; }
 .icon-message:before { content: "\e600"; }
@@ -45,7 +47,9 @@
 .icon-left:before { content: "\e604"; }
 .icon-top:before { content: "\e629"; }
 .icon-down:before { content: "\e62a"; }
+.icon-mobile:before { content: "\e646"; }
 .icon-code:before { content: "\e605"; }
+.icon-back-top:before { content: "\e647"; }
 .icon-store:before { content: "\e62b"; }
 .icon-money-1:before { content: "\e62c"; }
 .icon-pinpai:before { content: "\e62d"; }
@@ -82,3 +86,5 @@
 .icon-circle-sel:before { content: "\e635"; }
 .icon-circle:before { content: "\e636"; }
 .icon-delivery-goods:before { content: "\e638"; }
+.icon-zan:before { content: "\e641"; }
+.icon-pinglun:before { content: "\e645"; }

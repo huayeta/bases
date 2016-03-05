@@ -1,7 +1,7 @@
-@import "base.css";
-@import "form.css";
+@import "./common/base.css";
+@import "./common/form.css";
 @import "../font/iconfont.css";
-@import "button.css";
+@import "./common/button.css";
 
 body{ background-color: #f5f5f5;}
 
@@ -10,130 +10,82 @@ body{ background-color: #f5f5f5;}
 
 /*头部*/
 .m-index-header{
-    min-height: 8rem; background-image: linear-gradient(0deg, #0099e5, #0066cc); color: #fff; padding: 1.4rem 0; position: relative; width: 100%; overflow: hidden;
-    .btn-code{
-        position: absolute; top: .6rem; left: .6rem; font-size: .8rem; width: .8rem; height: .8rem; vertical-align: top; color: #fff; display: inline-block; line-height: .6rem;
-    }
-    .btn-right{
-        position: absolute; top: .6rem; right: .6rem; font-size: .7rem; color: #fff;
-        i{
-            display: block; position: absolute; top: -0.04rem; right: -0.2rem; width: .3rem; height: .3rem; line-height: .3rem; border-radius: 50%; background-color: #ff0000;
+    background-image: linear-gradient(0deg, #0099e5, #0066cc); color: #fff; position: relative; width: 100%;
+    .btns{
+        font-size: .8rem; line-height: .8rem;
+        .btn{
+            font-size: .8rem; display: inline-block; vertical-align: middle;
         }
-    }
-    @for $i form 1 to 2 {
-        .bg-0$i{
-            position: absolute; top:calc(1.4rem+3.4rem/2-.5rem); bottom: 0; left: 0rem; right: 0; @extend nowrap;
-            img{
-                width: 15rem; max-width: 15rem; display: inline-block;
-                position: absolute; top: 0;
+        .btn-set{
+            font-size: 1rem; position: relative;
+            i{
+                width: .3rem; height: .3rem; line-height: .3rem; border-radius: 50%;position: absolute; top:-0.3rem; right: 0rem; background-color: red; color: #fff; box-shadow: 0 0 2 0 rgba(0,0,0,.1);
             }
         }
     }
     .bg-01{
-        top:calc(1.4rem+3.4rem/2-.1rem);
-        z-index: 2;
-        /*img:nth-child(1){
-            right: 0;
-            animation: bgLeft-1-1 16s linear infinite both;
+        position: absolute; top:2rem; bottom: 0; left: 0rem; right: 0; @extend nowrap; overflow: hidden;
+        img{
+            width: 15rem; max-width: 15rem; display: inline-block;
+            position: absolute; top: 0;
         }
-        img:nth-child(2){
-            right:  -30rem;
-            animation: bgLeft-1-2 16s linear infinite both;
-        }*/
     }
-    .bg-02{
-        z-index: 1;
-
-        /*img:nth-child(1){
-            right: 0;
-            animation: bgLeft-2-1 24s linear infinite both;
-        }
-        img:nth-child(2){
-            right:  -30rem;
-            animation: bgLeft-2-2 24s linear infinite both;
-        }*/
-    }
-    .info{
-        position: relative; z-index: 3;
+    .infos{
+        position: relative; padding:.6rem; overflow: hidden;
         .pic{
-            text-align: center;
+            float: left; margin-right: .3rem;
             a{
-                display: inline-block; width: 3.4rem; height: 3.4rem; background: #fff; border-radius: 50%; border: .1rem solid #fff; background-size: 100% 100%; vertical-align: top;
+                display: inline-block; width: 3rem; height: 3rem; background: #fff; border-radius: 50%; border: .1rem solid #fff; background-size: 100% 100%; vertical-align: top;
 
             }
         }
-        .title{
-            font-size: .8rem; margin: .15rem 0; text-align: center; padding: 0 .2rem; text-shadow: 1px 1px 0 rgba(0,0,0,.2);
-            a{
-                color: #fff;
-            }
-            .icon{
-                color: #fff; font-size: .8rem; position: relative;
-            }
-            i{
-                display: block; position: absolute; top: -0.04rem; right: -0.04rem; width: .16rem; height: .16rem; border-radius: 50%; background-color: #ff0000;
-            }
-        }
-        .des{
-            font-size: .5rem; text-align: center; padding: 0 .2rem;text-shadow: 1px 1px 2px rgba(0,0,0,.1);
-        }
-    }
-}
-@keyframes bgLeft-1-1{
-    0%{right: 0;}
-    25%{right:15rem; opacity: 1;}
-    39%{right: 15rem; opacity: 0;}
-    40%{right: -30rem; opacity: 0;}
-    50%{right: -30rem; opacity: 1;}
-    100%{right:0;}
-}
-@keyframes bgLeft-1-2{
-    0%{right: -30rem;}
-    50%{right:0;}
-    75%{right: 15rem; opacity:1;}
-    89%{right: 15rem; opacity: 0;}
-    90%{right: -30rem; opacity: 0;}
-    100%{right:-30rem; opacity: 1;}
-}
-
-@keyframes bgLeft-2-1{
-    0%{right: 0;}
-    25%{right:15rem; opacity: 1;}
-    39%{right: 15rem; opacity: 0;}
-    40%{right: -30rem; opacity: 0;}
-    50%{right: -30rem; opacity: 1;}
-    100%{right:0;}
-}
-@keyframes bgLeft-2-2{
-    0%{right: -30rem;}
-    50%{right:0;}
-    75%{right: 15rem; opacity:1;}
-    89%{right: 15rem; opacity: 0;}
-    90%{right: -30rem; opacity: 0;}
-    100%{right:-30rem; opacity: 1;}
-}
-
-/*通知*/
-.m-index-notice{
-    background-color: #fff; padding: .6rem 0; margin-bottom: .3rem;
-    ul{
-        display: flex; justify-content:space-between;
-        li{
-            flex:1; text-align: center; border-right: 1px solid #f8f8f8; color: #666;
-            a{
-                display: inline-block; vertical-align: top;
+        .info{
+            overflow: hidden;
+            .title{
+                font-size: .8rem; margin: .3rem 0 .4rem; padding: 0 .2rem; text-shadow: 1px 1px 2px rgba(0,0,0,.1);
+                a{
+                    color: #fff;
+                }
                 .icon{
-                    font-size: 1.2rem; line-height: 1.2rem; margin-bottom: .3rem; position: relative;
-                    i{
-                        width: .8rem; height: .8rem; line-height: .8rem; transform: scale(.7); text-align: center; font-size: .4rem;  border-radius: 50%;position: absolute; top:-0.2rem; right: -0.2rem; background-color: red; color: #fff; box-shadow: 0 0 2 0 rgba(0,0,0,.1);
+                    img{
+                        height: .6rem;
                     }
                 }
-                .tt{
-                    font-size: .5rem; line-height: .5rem;
+            }
+            .des{
+                font-size: .5rem; padding: 0 .2rem;text-shadow: 1px 1px 2px rgba(0,0,0,.1);
+            }
+        }
+    }
+    /*通知*/
+    .notice{
+        color: #fff; margin-top: .5rem; background-image: linear-gradient(0deg, rgba(0,0,0,.3), rgba(0,0,0,0));
+        ul{
+            display: flex; justify-content:space-between;
+            li{
+                flex:1; text-align: center; color: #666; position: relative;
+                a{
+                    display: inline-block; vertical-align: top; color: #fff;
+                    .icon{
+                        font-size: 1rem; line-height: 1rem; position: relative;
+                        i{
+                            width: .8rem; height: .8rem; line-height: .8rem; transform: scale(.7); text-align: center; font-size: .4rem;  border-radius: 50%;position: absolute; top:-0.3rem; right: -0.4rem; background-color: red; color: #fff; box-shadow: 0 0 2 0 rgba(0,0,0,.1);
+                        }
+                    }
+                    .tt{
+                        font-size: .5rem; line-height: .5rem; margin: .3rem 0;
+                    }
+                }
+                &::after{
+                    content: ''; display: block; position: absolute; height: 100%; right: 0; width: 1px; top: 0; background-image: linear-gradient(0deg, rgba(255,255,255,.3), rgba(255,255,255,0));
+                }
+            }
+            li:last-child{
+                &::after{
+                    display:none;
                 }
             }
         }
-        li:last-child{border-right: 0;}
     }
 }
 
@@ -152,7 +104,7 @@ body{ background-color: #f5f5f5;}
     .items{
         margin: .7rem .3rem; position: relative;
         .item{
-            float: left; width: 25%; text-align: center;
+            float: left; width: 33.33%; text-align: center;
             .price{
                 font-size: .6rem; color: #333; font-weight: 700;
             }
@@ -312,5 +264,27 @@ body{ background-color: #f5f5f5;}
                 opaticy:.9
             }
         }
+    }
+}
+
+/*提醒*/
+.m-index-tips{
+    width: 15rem; height: 1.6rem; line-height: 1.6rem; overflow: hidden; padding: 0 .6rem; font-size: .5rem; background-color: #fff5d9; color: #f24f18;
+    .icon{
+        font-size: .6rem;
+    }
+    .icon.close{
+        font-size: .5rem;
+    }
+    .close:active{
+        opacity: .7;
+    }
+}
+
+/*默认密码*/
+.m-index-password{
+    width: 15rem; height: 2.5rem; line-height: 2.5rem; overflow: hidden; padding: 0 .6rem; font-size: .6rem; background-color: rgba(0,0,0,.7); color: #fff; position: absolute; top: 0; z-index: 7;
+    b{
+        color: #f24f18;
     }
 }

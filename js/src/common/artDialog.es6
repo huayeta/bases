@@ -1,3 +1,5 @@
+import objectAssign from 'object-assign';
+
 let dialog;
 if(window.top!=window && window.top.window.dialog){
     dialog=window.top.window.dialog;
@@ -24,7 +26,7 @@ const dialogTip=(obj={})=>{
     let opts={
         time:1000
     };
-    Object.assign(opts,obj);
+    objectAssign(opts,obj);
     let dia=dialog(opts);
     dia.addEventListener('show',()=>{
         setTimeout(()=>{
@@ -43,7 +45,7 @@ const dialogDel=(obj={})=>{
         okValue:'删除',
         cancelValue:'取消'
     };
-    Object.assign(opts,obj);
+    objectAssign(opts,obj);
     // opts.content='<i class="u-icon-'+opts.icon+'-big f-mr20 f-dib f-vam"></i><div style="display:inline-block;">'+opts.content+'</div>';
     opts.content=`<i class="u-icon-${opts.icon}-big f-mr20 f-dib f-vam"></i><div style="display:inline-block;">${opts.content}</div>`;
     return dialog(opts);
@@ -55,7 +57,7 @@ const dialogGet=(obj={})=>{
         padding:0,
         fixed: true
     };
-    Object.assign(opts,obj);
+    objectAssign(opts,obj);
     return dialog(opts);
 }
 

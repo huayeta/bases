@@ -156,7 +156,10 @@ define('mWbmc',function(require, exports, module){
                     for(var i in ARR){
                         var index=_this.getSelected(ARR[i].selectScroll);
                         var $item=ARR[i].tpl.find('li').eq(index);
-                        result.push({name:$item.text(),id:$item.data('id')});
+						var name=$item.text();
+						var id=$item.data('id');
+						if(!id)name='';
+                        result.push({name:name,id:id});
                     }
                     _this.hidePanel();
                     opts.callback && typeof opts.callback=='function' && opts.callback(result);

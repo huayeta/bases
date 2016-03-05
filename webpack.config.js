@@ -35,7 +35,21 @@ if(isProduction()){
         })
     )
 }
-
+//插件
+var processors=[
+    require('postcss-import'),//合并@import的样式到主样式里面
+    // require('cssnext'),
+    require('precss'),//预处理语言
+    require('postcss-will-change'),//提前动画
+    require('postcss-color-rgba-fallback'),//rgba的兼容
+    require('postcss-opacity'),//opacity的兼容
+    require('postcss-pseudoelements'),//::伪元素的兼容
+    require('postcss-vmin'),//vmin单位的兼容
+    require('pixrem'),//rem单位的兼容
+    require('css-mqpacker'),//合并媒体查询的样式
+    require('autoprefixer'),//自动添加前缀
+    require('cssnano'),//压缩合并优化
+];
 module.exports={
     resolve:{
         alias:{
@@ -52,7 +66,7 @@ module.exports={
     entry:{
         'photo/index':'src/photo/index.jsx',
         'index/m.index':'src/index/m.index.jsx',
-        'test/index':'src/test/index.jsx',
+        'product/index':'src/product/index.jsx'
     },
     output:{
         path:path.resolve(__dirname,'./public/js/'),
@@ -87,10 +101,7 @@ module.exports={
         ]
     },
     postcss:function(){
-        return [
-            require('autoprefixer'),
-            require('process')
-        ];
+        return processors;
     },
     plugins:plugins,
     devtool : isProduction()?null:'source-map'

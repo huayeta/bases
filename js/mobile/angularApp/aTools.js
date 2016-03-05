@@ -257,23 +257,13 @@ define('aTools',function(require, exports, module){
                     if(attrs.out){
                         $window.top.window.location.href=scope.goTo;
                     }else{
-					   $window.location.href=scope.goTo;
+						if(attrs.replace){
+							window.history.replaceState(null,null,scope.goTo);
+							window.location.href=scope.goTo;
+						}else{
+							$window.location.href=scope.goTo;
+						}
                     }
-				})
-            }
-        }
-    });
-    //点击到某一网址，跳出iframe
-    aTools.directive('goout',function($window){
-        return{
-            restrict:'A',
-            scope:{
-                goout:'@goout'
-            },
-            link:function(scope,ele,attrs){
-                ele.bind('click',function(){
-					if(!scope.goout)return;
-					$window.top.window.location.href=scope.goout;
 				})
             }
         }
@@ -673,7 +663,7 @@ define('aTools',function(require, exports, module){
                             var str='';
                             var arr=[];
                             _this.isStatus=true;
-                            if(member.isemail && member.isemail=='1' && !isTrue(ret.info.isemail)){
+                            if(member.isemail && member.isemail=='1' && ret.info.isemail!='1'){
                                 arr.push({
                                     verify:'email',
                                     callback:verify_email,
@@ -681,9 +671,10 @@ define('aTools',function(require, exports, module){
                                     url:'?m=member&c=account&a=verify_email'
                                 });
 								$window.location.href='?m=member&c=account&a=verify_email';
+								return;
                                 _this.isStatus=false;
                             }
-                            if(member.ismobile && member.ismobile=='1' && !isTrue(ret.info.ismobile)){
+                            if(member.ismobile && member.ismobile=='1' && ret.info.ismobile!='1'){
                                 arr.push({
                                     verify:'mobile',
                                     callback:verify_mobile,
@@ -691,9 +682,10 @@ define('aTools',function(require, exports, module){
                                     url:'?m=member&c=account&a=verify_mobile'
                                 });
 								$window.location.href='?m=member&c=account&a=verify_mobile';
+								return;
                                 _this.isStatus=false;
                             }
-                            if(member.isauth && member.isauth=='1' && !isTrue(ret.info.isidcard)){
+                            if(member.isauth && member.isauth=='1' && ret.info.isidcard!='1'){
                                 arr.push({
                                     verify:'auth',
                                     callback:verify_auth,
@@ -701,6 +693,7 @@ define('aTools',function(require, exports, module){
                                     url:'?m=member&c=account&a=verify_card'
                                 });
 								$window.location.href='?m=member&c=account&a=verify_card';
+								return;
                                 _this.isStatus=false;
                             }
                             // if(member.isgroupid && member.isgroupid=='1' && !isTrue(ret.info.groupid)){
@@ -815,16 +808,6 @@ define('aTools',function(require, exports, module){
     //串联array
     aTools.arrVal=function(arr){
         if(angular.isArray(arr)){
-            // var id='';
-            // angular.forEach(arr,function(n,i){
-            //     if(n){
-            //         if(i==0){
-            //             id+=n;
-            //         }else{
-            //             id=id+','+n;
-            //         }
-            //     }
-            // });
             return arr.join(',');
         }
     };

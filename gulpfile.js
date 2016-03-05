@@ -33,26 +33,26 @@ gulp.task('publish',['clean'],function(cb){
 })
 
 //postcss
+//插件
+var processors=[
+    require('postcss-import'),//合并@import的样式到主样式里面
+    // require('cssnext'),
+    require('precss'),//预处理语言
+    require('postcss-will-change'),//提前动画
+    require('postcss-color-rgba-fallback'),//rgba的兼容
+    require('postcss-opacity'),//opacity的兼容
+    require('postcss-pseudoelements'),//::伪元素的兼容
+    require('postcss-vmin'),//vmin单位的兼容
+    require('pixrem'),//rem单位的兼容
+    require('css-mqpacker'),//合并媒体查询的样式
+    require('autoprefixer'),//自动添加前缀
+    require('cssnano'),//压缩合并优化
+];
 var base_postcss=[
     BASE_CSS+'src/*.css',
     BASE_CSS+'src/**/*.css',
 ];
 gulp.task('postcss',function(){
-    //插件
-    var processors=[
-        require('postcss-import'),//合并@import的样式到主样式里面
-        // require('cssnext'),
-        require('precss'),//预处理语言
-        require('postcss-will-change'),//提前动画
-        require('postcss-color-rgba-fallback'),//rgba的兼容
-        require('postcss-opacity'),//opacity的兼容
-        require('postcss-pseudoelements'),//::伪元素的兼容
-        require('postcss-vmin'),//vmin单位的兼容
-        require('pixrem'),//rem单位的兼容
-        require('css-mqpacker'),//合并媒体查询的样式
-        require('autoprefixer'),//自动添加前缀
-        require('cssnano'),//压缩合并优化
-    ];
     return gulp.src(base_postcss)
         .pipe(combine(
             sourcemaps.init(),
@@ -61,22 +61,26 @@ gulp.task('postcss',function(){
         ))
         .pipe(gulp.dest('./public/wap/dest'))
 })
-
 gulp.task('postcss-w',['postcss'],function(){
     gulp.watch(base_postcss,['postcss']);
 })
-
 gulp.task('postcss-clean',function(cb){
     del([BASE_CSS+'dest/']).then((path)=>{
         console.log(path);
         cb();
     })
 })
+gulp.task('postcss-start',['postcss-clean'],function(cb){
+    shell.task([
+        'gulp postcss-w'
+    ])(cb);
+})
 
 //webpack
 var Base_webpack=[
     BASE+'src/*.jsx',
     BASE+'src/*.es6',
+    BASE+'src/*.css',
     BASE+'src/**/*.jsx',
     BASE+'src/**/*.es6',
     BASE+'src/**/*.css',
