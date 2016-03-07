@@ -14,7 +14,7 @@ export default class Ckeditor extends React.Component {
         let ckeditorDom=document.createElement('script');
         ckeditorDom.setAttribute('type','text/javascript');
         ckeditorDom.setAttribute('id','ckeditor');
-        ckeditorDom.setAttribute('src','js/plugins/ckeditor/ckeditor.js');
+        ckeditorDom.setAttribute('src','/js/plugins/ckeditor/ckeditor.js');
         this.ckeditor=ckeditorDom;
         document.body.appendChild(ckeditorDom);
     }
@@ -27,7 +27,7 @@ export default class Ckeditor extends React.Component {
     }
     render(){
         return(
-            <textarea {...this.props} value={this.props.value} className={this.props.className+' ckeditor'}></textarea>
+            <textarea {...this.props} defaultValue={this.props.defaultValue} className={this.props.className+' ckeditor'}></textarea>
         )
     }
 }

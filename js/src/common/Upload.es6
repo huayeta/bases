@@ -7,12 +7,14 @@ export default class Upload extends events {
         super();
         this.config=objectAssign({
             size:1,
+            type:'image'
         },obj);
     }
-    getImage(obj={}){
-        let _this=this;
+    upload(obj={}){
+        let _this=this,_url;
         objectAssign(_this.config,obj);
-        let _url='?m=attachment&c=images&a=dialog';
+        if(_this.config.type=='image')_url='?m=attachment&c=images&a=dialog';
+        if(_this.config.type=='file')_url='?m=attachment&c=attachment&a=dialog';
         if(_this.config.isadmin==1){
             _url+='&isadmin=1';
         }

@@ -161,7 +161,7 @@ define('fnDialog',function(require, exports, module){
 	function editorDialog(a){
 		var a=a||{};
 		var opts = {
-			title:a.title || $('title').text() || '提示信息',
+			title:a.title || document.title || '提示信息',
 			width:a.width,
 			height:a.height || '',
 			callback: a.callback || '',

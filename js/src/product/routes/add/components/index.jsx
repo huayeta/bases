@@ -4,16 +4,16 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import ProductAttr from './ProductAttr.jsx';
 import SaleAttr from './SaleAttr.jsx';
+import Picture from './Picture.jsx';
+import Content from './Content.jsx';
 import serialize from 'form-serialize';
 import {If,Then,Else} from 'react-if';
-import {Select,Textarea} from 'common/forms.jsx';
-import Upload from 'common/Upload.es6';
-import {dialogGet,dialog,dialogTip} from 'common/artDialog.es6';
+import {Select} from 'common/forms.jsx';
+import {dialogGet,dialogTip} from 'common/artDialog.es6';
 import {DialogGet} from 'common/Dialog.jsx';
-import {Tab,Tabs,TabList,TabPanel} from 'react-tabs';
-import Ckeditor from 'common/Ckeditor.jsx';
 import Agreement from 'common/Agreement.jsx';
 import Fetch from 'common/Fetch.es6';
+import Newtabs from 'common/Newtabs.jsx';
 
 class AddProduct extends React.Component {
     constructor() {
@@ -48,41 +48,7 @@ class AddProduct extends React.Component {
                 }
             })
     }
-    handleUpload(index){
-        //上传的时候的回调
-        let _this=this;
-        new Upload().on('success',function(datas){
-            if(datas && Array.isArray(datas) && datas.length>0){
-                _this.config.picture[index]=datas[0].filepath;
-                _this.forceUpdate();
-            }
-        }).getImage()
-    }
-    handleUploadDel(index){
-        //删除上传的图片
-        this.config.picture[index]='';
-        this.forceUpdate();
-    }
-    handleVideo(){
-        let _this=this;
-        //上传视频
-        dialog({
-            title:'视频地址',
-            content:`<textarea placeholder="复制你视频的html地址" class="u-txtarea" style="width:500px; height:215px;">${config.video}</textarea>`,
-            okValue:'确定',
-            ok:function(){
-                let textareaDom=this.node.querySelectorAll('textarea')[0];
-                let value=textareaDom.value;
-                if(!value){
-                    dialogTip({content:'请先填写视频地址'}).show();
-                    return false;
-                }
-                // console.log(value);
-                _this.config.video=value;
-                _this.forceUpdate();
-            }
-        }).showModal();
-    }
+
     render(){
         const {classify} = this.props;
         let config=this.config;
@@ -208,7 +174,7 @@ class AddProduct extends React.Component {
                         <div className="m-product-block f-mb10 f-mt10">
                             <div className="title">销售属性</div>
                             <div className="con">
-                                <SaleAttr classifyId="535" />
+                                <SaleAttr classifyId="535" sales={config.sales} />
                             </div>
                         </div>
                         <div className="m-product-block f-mb10">
@@ -221,7 +187,7 @@ class AddProduct extends React.Component {
                                             <th valign="top" width="80">设置邮费：</th>
                                             <td>
                                                 <Select className="u-slt f-mr10" name="arg[freightid]" url="?m=freight&c=index&a=index" defaultValue={config.freightid} onChange={this.handleFreightChange.bind(this)} asyncFn={this.handleFreightAsync.bind(this)} ref="freightSlt"></Select>
-                                                <a className="s-blue" data-newtabs="运费模板,?m=freight&c=index&a=add">新增运费模板</a>
+                                                <Newtabs className="s-blue" title="运费模板" url="?m=freight&c=index&a=add">新增运费模板</Newtabs>
                                                 <a className="s-green f-ml10" onClick={()=>{this.refs.freightSlt.getData()}}>刷新运费模板</a>
                                                 <span className="f-ml10 s-gray">当免运费的时候可以去添加一个免运费模板</span>
                                                 {freightBox}
@@ -240,7 +206,7 @@ class AddProduct extends React.Component {
                                                         )
                                                     })}
                                                 </select>
-                                                <a className="s-blue" data-newtabs="配送时间,?m=member&c=delivery_time&a=add">新增定期模板</a>
+                                                <Newtabs className="s-blue" title="配送时间" url="?m=member&c=delivery_time&a=add">新增定期模板</Newtabs>
                                             </td>
                                         </tr>
                                         <tr>
@@ -260,66 +226,8 @@ class AddProduct extends React.Component {
                                 </table>
                             </div>
                         </div>
-                        <div className="m-product-block f-mb10">
-                            <div className="title">商品图片</div>
-                            <div className="con">
-                                <ul className="f-cb product-imgs">
-                                    <li>
-                                        <input type="hidden" name="arg[picture][0]" value={config.picture[0]} />
-                                        <div className="pic"><a className="clear" onClick={this.handleUploadDel.bind(this,0)}>×</a><a href={config.picture[0]?config.picture[0]:"/member/images/common/m-shop-add-pic.gif"} target="_blank"><img src={config.picture[0]?config.picture[0]:"/member/images/common/m-shop-add-pic.gif"}/></a></div>
-                                        <h2><span className="u-btn-gray1" onClick={this.handleUpload.bind(this,0)}>上传图片</span></h2>
-                                    </li>
-                                    <li>
-                                        <input type="hidden" name="arg[picture][1]" value={config.picture[1]} />
-                                        <div className="pic"><a className="clear">×</a><a href={config.picture[1]?config.picture[1]:"/member/images/common/m-shop-add-pic.gif"} target="_blank"><img src={config.picture[1]?config.picture[1]:"/member/images/common/m-shop-add-pic.gif"}/></a></div>
-                                        <h2><a className="u-btn-gray1" onClick={this.handleUpload.bind(this,1)}>上传图片</a></h2>
-                                    </li>
-                                    <li>
-                                        <input type="hidden" name="arg[picture][2]" value={config.picture[2]} />
-                                        <div className="pic"><a className="clear">×</a><a href={config.picture[2]?config.picture[2]:"/member/images/common/m-shop-add-pic.gif"} target="_blank"><img src={config.picture[2]?config.picture[2]:"/member/images/common/m-shop-add-pic.gif"}/></a></div>
-                                        <h2><a className="u-btn-gray1" onClick={this.handleUpload.bind(this,2)}>上传图片</a></h2>
-                                    </li>
-                                    <li>
-                                        <input type="hidden" name="arg[picture][3]" value={config.picture[3]} />
-                                        <div className="pic"><a className="clear">×</a><a href={config.picture[3]?config.picture[3]:"/member/images/common/m-shop-add-pic.gif"} target="_blank"><img src={config.picture[3]?config.picture[3]:"/member/images/common/m-shop-add-pic.gif"}/></a></div>
-                                        <h2><a className="u-btn-gray1" onClick={this.handleUpload.bind(this,3)}>上传图片</a></h2>
-                                    </li>
-                                    <li>
-                                        <input type="hidden" name="arg[picture][4]" value={config.picture[4]} />
-                                        <div className="pic"><a className="clear">×</a><a href={config.picture[4]?config.picture[4]:"/member/images/common/m-shop-add-pic.gif"} target="_blank"><img src={config.picture[4]?config.picture[4]:"/member/images/common/m-shop-add-pic.gif"}/></a></div>
-                                        <h2><a className="u-btn-gray1" onClick={this.handleUpload.bind(this,4)}>上传图片</a></h2>
-                                    </li>
-                                    <li>
-                                        <Textarea className="f-dn" name="arg[video]" value={config.video}></Textarea>
-                                        <div className="pic"><a className="clear">×</a>
-                                            <If condition={!!config.video}>
-                                                <Then>
-                                                    <div>
-                                                        {config.video}
-                                                    </div>
-                                                </Then>
-                                                <Else>
-                                                    <a><img src="/member/images/common/video.jpg" /></a>
-                                                </Else>
-                                            </If>
-                                        </div>
-                                        <h2><a className="u-btn-yellow" onClick={this.handleVideo.bind(this)}>上传视频</a><a href="http://www.yingshangkeji.com/?m=article&a=item&id=845636&cid=22093" className="u-icon-help" target="_blank"></a></h2>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <Tabs className="m-tabs" forceRenderTabPanel={true}>
-                            <TabList className="opt f-cb">
-                                <Tab>商品详情</Tab>
-                                <Tab>规格参数</Tab>
-                                <Tab>包装清单</Tab>
-                                <Tab>售后承诺</Tab>
-                            </TabList>
-                            <TabPanel className="editor"><Ckeditor name="arg[content]" value={config.content} /></TabPanel>
-                            <TabPanel className="editor"><Ckeditor name="arg[content1]" value={config.content1} /></TabPanel>
-                            <TabPanel className="editor"><Ckeditor name="arg[content2]" value={config.content2} /></TabPanel>
-                            <TabPanel className="editor"><Ckeditor name="arg[content3]" value={config.content3} /></TabPanel>
-                        </Tabs>
+                        <Picture picture={config.picture} video={config.video} />
+                        <Content content={config.content} content1={config.content1} content2={config.content2} content3={config.content3} />
                         <div className="f-mtb20 f-tac">
                             <input type="submit" value="商品入库" className="u-btn-red u-btn-biger" /><label className="f-ml15"><input type="checkbox" className="u-checkbox f-mr5" /></label><DialogGet url="?m=member&a=agreement&name=supply">承诺遵守<Agreement name="supply" /></DialogGet>
                         </div>

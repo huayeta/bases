@@ -7,9 +7,10 @@ class DialogGet extends React.Component {
     }
     handleClick(){
         let _this=this;
-        let {url,callback}=this.props;
+        let {url,callback,data}=this.props;
         dialogGet({
             url:url,
+            data:data,
             onclose:function(){
                 //如果有回调函数的时候
                 if(callback){
@@ -20,7 +21,7 @@ class DialogGet extends React.Component {
     }
     render(){
         return(
-            <a onClick={this.handleClick.bind(this)}>
+            <a {...this.props} onClick={this.handleClick.bind(this)}>
                 {this.props.children}
             </a>
         )

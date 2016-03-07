@@ -61,4 +61,52 @@ const dialogGet=(obj={})=>{
     return dialog(opts);
 }
 
-export {dialog,dialogTip,dialogDel,dialogGet};
+//计算dialog的最大高度
+const maxhDialog=(h)=>{
+    let yskjDom=document.querySelectorAll('.g-yskj')[0];
+    yskjDom.setAttribute('style','height:auto');
+    let maxH=window.parent.window.document.documentElement.clientHeight*0.75;
+    let height;
+    if(h){
+        height=(parseFloat(h,10)>maxH)?maxH:parseFloat(h,10);
+    }else{
+        let H=document.querySelectorAll('.j-dialog')[0].clientHeight+1;
+        height=(H>maxH?maxH:H);
+    }
+    yskjDom.setAttribute('style','height:'+height+'px');
+    return height;
+}
+//重新等位dialog的高度
+const resetDialog=()=>{
+    let tmpDialog=dialog.get(window);
+    tmpDialog.height(maxhDialog());
+}
+
+//弹窗的内部js
+const dialogEditor=(obj={})=>{
+    let tmpDialog=dialog.get(window);
+    let title=obj.title || document.title || '提示信息';
+    tmpDialog.title(title);
+    if(obj.width)tmpDialog.width(obj.width);
+    if(obj.height){
+        let maxH=maxhDialog(obj.height);
+        tmpDialog.height(maxH);
+    }
+    tmpDialog.reset();
+    if(obj.button){
+        tmpDialog.button(obj.button);
+    }else{
+        tmpDialog.button([{
+            value:'确定',
+            callback:function(){
+                if(typeof obj.callback == 'function'){
+                    obj.callback.bind(dialog)();
+                }
+                return false;
+            },
+            autofocus: true
+        }]);
+    }
+}
+
+export {dialog,dialogTip,dialogDel,dialogGet,dialogEditor,resetDialog};

@@ -32,10 +32,10 @@ CKEDITOR.editorConfig = function( config ) {
 		//ie内核
 		XHR=new ActiveXobject("Microsoft.XMLHTTP");
 	}else{
-		XHR = null; 
+		XHR = null;
 	}
 	if(XHR){
-		XHR.open("GET", "?m=admin&c=index&a=getinfo");
+		XHR.open("GET", window.location.origin+"/?m=admin&c=index&a=getinfo");
 		XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		XHR.setRequestHeader("x-requested-with", "XMLHttpRequest");
 		XHR.setRequestHeader("If-Modified-Since", "0");
