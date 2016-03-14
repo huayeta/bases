@@ -17,12 +17,18 @@ class Input extends React.Component {
             this.forceUpdate();
         }
     }
-    handleChange(event){
-        this.value=event.target.value;
+    setValue(value){
+        this.value=value;
         this.forceUpdate();
     }
-    handleBlur(){
-        let value=this.input.value;
+    handleChange(event){
+        let {onChange}=this.props;
+        this.value=event.target.value;
+        if(onChange)onChange(event);
+        this.forceUpdate();
+    }
+    handleBlur(event){
+        let value=event.target.value;
         let {datatype}=this.props;
         if(datatype){
             if(datatype=='*'){
@@ -30,14 +36,59 @@ class Input extends React.Component {
             }
         }
     }
-    componentDidMount(){
-        this.input=findDOMNode(this.refs.inputText);
-    }
     render(){
         return(
-            <input ref="inputText" type="text" {...this.props} value={this.value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)} />
+            <input type="text" {...this.props} value={this.value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)} />
         )
     }
+}
+Input.propTypes={
+    onChange:React.PropTypes.func,
+}
+
+class InputLimitword extends React.Component {
+    constructor() {
+        super();
+    }
+    componentWillMount(){
+        let {value}=this.props;
+        this.updataValue(value);
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.value!=this.props.value){
+            this.updataValue(nextProps.value);
+            this.forceUpdate();
+            this.input.setValue(this.value);
+        }
+    }
+    componentDidMount(){
+        this.input=this.refs.input;
+    }
+    updataValue(value){
+        let {limit}=this.props;
+        let newValue=value.substr(0,limit);
+        this.value=newValue;
+        this.length=newValue.length;
+    }
+    handleChange(event){
+        let {limit,onChange}=this.props;
+        let value=event.target.value;
+        this.updataValue(value);
+        event.target.value=this.value;
+        this.input.setValue(this.value);
+        this.forceUpdate();
+        if(onChange)onChange(event);
+    }
+    render(){
+        let {value,onChange,...other}=this.props;
+        return(
+            <span className="u-txt-word"><Input ref="input" type="text" className="u-txt" {...other} value={this.value} onChange={this.handleChange.bind(this)} /><em><b className="s-yellow">{this.props.limit-this.length}</b><span>/{this.props.limit}</span></em></span>
+        )
+    }
+}
+InputLimitword.propTypes={
+    limit:React.PropTypes.number.isRequired,
+    onChange:React.PropTypes.func,
 }
 
 class Select extends React.Component {
@@ -140,4 +191,4 @@ class Textarea extends React.Component {
     }
 }
 
-export {Input,Select,Textarea}
+export {Input,InputLimitword,Select,Textarea}

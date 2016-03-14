@@ -15,6 +15,7 @@ import {dialogGet,dialogTip} from 'common/artDialog.es6';
 import {DialogGet} from 'common/Dialog.jsx';
 import Agreement from 'common/Agreement.jsx';
 import Fetch from 'common/Fetch.es6';
+import {InputLimitword} from 'common/forms.jsx';
 
 class AddProduct extends React.Component {
     constructor() {
@@ -79,10 +80,7 @@ class AddProduct extends React.Component {
                                 <tr>
                                     <th>商品名称：</th>
                                     <td>
-                                        <span className="u-txt-word f-mr10">
-                                            <input type="text" className="u-txt" size="93" id="title" name="arg[title]" value={config.title} onChange={this.handleChange.bind(this,'title')} />
-                                            <em><b className="s-yellow">60</b>/60</em>
-                                        </span>
+                                        <InputLimitword size="93" limit={60} name="arg[title]" value={config.title} onChange={this.handleChange.bind(this,'title')} />
                                     </td>
                                 </tr>
                                 <tr>
