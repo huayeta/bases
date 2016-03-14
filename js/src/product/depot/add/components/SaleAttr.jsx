@@ -137,8 +137,9 @@ export default class SaleAttr extends React.Component {
                                     )
                                 })}
                                 <th className="tac" width="50">价格</th>
-                                <th className="tac" width="50">成本</th>
-                                <th className="tac" width="50">库存<span className="s-red f-ml5">*</span></th>
+                                <th className="tac" width="50">条形码</th>
+                                <th className="tac" width="50">单位<span className="s-red f-ml5">*</span></th>
+                                <th className="tac" width="50">规格<span className="s-red f-ml5">*</span></th>
                                 <th className="tac" width="50">编辑</th>
                             </tr>
                         </thead>

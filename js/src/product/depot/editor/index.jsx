@@ -4,7 +4,6 @@ import {render,findDOMNode} from 'react-dom';
 import objectAssign from 'object-assign';
 import serialize from 'form-serialize';
 import Picture from '../add/components/Picture.jsx';
-import Content from '../add/components/Content.jsx';
 import {dialogEditor,dialog} from 'common/artDialog.es6';
 
 class  EditorApp extends React.Component {
@@ -14,7 +13,6 @@ class  EditorApp extends React.Component {
         let data=this.dialog.data;
         this.config={
             picture:[],
-            video:'',
             content:'',
             content1:'',
             content2:'',
@@ -23,7 +21,6 @@ class  EditorApp extends React.Component {
         objectAssign(this.config,data.defaultValue,{sale:data.sale});
         if(!this.config.picture)this.config.picture=[];
         if(!this.config.title)this.config.title=data.config.title;
-        if(!this.config.advertisement)this.config.advertisement=data.config.advertisement;
     }
     componentDidMount(){
         let _this=this;
@@ -37,7 +34,7 @@ class  EditorApp extends React.Component {
         dialogEditor({
             title:`${name}的规格`,
             width:750,
-            height:630,
+            height:300,
             callback:function(){
                 _this.handleSubmit();
             }
@@ -46,7 +43,6 @@ class  EditorApp extends React.Component {
     handleSubmit(event){
         let _this=this;
         if(event)event.preventDefault();
-        if(window.CKupdate)window.CKupdate();
         let formValue=serialize(_this.form,{hash:true});
         this.dialog.close(formValue.arg).remove();
     }
@@ -67,19 +63,10 @@ class  EditorApp extends React.Component {
                                         <input type="text" className="u-txt" size="60" name="arg[title]" defaultValue={config.title} />
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        商品广告词：
-                                    </th>
-                                    <td>
-                                        <input type="text" className="u-txt" size="60" name="arg[advertisement]" defaultValue={config.advertisement} />
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <Picture picture={config.picture} video={config.video} />
-                    <Content content={config.content} content1={config.content1} content2={config.content2} content3={config.content3} />
                 </form>
             </div>
         )

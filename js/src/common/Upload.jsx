@@ -9,7 +9,6 @@ export  default class Upload extends React.Component {
         let _this=this;
         let {success}=this.props;
         let uploadTen=new upload().on('success',function(datas){
-            console.log(datas);
             if(success)success(datas);
         }).upload({type:_this.props.type});
     }

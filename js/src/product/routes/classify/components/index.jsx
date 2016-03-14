@@ -1,4 +1,5 @@
 import React from 'react';
+import 'babel-polyfill';
 import classifycss from './classify.css';
 import Wbmc from 'common/Wbmc.es6';
 import {Link} from 'react-router';
@@ -36,8 +37,6 @@ class ClassifyApp extends React.Component {
                     let index=_this.datas3.findIndex((data)=>data.id==this.def[2]);
                     if(index!=-1)_this.handleClick(index,3);
                 }
-                // _this.handleLeave();
-                // _this.context.router.replace('/add');
             }else{
                 _this.datas1Sel=0;
                 _this.handleClick(_this.datas1Sel,1);
@@ -103,6 +102,10 @@ class ClassifyApp extends React.Component {
         })
     }
     render(){
+        let route=`/add`;
+        if(this.config.route){
+            route=`/${this.config.route}`;
+        }
         return (
             <div>
                 <div className="m-product-classify">
@@ -144,7 +147,7 @@ class ClassifyApp extends React.Component {
                     </div>
                 </div>
                 <div className="f-tac f-mt20">
-                    <Link to={`/add/${this.classifyId}`} className="u-btn u-btn-biger" onClick={this.handleLeave.bind(this)}>下一步，填写详细信息</Link>
+                    <Link to={route} className="u-btn u-btn-biger" onClick={this.handleLeave.bind(this)}>下一步，填写详细信息</Link>
                 </div>
             </div>
         )
@@ -152,11 +155,14 @@ class ClassifyApp extends React.Component {
 }
 
 ClassifyApp.contextTypes={
-    router: React.PropTypes.object,
+    router: React.PropTypes.object
 }
 
 module.exports=connect((state)=>{
-    return state.classify;
+    return {
+        classify:state.classify,
+        config:state.config
+    };
 },(dispatch)=>{
     return {
         actions:bindActionCreators({updataClassify},dispatch),

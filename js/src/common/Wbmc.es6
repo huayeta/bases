@@ -1,5 +1,6 @@
 import objectAssign from 'object-assign';
 import events from 'common/events.es6';
+import Fetch from 'common/Fetch.es6';
 
 class Wbmc extends events {
     constructor(cfg={}) {
@@ -9,8 +10,7 @@ class Wbmc extends events {
     getData(){
         let _this=this;
         if(!this.config.name)return [];
-        fetch('/js/dict/'+_this.config.name+'.js')
-            .then((res)=>res.json())
+        Fetch('/js/dict/'+_this.config.name+'.js',{isJson:true})
             .then((datas) => {
                 _this.datas=datas;
                 _this.fire('datas');

@@ -1,33 +1,28 @@
 import React from 'react';
 import {findDOMNode} from 'react-dom';
-import {Link} from 'react-router';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {updataConfig,UPDATA_CONFIG} from '../../../actions/index.jsx';
-import ProductAttr from './ProductAttr.jsx';
-import SaleAttr from './SaleAttr.jsx';
-import Picture from './Picture.jsx';
-import Content from './Content.jsx';
-import Freight from './Freight.jsx';
 import serialize from 'form-serialize';
 import {If,Then,Else} from 'react-if';
-import {dialogGet,dialogTip} from 'common/artDialog.es6';
-import {DialogGet} from 'common/Dialog.jsx';
-import Agreement from 'common/Agreement.jsx';
 import Fetch from 'common/Fetch.es6';
+import {dialogTip} from 'common/artDialog.es6';
+import {DialogChoose,DialogGet} from 'common/Dialog.jsx';
+import Agreement from 'common/Agreement.jsx';
+import ProductAttr from './ProductAttr.jsx';
+import SaleAttr from './SaleAttr.jsx';
+import Freight from './Freight.jsx';
+import Picture from './Picture.jsx';
+import Content from './Content.jsx';
 
-class AddProduct extends React.Component {
+export default class DepotImport extends React.Component {
     constructor() {
         super();
-    }
-    componentDidMount(){
-        this.form=findDOMNode(this.refs.formName);
+        this.config=window.config || {};
+        if(this.config.id)this.editor=true;
     }
     handleSubmit(event){
         let _this=this;
         if(window.CKupdate)window.CKupdate();
         let formValue=serialize(this.form);
-        Fetch('?m=product&c=product&a=add&id='+_this.props.config.id,{
+        Fetch('?m=product&c=product&a=add&id='+this.config.id,{
             isJson:true,
             method:'POST',
             body:formValue
@@ -39,56 +34,54 @@ class AddProduct extends React.Component {
         })
         event.preventDefault();
     }
-    handleChange(name,event){
-        if(!name)return;
-        let value=event.target.value;
-        this.props.actions.updataConfig(name,value);
+    handleChoose(returnValue){
+        // console.log(returnValue);
+        //选择完商品后的回调
+        if(returnValue && returnValue.length>0){
+            this.config=returnValue[0];
+            this.forceUpdate();
+        }
+    }
+    componentDidMount(){
+        this.form=findDOMNode(this.refs.formName);
     }
     render(){
-        const {classify,config} = this.props;
-        let classifyId;
-        if(classify['0'])classifyId=classify['0'].id;
-        if(classify['1'])classifyId=classify['1'].id;
-        if(classify['2'])classifyId=classify['2'].id;
-        if(classifyId)classifyId=parseInt(classifyId,10);
-
-        //销售属性
-        let sales_label=[];
-        let sales=config.sales;
-        if(config.sales_label){
-            // sales_label=JSON.parse(config.sales_label);
-            sales_label=eval(config.sales_label);
-        }
+        let {config}=this;
         return(
-            <div>
-                <div className="m-tabform f-pdt10 m-tabform-w800">
-                    <form ref="formName" onSubmit={this.handleSubmit.bind(this)}>
-                        <input type="hidden" name="id" defaultValue={config.id} />
+            <div className="m-tabform f-pdt10 m-tabform-w800">
+                <form ref="formName" onSubmit={this.handleSubmit.bind(this)}>
+                    <input type="hidden" name="id" value={config.id} />
+                    <input type="hidden" name="arg[no]" value={config.sales_array?config.sales_array[0].no:''} />
+                    <input type="hidden" name="arg[categoryid]" value={config.categoryid} />
+                    {this.editor?'':<table>
+                        <thead><tr><th width="88"></th><td></td></tr></thead>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    选择商品：
+                                </th>
+                                <td>
+                                    <DialogChoose className="u-btn u-btn-big" url="?m=depot&c=information&a=publish_info" callback={this.handleChoose.bind(this)}>点击选择</DialogChoose>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>}
+                    {(!this.editor && !config.id)?'':<div>
                         <table>
                             <thead><tr><th width="88"></th><td></td></tr></thead>
                             <tbody>
                                 <tr>
                                     <th>
-                                        商品分类：
+                                        商品名称：
                                     </th>
                                     <td>
-                                        <input type="hidden" name="arg[categoryid]" value={classifyId} />
-                                        {classify['0']?(classify['0'].name+'>'):''} {classify['1']?(classify['1'].name+'>'):''} {classify['2']?(classify['2'].name+'>'):''} <Link to="/classify" className="u-btn f-ml10">重新选择分类</Link><span className="s-red f-ml10">重新选择分类当前所填写的内容将清空，请谨慎选择</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>商品名称：</th>
-                                    <td>
-                                        <span className="u-txt-word f-mr10">
-                                            <input type="text" className="u-txt" size="93" id="title" name="arg[title]" value={config.title} onChange={this.handleChange.bind(this,'title')} />
-                                            <em><b className="s-yellow">60</b>/60</em>
-                                        </span>
+                                        <input type="text" className="u-txt" size="99" name="arg[title]" defaultValue={config.title} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>商品广告词：</th>
                                     <td>
-                                        <input type="text" className="u-txt" size="99" id="title" name="arg[advertisement]" value={config.advertisement} onChange={this.handleChange.bind(this,'advertisement')} />
+                                        <input type="text" className="u-txt" size="99" name="arg[advertisement]" defaultValue={config.advertisement} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -119,14 +112,9 @@ class AddProduct extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
-                        {classifyId?<div className="m-product-block f-mb10 f-mt10">
-                            <div className="title">商品属性</div>
-                            <div className="con">
-                                <ProductAttr classifyId={classifyId} />
-                            </div>
-                        </div>:''}
-                        <div className="m-product-block f-mb10 f-mt10">
-                            <div className="title">价格库存</div>
+                        <ProductAttr value={config.value} />
+                        {!config.sales_label?<div className="m-product-block f-mb10 f-mt10">
+                            <div className="title">价格单位</div>
                             <div className="con">
                                 <div className="f-mb5">
                                     <span className="th">市场价格：<input type="text" className="u-txt" size="10" name="arg[market]" defaultValue={config.market} /></span><span className="f-ml5">元</span>
@@ -134,41 +122,19 @@ class AddProduct extends React.Component {
                                     <span className="f-ml15 th">供应价格：<input type="text" className="u-txt" size="10" name="arg[cost]" defaultValue={config.cost} /></span><span className="f-ml5">元</span>
                                 </div>
                                 <div style={{'border':'1px solid #facdcd','backgroundColor':'#fff0f0','padding':'5px 10px','marginBottom':'10px'}}><span className="s-red f-mr5">市场价格</span>实际参考价，只做显示用;<span className="s-red f-mr5 f-ml20">成交价格</span>顾客实际支付的现金数量;<span className="s-red f-mr5 f-ml20">供应价</span>供应商每单业务完成交易后获得金额;</div>
-                                <div className="">
-                                    <span className="th">库存数量：</span><input type="text" className="u-txt" size="10" name="arg[stock]" defaultValue={config.stock} /><span className="f-ml10 s-gray">库存随系统所有代理店面销售减少</span>
-                                </div>
                             </div>
-                        </div>
-                        {classifyId?<div className="m-product-block f-mb10 f-mt10">
-                            <div className="title">销售属性</div>
-                            <div className="con">
-                                <SaleAttr classifyId={classifyId} sales={sales} sales_label={sales_label} title={config.title} advertisement={config.advertisement} />
-                            </div>
-                        </div>:''}
+                        </div>:<SaleAttr sales={config.sales_array} salesLable={config.sales_label} />}
                         <Freight config={config} />
-                        <Picture picture={config.picture} video={config.video} />
-                        <Content content={config.content} content1={config.content1} content2={config.content2} content3={config.content3} />
+                        {config.sales_label?'':<div >
+                            <Picture picture={config.pictures?config.pictures:config.picture} video={config.video} />
+                            <Content content={config.content} content1={config.content1} content2={config.content2} content3={config.content3} />
+                        </div>}
                         <div className="f-mtb20 f-tac">
                             <input type="submit" value="商品入库" className="u-btn-red u-btn-biger" /><label className="f-ml15"><input type="checkbox" className="u-checkbox f-mr5" required /></label><DialogGet url="?m=member&a=agreement&name=supply">承诺遵守<Agreement name="supply" /></DialogGet>
                         </div>
-                    </form>
-                </div>
+                    </div>}
+                </form>
             </div>
         )
     }
 }
-
-AddProduct.contextTypes={
-    router: React.PropTypes.object
-}
-
-module.exports=connect((state)=>{
-    return {
-        classify:state.classify,
-        config:state.config
-    };
-},(dispatch)=>{
-    return {
-        actions:bindActionCreators({updataConfig},dispatch)
-    }
-})(AddProduct);
