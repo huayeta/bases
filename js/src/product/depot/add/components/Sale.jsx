@@ -52,7 +52,15 @@ class Sale extends React.Component {
                 })}
                 <td className="tac"><Input type="text" className="u-txt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][market]'} value={val.market} /></td>
                 <td className="tac"><Input type="text" className="u-txt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][bar_code]'} value={val.bar_code}  /></td>
-                <td className="tac"><Input type="text" className="u-txt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][unit]'} value={val.unit} /></td>
+                <td className="tac">
+                    <select className="u-slt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][unit]'} defaultValue={val.unit}>
+                        {config.unit_array.map((unit,index)=>{
+                            return(
+                                <option id={unit.id} key={index}>{unit.name}</option>
+                            )
+                        })}
+                    </select>
+                </td>
                 <td className="tac"><Input type="text" className="u-txt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][format]'} value={val.format} /></td>
                 <td className="tac">
                     <input type="hidden" name={'arg[sales]['+idArr.join('|')+'][title]'} value={title}  />

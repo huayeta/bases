@@ -55,7 +55,7 @@ class AddProduct extends React.Component {
 
         //销售属性
         let sales_label=[];
-        let sales=config.sales;
+        let sales=config.sales_array;
         if(config.sales_label){
             // sales_label=JSON.parse(config.sales_label);
             sales_label=eval(config.sales_label);
@@ -65,6 +65,8 @@ class AddProduct extends React.Component {
                 <div className="m-tabform f-pdt10 m-tabform-w800">
                     <form ref="formName" onSubmit={this.handleSubmit.bind(this)}>
                         <input type="hidden" name="id" defaultValue={config.id} />
+                        <input type="hidden" name="arg[no]" value={config.sales_array.length>0?config.sales_array[0].no:''} />
+                        <input type="hidden" name="arg[categoryid]" value={classifyId} />
                         <table>
                             <thead><tr><th width="88"></th><td></td></tr></thead>
                             <tbody>
@@ -73,14 +75,13 @@ class AddProduct extends React.Component {
                                         商品分类：
                                     </th>
                                     <td>
-                                        <input type="hidden" name="arg[categoryid]" value={classifyId} />
                                         {classify['0']?(classify['0'].name+'>'):''} {classify['1']?(classify['1'].name+'>'):''} {classify['2']?(classify['2'].name+'>'):''} <Link to="/classify" className="u-btn f-ml10">重新选择分类</Link><span className="s-red f-ml10">重新选择分类当前所填写的内容将清空，请谨慎选择</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>商品名称：</th>
                                     <td>
-                                        <InputLimitword size="93" limit={60} name="arg[title]" value={config.title} onChange={this.handleChange.bind(this,'title')} />
+                                        <InputLimitword size="93" limit={60} name="arg[title]" defaultValue={config.title} onBlur={this.handleChange.bind(this,'title')} />
                                     </td>
                                 </tr>
                                 <tr>

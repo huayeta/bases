@@ -23,6 +23,9 @@ var plugins=[
     ),
     new webpack.ProvidePlugin({
        'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    }),
+    new webpack.DefinePlugin({
+        'process.env.NODE_ENV': (!isProduction()?'"development"':'"production"')
     })
 ]
 if(isProduction()){
@@ -65,13 +68,17 @@ module.exports={
     },
     entry:{
         'photo/index':'src/photo/index.jsx',
-        'index/m.index':'src/index/m.index.jsx',
-        'product/index':'src/product/index.jsx'
+        // 'index/m.index':'src/index/m.index.jsx',
+        'product/index':'src/product/index.jsx',
+        'product/editor':'src/product/routes/editor/index.jsx',
+        'product/depot':'src/product/depot.jsx',
+        'product/depot_editor':'src/product/depot/editor/index.jsx',
+        'product/depot_import':'src/product/depot_import.jsx',
     },
     output:{
         path:path.resolve(__dirname,'./public/js/'),
         publicPath:'/js/dest/',
-        chunkFilename:date+'[name].chunk.js',
+        chunkFilename:isProduction()?(date+'[name].chunk.js'):'[name].chunk.js',
         filename:'[name].js'
     },
     module:{
@@ -97,7 +104,11 @@ module.exports={
                     "plugins": ["transform-runtime"]
                 }
             },
-            {test: /.(png|jpg)$/, loader: "url-loader?limit=10000"}
+            {test: /.(png|jpg)$/, loader: "url-loader?limit=10000"},
+            {
+                test: /\.(woff|woff2|eot|ttf|svg)(\?.*$|$)/,
+                loader: 'url-loader?importLoaders=1&limit=1000&name=/fonts/[name].[ext]'
+            }
         ]
     },
     postcss:function(){

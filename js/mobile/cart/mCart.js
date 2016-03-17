@@ -175,18 +175,14 @@ define('mCart',function(require, exports, module){
 	var product=function(a){
         var a=a||{};
         var defaults={
-            sales_attributes:[],//商品规格
-            sales_attribute:{},//用户填写的商品规格
-            cur:{name:'郑州',id:'149'},
-            spic:false//是否填写了规格
+			sales_label:[],//商品所有规格
+            sales:'',//卖家商品的规格
+			sales_arr:[],//商品的组合
+            cur:{name:'郑州',id:'149'}
         };
         var opts=$.extend(defaults,a);
         //设置邮费
         freightFn({freight:opts.freight,cur:opts.cur,nodelivery:opts.nodelivery});
-        //商品规格
-        for(var i in opts.sales_attribute){
-            opts.spic=true;
-        }
         //初始化数量修改函数
         fnQuantity();
         //初始化商品规格弹窗函数
@@ -204,15 +200,8 @@ define('mCart',function(require, exports, module){
         var $givepoint=$('.j-givepoint');//赠送的积分的jquery对象
 		var	$pointB=$('.j-pointB');
 		var $pointBNum=$pointB.find('.j-pointBNum');
-        if(opts.spic)$isSpic.show();
-        $price.data('defaultValue',$price.html());
-        $stock.data('defaultValue',$stock.html());
         //立即购买按钮
         $orderForm.submit(function(event){
-            if(!$.isEmptyObject(opts.sales_attribute) && $orderSales.val()==''){
-                simpop.tips({content:'请先选择商品规格后再购买',time:2000});
-                return false;
-            }
             if(!mTools.isLogin()){
                 mTools.getLogin();
                 return false;
@@ -230,7 +219,7 @@ define('mCart',function(require, exports, module){
                 url:'?m=product&c=cart&a=add',
                 isLogin:true,
                 type:'post',
-                data:'products[0][id]='+$spicBox.find('.j-id').val()+'&products[0][quantity]='+$spicBox.find('.j-quantity').val()+'&products[0][sales]='+salesVal,
+                data:'products[0][id]='+opts.id+'&products[0][quantity]='+$spicBox.find('.j-quantity').val(),
                 success:function(ret){
                     if(ret.status){
                         simpop.tips({
@@ -245,113 +234,50 @@ define('mCart',function(require, exports, module){
             });
 		});
         //设置规格
-        // console.log(opts.sales_attributes);
-        // console.log(opts.sales_attribute);
-		//积分B的显示
-		function pointBFn(price){
-			$pointB.show();
-			$pointBNum.text(price * opts.pointB_allot_self);
-		}
-		function getGivepoint(result){
-			if(opts.give_point_json){
-				if(!result)return $givepoint.find('b').text('0');
-				var diff=parseFloat(result.price)-parseFloat(result.cost);
-				// console.log(opts.give_point_json);
-				// console.log(diff);
-				var givepoint=opts.give_point_json[diff]?opts.give_point_json[diff]:0;
-				if(givepoint && givepoint>0){
-					$givepoint.show().find('b').text(givepoint);
-				}else{
-					$givepoint.hide().find('b').text(0);
+        if(opts.sales){
+			$isSpic.show();
+			//如果有规格的话
+			// 设置选中
+			var salesArr=opts.sales.split('|');
+			var label=[];
+			for(var i in opts.sales_label){
+				label[i]={id:opts.sales_label[i].id,name:opts.sales_label[i].name,children:[]};
+				for(var j in opts.sales_label[i].children){
+					var tx=false;
+					for(var n in salesArr){
+						if(j==salesArr[n]){tx=true;break;}
+					}
+					if(tx){
+						label[i].children.push({id:j,name:opts.sales_label[i].children[j],isSel:true});
+					}else{
+						label[i].children.push({id:j,name:opts.sales_label[i].children[j]});
+					}
 				}
-			}else{
-				if(opts.give_point){
-					$givepoint.show().find('b').text(opts.give_point);
-				}
-				pointBFn(opts.price);
-				return;
 			}
-
-		}
-        if($.isEmptyObject(opts.sales_attribute)){
-			getGivepoint();
-		}else{
-            var sales={};
-            sales.sales_attribute_str=mTools.serialize(opts.sales_attribute);
-            sales.attribute=[];//页面应该显示的规格
-            sales.sels=[];//用户选择的规格
-            sales.spic={};//用户最终的规格
-            sales.num=0;//用户选择了几个规格
-            // console.log(sales.sales_attribute_str);
-            //组合显示那些规格
-            for(var i in opts.sales_attributes){
-                var tmp={name:opts.sales_attributes[i].name,id:opts.sales_attributes[i].id,'children':[]};
-                for(var j in opts.sales_attributes[i]['children']){
-                    var children=opts.sales_attributes[i]['children'][j];
-                    var reg=new RegExp('(\{|,)'+children.id+'\:');
-                    var tx=reg.test(sales.sales_attribute_str);
-                    if(!tx)continue;
-                    tmp['children'].push(children);
-                }
-                if(tmp.children.length>0)sales.attribute.push(tmp);
-            }
-            if(sales.attribute.length>0){
-                //如果有规格的话
-                $spic.html(template('spic',{'attribute':sales.attribute}));
-                $spic.on('click','.btn1:not(.btn1-not-stock)',function(){
-                    var _this=$(this);
-                    var pindex=_this.data('pindex');
-                    var index=_this.data('index');
-                    if(_this.hasClass('btn1-active')){
-                        _this.removeClass('btn1-active').siblings().removeClass('btn1-active');
-                        sales.sels[pindex]=null;
-                        sales.num--;
-                        updateSales();
-                    }else{
-                        _this.addClass('btn1-active').siblings().removeClass('btn1-active');
-                        if(!sales.sels[pindex])sales.num++;
-                        sales.sels[pindex]=sales.attribute[pindex].children[index].id;
-                        //更新规格
-                        if(sales.num==sales.attribute.length){
-                            var result=opts.sales_attribute;
-                            for(var i in sales.sels){
-                                result=result[sales.sels[i]];
-                            }
-                            updateSales(result);
-                        }else{
-                            updateSales();
-                        }
-                    }
-                })
-                function updateSales(result){
-                    if(result){
-                        //当匹配出规格的时候
-                        if(result.price){
-							$price.html('￥<b>'+result.price+'</b>');
-							$pointB.show();
-							$pointBNum.text(result.price);
+			$spic.html(template('spic',{'sales':label}));
+			$spic.on('click','.btn1:not(.btn1-not-stock)',function(){
+				var $this=$(this);
+				var id=$this.data('id');
+				var index=$this.data('index');
+				var sales=[];
+				for(var i in label){
+					if(i==index){
+						sales.push(id);
+					}else{
+						for(var j in label[i].children){
+							var children=label[i].children[j];
+							if(children.isSel){
+								sales.push(children.id);
+							}
 						}
-                        else{
-							$price.html($price.data('defaultValue'));
-							$pointB.hide();
-							$pointBNum.text('0');
-						}
-                        $stock.html('库存'+result.stock+'件');
-                        $orderSales.val(sales.sels.join(','));
-						//赠送的积分
-                        getGivepoint(result);
-                    }else{
-                        //出现没匹配到的问题
-                       $price.html($price.data('defaultValue'));
-					   $pointB.hide();
-					   $pointBNum.text('0');
-                        $stock.html('库存0件');
-                        $orderSales.val('');
-						//赠送的积分
-                        getGivepoint();
-                    }
-                }
-            }
+					}
+				}
+				for(var i in opts.sales_arr){
+					if(opts.sales_arr[i].sales==sales.join('|')){
+						window.location.href="?m=product&a=item&id="+opts.sales_arr[i].id;
+					}
+				}
+			})
         }
 	}
 

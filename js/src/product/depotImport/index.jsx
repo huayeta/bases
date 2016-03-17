@@ -51,7 +51,7 @@ export default class DepotImport extends React.Component {
             <div className="m-tabform f-pdt10 m-tabform-w800">
                 <form ref="formName" onSubmit={this.handleSubmit.bind(this)}>
                     <input type="hidden" name="id" value={config.id} />
-                    <input type="hidden" name="arg[no]" value={config.sales_array?config.sales_array[0].no:''} />
+                    <input type="hidden" name="arg[no]" value={config.sales_array.length>0?config.sales_array[0].no:''} />
                     <input type="hidden" name="arg[categoryid]" value={config.categoryid} />
                     {this.editor?'':<table>
                         <thead><tr><th width="88"></th><td></td></tr></thead>

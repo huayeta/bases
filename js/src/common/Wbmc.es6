@@ -42,7 +42,9 @@ class Wbmc extends events {
     getId(id){
         let _this=this;
         let arr=[];
-        let pid=_this.findIdObj[id].pid;
+        let obj=_this.findIdObj[id];
+        if(!obj)return arr;
+        let pid=obj.pid;
         let tmp=pid;
         if(!id)return '';
         arr.push(id);

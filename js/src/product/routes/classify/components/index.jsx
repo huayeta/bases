@@ -1,11 +1,10 @@
 import React from 'react';
-import 'babel-polyfill';
 import classifycss from './classify.css';
 import Wbmc from 'common/Wbmc.es6';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updataClassify} from '../../../actions/';
+import {updataClassify,updataConfig} from '../../../actions/';
 
 class ClassifyApp extends React.Component {
     constructor() {
@@ -14,7 +13,14 @@ class ClassifyApp extends React.Component {
         this.datas2=[];
         this.datas3=[];
         this.classifyId='';
-        this.config=window.config;
+    }
+    componentWillMount(){
+        this.config=this.props.config;
+        let route=`/add`;
+        if(this.config.route){
+            route=`/${this.config.route}`;
+        }
+        this.routeName=route;
     }
     componentDidMount(){
         let _this=this;
@@ -36,6 +42,13 @@ class ClassifyApp extends React.Component {
                 if(this.def[2]){
                     let index=_this.datas3.findIndex((data)=>data.id==this.def[2]);
                     if(index!=-1)_this.handleClick(index,3);
+                }
+                //初始化
+                if(this.def.length==3){
+                    if(_this.config.isInit==undefined){
+                        _this.handleLeave();
+                        _this.context.router.replace(_this.routeName);
+                    }
                 }
             }else{
                 _this.datas1Sel=0;
@@ -94,18 +107,17 @@ class ClassifyApp extends React.Component {
     }
     handleLeave(){
         var _this=this;
-        const {updataClassify} =this.props.actions;
+        const {updataClassify,updataConfig} =this.props.actions;
         updataClassify({
             0:_this.datas1[_this.datas1Sel],
             1:_this.datas2[_this.datas2Sel],
             2:_this.datas3[_this.datas3Sel]
-        })
+        });
+        //初始化
+        updataConfig('isInit',false)
     }
     render(){
-        let route=`/add`;
-        if(this.config.route){
-            route=`/${this.config.route}`;
-        }
+
         return (
             <div>
                 <div className="m-product-classify">
@@ -147,7 +159,7 @@ class ClassifyApp extends React.Component {
                     </div>
                 </div>
                 <div className="f-tac f-mt20">
-                    <Link to={route} className="u-btn u-btn-biger" onClick={this.handleLeave.bind(this)}>下一步，填写详细信息</Link>
+                    <Link to={this.routeName} className="u-btn u-btn-biger" onClick={this.handleLeave.bind(this)}>下一步，填写详细信息</Link>
                 </div>
             </div>
         )
@@ -155,7 +167,7 @@ class ClassifyApp extends React.Component {
 }
 
 ClassifyApp.contextTypes={
-    router: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 }
 
 module.exports=connect((state)=>{
@@ -165,6 +177,6 @@ module.exports=connect((state)=>{
     };
 },(dispatch)=>{
     return {
-        actions:bindActionCreators({updataClassify},dispatch),
+        actions:bindActionCreators({updataClassify,updataConfig},dispatch),
     }
 })(ClassifyApp);

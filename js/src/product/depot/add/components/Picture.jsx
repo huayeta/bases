@@ -34,7 +34,7 @@ export default class Picture extends React.Component {
             <div className="m-product-block f-mb10">
                 <div className="title">商品图片</div>
                 <div className="con">
-                    <ul className="f-cb product-imgs" style={{'text-align':'center'}}>
+                    <ul className="f-cb product-imgs" style={{'textAlign':'center'}}>
                         {this.picture.map((picture,index)=>{
                             return(
                                 <li key={index} style={{'float':'none','display':'inline-block','margin':'9px 17px 0',}}>

@@ -9,7 +9,9 @@ class Input extends React.Component {
         this.value='';
     }
     componentWillMount(){
-        this.value=this.props.value;
+        let {defaultValue,value}=this.props;
+        if(defaultValue)this.value=defaultValue;
+        if(value)this.value=value;
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.value!==this.props.value){
@@ -29,16 +31,18 @@ class Input extends React.Component {
     }
     handleBlur(event){
         let value=event.target.value;
-        let {datatype}=this.props;
+        let {datatype,onBlur}=this.props;
         if(datatype){
             if(datatype=='*'){
                 // if(!value)this.input.
             }
         }
+        if(onBlur)onBlur(event);
     }
     render(){
+        let {defaultValue,...other}=this.props;
         return(
-            <input type="text" {...this.props} value={this.value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)} />
+            <input type="text" {...other} value={this.value} onChange={this.handleChange.bind(this)} onBlur={this.handleBlur.bind(this)} />
         )
     }
 }
@@ -51,8 +55,9 @@ class InputLimitword extends React.Component {
         super();
     }
     componentWillMount(){
-        let {value}=this.props;
-        this.updataValue(value);
+        let {defaultValue=''}=this.props;
+        this.value=defaultValue;
+        this.updataValue(defaultValue);
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.value!=this.props.value){
@@ -67,22 +72,22 @@ class InputLimitword extends React.Component {
     updataValue(value){
         let {limit}=this.props;
         let newValue=value.substr(0,limit);
-        this.value=newValue;
+        if(value.length>limit){
+            this.input.setValue(newValue);
+        }
         this.length=newValue.length;
     }
     handleChange(event){
         let {limit,onChange}=this.props;
         let value=event.target.value;
         this.updataValue(value);
-        event.target.value=this.value;
-        this.input.setValue(this.value);
         this.forceUpdate();
         if(onChange)onChange(event);
     }
     render(){
-        let {value,onChange,...other}=this.props;
+        let {defaultValue,value,...other}=this.props;
         return(
-            <span className="u-txt-word"><Input ref="input" type="text" className="u-txt" {...other} value={this.value} onChange={this.handleChange.bind(this)} /><em><b className="s-yellow">{this.props.limit-this.length}</b><span>/{this.props.limit}</span></em></span>
+            <span className="u-txt-word"><Input ref="input" type="text" className="u-txt" {...other} defaultValue={this.props.defaultValue} onChange={this.handleChange.bind(this)} /><em><b className="s-yellow">{this.props.limit-this.length}</b><span>/{this.props.limit}</span></em></span>
         )
     }
 }

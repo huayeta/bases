@@ -95,7 +95,15 @@ class addDepot extends React.Component {
                                 <div className="f-mb5">
                                     <span className="th">市场价格：<input type="text" className="u-txt" size="10" name="arg[market]" defaultValue={config.market} /></span><span className="f-ml5">元</span>
                                     <span className=" f-ml15 th">条码：<input type="text" className="u-txt" size="10" name="arg[bar_code]" defaultValue={config.bar_code} /></span>
-                                    <span className=" f-ml15 th">单位：<input type="text" className="u-txt" size="10" name="arg[unit]" defaultValue={config.unit} /></span>
+                                    <span className=" f-ml15 th">单位：
+                                        <select className="u-slt" name="arg[unit]" defaultValue={config.unit}>
+                                            {config.unit_array.map((unit,index)=>{
+                                                return(
+                                                    <option id={unit.id} key={index}>{unit.name}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </span>
                                     <span className=" f-ml15 th">规格：<input type="text" className="u-txt" size="10" name="arg[format]" defaultValue={config.format} /></span>
                                 </div>
                             </div>
