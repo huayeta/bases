@@ -1,6 +1,6 @@
 define('tree',function(require, exports, module){
 	require('jquery');
-	
+
 	var tree=function(a){
 		var defaults={
 			url:'',
@@ -13,7 +13,7 @@ define('tree',function(require, exports, module){
 			var txt=_this.text();
 			if(txt=='+'){
 				if(!has){
-					$.getJSON(opts.url+'&pid='+oid,function(r){_this.parent().parent().after(opts.callback(r));_this.text('-');_this.data('has',true)});
+					$.getJSON(opts.url+'&pid='+oid,function(r){_this.parent().parent().after(opts.callback(r,_this[0]));_this.text('-');_this.data('has',true)});
 				}else{
 					$('tbody>tr').each(function(){
 						var map = $('.tree', this).attr('map'), id = $('.tree', this).attr('id');
@@ -34,7 +34,7 @@ define('tree',function(require, exports, module){
 			}
 		});
 	};
-	
+
 	module.exports={
 		tree:tree
 	}

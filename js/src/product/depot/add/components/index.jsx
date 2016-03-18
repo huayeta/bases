@@ -99,7 +99,7 @@ class addDepot extends React.Component {
                                         <select className="u-slt" name="arg[unit]" defaultValue={config.unit}>
                                             {config.unit_array.map((unit,index)=>{
                                                 return(
-                                                    <option id={unit.id} key={index}>{unit.name}</option>
+                                                    <option value={unit.id} key={index}>{unit.name}</option>
                                                 )
                                             })}
                                         </select>

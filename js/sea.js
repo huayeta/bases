@@ -79,6 +79,7 @@ seajs.config({
 		mTime:'mobile/plugins/mSelect/m.time',
 		mWbmc:'mobile/plugins/mSelect/m.wbmc',
         touchSlide:'mobile/plugins/touchSlide/TouchSlide',
+		slick:'mobile/plugins/slick/slick.min',
         swiper:'mobile/plugins/swiper/swiper.min',
         media:'mobile/plugins/media/media',
         mUeditor:'mobile/plugins/ueditor/sea.ueditor',

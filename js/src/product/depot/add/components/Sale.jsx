@@ -56,7 +56,7 @@ class Sale extends React.Component {
                     <select className="u-slt" style={{'width':'80%'}} name={'arg[sales]['+idArr.join('|')+'][unit]'} defaultValue={val.unit}>
                         {config.unit_array.map((unit,index)=>{
                             return(
-                                <option id={unit.id} key={index}>{unit.name}</option>
+                                <option value={unit.id} key={index}>{unit.name}</option>
                             )
                         })}
                     </select>

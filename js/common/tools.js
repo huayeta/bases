@@ -1867,6 +1867,7 @@ define('tools', function(require, exports, module) {
     //div编辑器初始化
     var divEditor = function() {
         var _this = $('[contenteditable=true]')[0];
+        if(!_this)return;
         var EditDiv = {
             focus: false //确定当前焦点在编辑框内
         };

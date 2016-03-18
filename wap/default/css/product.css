@@ -27,6 +27,7 @@
 /* 商品底部 */
 .m-product-footer{ height: 50px; line-height: 50px; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; -webkit-box-pack: justify; -webkit-justify-content: space-between; -ms-flex-pack: justify; justify-content: space-between;}
 .m-product-footer>div{ -webkit-box-flex: 1; -webkit-flex: 1; -ms-flex: 1; flex: 1; height: 100%; text-align: center;background:rgba(0,0,0,0.9);color: #FFF;font-size: 12px;}
+.m-product-footer>div.first {-webkit-box-flex: .5; -webkit-flex: .5; -ms-flex: .5; flex: .5;}
 .m-product-footer>div.cart,.m-product-footer>div.order{color: #fff;font-size: 16px;}
 .m-product-footer>div.cart{ background-color: #ff7000;}
 .m-product-footer>div.order{background-color: #e50000;}

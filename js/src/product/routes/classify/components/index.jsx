@@ -1,5 +1,5 @@
 import React from 'react';
-import classifycss from './classify.css';
+import './classify.css';
 import Wbmc from 'common/Wbmc.es6';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
