@@ -20,7 +20,7 @@ export default class WarnIe extends React.Component {
         return(
             <If condition={this.isUpdata}>
                 <Then>
-                    您的浏览器版本过低，请升级您的浏览器
+                    您的浏览器版本过低，请升级您的浏览器，可以选择<a href="http://se.360.cn/">360极速浏览器</a>
                 </Then>
             </If>
         )
